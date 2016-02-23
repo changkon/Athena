@@ -16,6 +16,7 @@ version = '0.0.1'
 // variable definitions
 // port number used for development
 def portNumber = 10003
+def baseName = "athena"
 
 jettyRunWar {
     contextPath = '/'
@@ -29,6 +30,10 @@ jettyRun {
 
 repositories {
     mavenCentral()
+}
+
+war {
+    archiveName = "ROOT.$extension"
 }
 
 dependencies {
