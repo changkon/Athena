@@ -9,7 +9,6 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
-
 *.class
 
 # Mobile Tools for Java (J2ME)
