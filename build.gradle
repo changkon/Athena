@@ -1,0 +1,29 @@
+group 'blaze'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+// specify jdk compatibility in project
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// specify version of project
+// version number follows http://semver.org/
+version = '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // jaxrs implementation
+    compile "org.jboss.resteasy:resteasy-jaxrs:+"
+
+    // jaxb provider
+    compile "org.jboss.resteasy:resteasy-jaxb-provider:+"
+
+    // jackson provider
+    compile "org.jboss.resteasy:resteasy-jackson2-provider:+"
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
