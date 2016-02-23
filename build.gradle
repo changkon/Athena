@@ -2,6 +2,8 @@ group 'blaze'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'jetty'
 
 // specify jdk compatibility in project
 sourceCompatibility = 1.8
@@ -10,6 +12,20 @@ targetCompatibility = 1.8
 // specify version of project
 // version number follows http://semver.org/
 version = '0.0.1'
+
+// variable definitions
+// port number used for development
+def portNumber = 10003
+
+jettyRunWar {
+    contextPath = '/'
+    httpPort = portNumber
+}
+
+jettyRun {
+    contextPath = '/'
+    httpPort = portNumber
+}
 
 repositories {
     mavenCentral()
