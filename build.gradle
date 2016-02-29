@@ -62,5 +62,8 @@ dependencies {
     // spring boot starter
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
 
+    // spring dev tools
+    compile "org.springframework.boot:spring-boot-devtools"
+
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
