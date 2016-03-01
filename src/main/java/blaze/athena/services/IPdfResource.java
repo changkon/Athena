@@ -1,6 +1,8 @@
 package blaze.athena.services;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 
 /**
  * <p>Example resource which returns a simple Hello message</p>
@@ -10,7 +12,7 @@ import javax.ws.rs.*;
  * @since 23 Feb 2016
  */
 @Path("/pdf")
-public interface IPdfResource {
+public interface IPDFResource {
 
     /**
      * <p>Returns a hello message</p>
