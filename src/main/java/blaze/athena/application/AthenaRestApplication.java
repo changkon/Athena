@@ -1,6 +1,7 @@
 package blaze.athena.application;
 
 import blaze.athena.services.HelloResource;
+import blaze.athena.services.PdfResource;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -21,6 +22,7 @@ public class AthenaRestApplication extends Application {
 
     public AthenaRestApplication() {
         components.add(HelloResource.class);
+        components.add(PdfResource.class);
     }
 
     @Override
