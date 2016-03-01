@@ -18,6 +18,8 @@ import java.util.Set;
 @ApplicationPath("/services")
 public class AthenaRestApplication extends Application {
 
+    public static final String BASEURI = "http://localhost:10003/services";
+
     private Set<Class<?>> components = new HashSet<Class<?>>();
 
     public AthenaRestApplication() {

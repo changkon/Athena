@@ -12,7 +12,7 @@ import javax.ws.rs.Produces;
  * @since 23 Feb 2016
  */
 @Path("/pdf")
-public interface IPDFResource {
+public interface IPDFResource extends IDocumentResource {
 
     /**
      * <p>Returns a hello message</p>
@@ -22,5 +22,4 @@ public interface IPDFResource {
     @GET
     @Produces("text/plain")
     String test();
-
 }

@@ -2,6 +2,7 @@ package blaze.athena.document;
 
 import blaze.athena.services.PDFResource;
 import org.apache.pdfbox.cos.COSDocument;
+import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.pdfbox.io.RandomAccessFile;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -10,6 +11,7 @@ import org.apache.pdfbox.text.PDFTextStripperByArea;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author Chang Kon Han
@@ -29,8 +31,8 @@ public class PDFManager implements DocumentManager {
     }
 
     @Override
-    public String toText(File file) throws IOException {
-        parser = new PDFParser(new RandomAccessFile(file, "r")); // update for PDFBox V 2.0
+    public String toText(InputStream stream) throws IOException {
+        parser = new PDFParser(new RandomAccessBufferedFileInputStream(stream)); // update for PDFBox V 2.0
 
         parser.parse();
         cosDoc = parser.getDocument();

@@ -2,6 +2,7 @@ package blaze.athena.document;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,10 +18,11 @@ public interface DocumentManager {
 
     /**
      * <p>Extracts the contents of a file</p>
-     * @param file
-     * @return text contents of a file upload
+     * @param stream
+     * @return
+     * @throws IOException
      */
-    String toText(File file) throws IOException;
+    String toText(InputStream stream) throws IOException;
 
     /**
      * <p>Given an input string, formats it for print</p>
