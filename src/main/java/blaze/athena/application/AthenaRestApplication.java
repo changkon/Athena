@@ -1,7 +1,7 @@
 package blaze.athena.application;
 
 import blaze.athena.services.HelloResource;
-import blaze.athena.services.PdfResource;
+import blaze.athena.services.PDFResource;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -18,11 +18,13 @@ import java.util.Set;
 @ApplicationPath("/services")
 public class AthenaRestApplication extends Application {
 
+    public static final String BASEURI = "http://localhost:10003/services";
+
     private Set<Class<?>> components = new HashSet<Class<?>>();
 
     public AthenaRestApplication() {
         components.add(HelloResource.class);
-        components.add(PdfResource.class);
+        components.add(PDFResource.class);
     }
 
     @Override

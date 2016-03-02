@@ -62,11 +62,20 @@ dependencies {
     // spring boot starter
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
 
+    // spring boot test starter
+    compile "org.springframework.boot:spring-boot-starter-test:+"
+
     // spring dev tools
     compile "org.springframework.boot:spring-boot-devtools"
 
     //pdfbox
     compile "org.apache.pdfbox:pdfbox:2.0.0-RC3"
+
+    // resteasy multipart provider
+    compile "org.jboss.resteasy:resteasy-multipart-provider:+"
+
+    // resteasy client
+    compile "org.jboss.resteasy:resteasy-client:+"
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
