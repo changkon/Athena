@@ -1,5 +1,6 @@
 package blaze.athena.services;
 
+import blaze.athena.QuestionGeneration.SentenceSimplifier;
 import blaze.athena.document.PDFManager;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -25,11 +26,13 @@ public class PDFResource implements IPDFResource {
     public String test() {
         PDFManager pdfManager = new PDFManager();
         ClassLoader classLoader = getClass().getClassLoader();
-        File pdfFile = new File(classLoader.getResource("Lecture03_Software.pdf").getFile());
+        File pdfFile = new File(classLoader.getResource("selection.pdf").getFile());
 
         try {
-            String str = pdfManager.toText(new FileInputStream(pdfFile));
+            FileInputStream fis = new FileInputStream(pdfFile);
+            String str = pdfManager.toText(fis);
             String finalStr = pdfManager.formatText(str);
+            fis.close();
             return finalStr;
         } catch (IOException e) {
             return null;
@@ -55,6 +58,33 @@ public class PDFResource implements IPDFResource {
 
             String finalStr = pdfManager.formatText(joiner.toString());
             return Response.ok(finalStr).build();
+        } catch (IOException e) {
+            // error occurred processing input
+            return Response.serverError().build();
+        }
+    }
+
+    @Override
+    public Response generateQuestions(@MultipartForm MultipartFormDataInput input) {
+
+        Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
+        List<InputPart> inputParts = uploadForm.get("fileUpload");
+
+        try {
+            StringJoiner joiner = new StringJoiner("\n");
+            PDFManager pdfManager = new PDFManager();
+
+            for (InputPart inputPart : inputParts) {
+                // Convert the uploaded file to inputstream
+                InputStream inputStream = inputPart.getBody(InputStream.class, null);
+
+                joiner.add(pdfManager.toText(inputStream));
+            }
+
+            String finalStr = pdfManager.formatText(joiner.toString());
+            SentenceSimplifier ss = new SentenceSimplifier();
+            String questions = ss.run(finalStr);
+            return Response.ok(questions).build();
         } catch (IOException e) {
             // error occurred processing input
             return Response.serverError().build();

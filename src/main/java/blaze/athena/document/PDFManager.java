@@ -55,6 +55,7 @@ public class PDFManager implements DocumentManager {
         for (int i = 1; i < pdDoc.getNumberOfPages(); i++) {
             pdfTextStripper.extractRegions(pdDoc.getPage(i));
             text += pdfTextStripper.getTextForRegion(regionName);
+            text += "==========.\n";
         }
         return text;
     }

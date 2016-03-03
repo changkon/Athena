@@ -71,6 +71,14 @@ dependencies {
     //pdfbox
     compile "org.apache.pdfbox:pdfbox:2.0.0-RC3"
 
+    //stanford parser
+    compile files('lib/jaws-bin.jar')
+    compile files('lib/stanford-parser-2008-10-26.jar')
+    compile files('lib/jwnl.jar')
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'commons-logging:commons-logging:1.2'
+
+
     // resteasy multipart provider
     compile "org.jboss.resteasy:resteasy-multipart-provider:+"
 
@@ -78,4 +86,7 @@ dependencies {
     compile "org.jboss.resteasy:resteasy-client:+"
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+springBoot {
+    mainClass = "blaze.athena.application.AthenaSpringApplication"
 }

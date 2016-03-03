@@ -24,6 +24,11 @@ public interface IDocumentResource {
     @Consumes("multipart/form-data")
     Response uploadFile(@MultipartForm MultipartFormDataInput input);
 
+    @POST
+    @Path("/generate")
+    @Consumes("multipart/form-data")
+    Response generateQuestions(@MultipartForm MultipartFormDataInput input);
+
     default File getFile(byte[] content, String filename) throws IOException {
         File file = new File(filename);
 
