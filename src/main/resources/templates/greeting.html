@@ -6,5 +6,9 @@
 </head>
 <body>
 <p th:text="'Hello, ' + ${name} + '!'" />
+<form method="POST" th:action="@{/signout}">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+    <button>Sign Out</button>
+</form>
 </body>
 </html>
