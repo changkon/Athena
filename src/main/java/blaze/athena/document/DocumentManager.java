@@ -45,9 +45,21 @@ public interface DocumentManager {
             }
             char secondLineFirstLetter = secondLine.charAt(0);
             char firstLineLastLetter = firstLine.charAt(firstLine.length()-1);
-            if (firstLineLastLetter != '.' && Character.isLowerCase(secondLineFirstLetter)) {
-                lines[i] += secondLine;
+            if (firstLineLastLetter != '.' &&
+                    (Character.isLowerCase(secondLineFirstLetter) ||
+                            Character.isLetter(secondLineFirstLetter) && !lines[i].replace(" ", "").contains("==========."))) {
+                lines[i] = firstLine + " " + secondLine;
                 lines[i+next] = "";
+                i--; //reset i to test this line again
+            }
+            if (i >= 0) {
+                lines[i] = lines[i].trim();
+            }
+            lines[i+next] = lines[i+next].trim();
+        }
+        for (int i = 0; i < lines.length; i++) {
+            if (!lines[i].trim().equals("")) {
+                lines[i] += ".";
             }
         }
         List<String> list = Arrays.asList(lines);
