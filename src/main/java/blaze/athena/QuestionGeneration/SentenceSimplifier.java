@@ -35,6 +35,7 @@ import edu.stanford.nlp.util.Pair;
 
 import java.io.File;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Class for extracting simplified factual statements from complex sentences.
@@ -1471,7 +1472,7 @@ public class SentenceSimplifier {
 							if (nounPhrase.startsWith("the ")){
 								nounPhrase = nounPhrase.replaceFirst("the ", "");
 							}
-							questionList.add(topicList.get(i) + ":\n" + sentencesList.get(i).replaceAll("\\b" + nounPhrase + "\\b", "__________________"));
+							questionList.add(topicList.get(i) + ":\n" + sentencesList.get(i).replaceAll("\\b" + Pattern.quote(nounPhrase) + "\\b", "__________________"));
 							answerList.add(nounPhrase);
 						}
 					}
