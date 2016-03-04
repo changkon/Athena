@@ -68,7 +68,7 @@ public class PDFResource implements IPDFResource {
     public Response generateQuestions(@MultipartForm MultipartFormDataInput input) {
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
-        List<InputPart> inputParts = uploadForm.get("fileUpload");
+        List<InputPart> inputParts = uploadForm.get("uploadedFile");
 
         try {
             StringJoiner joiner = new StringJoiner("\n");
