@@ -35,6 +35,7 @@ import edu.stanford.nlp.util.Pair;
 
 import java.io.File;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Class for extracting simplified factual statements from complex sentences.
@@ -1458,11 +1459,20 @@ public class SentenceSimplifier {
 
 			for (int i = 0; i < sentencesList.size(); i++) {
 				Tree taggedWords = parsedList.get(i);
+				boolean nounPhrasePresent = false;
 				for (Tree phrase : taggedWords.children()) {
-					if (phrase.value().equals("VP")) {
-						String nounPhrase = getNounPhrase(phrase);
-						if (nounPhrase != null) {
-							questionList.add(topicList.get(i) + ":\n" + sentencesList.get(i).replace(nounPhrase, "__________________"));
+					if (phrase.value().equals("NP")) {
+						nounPhrasePresent = true;
+						// there should be some noun phrase before the verb phrase for a valid sentence
+						// Learning objectives tend to start with "Understand" - these are not questionable sentences
+					} else if (phrase.value().equals("VP") && nounPhrasePresent && !sentencesList.get(i).startsWith("Understand")) {
+						List<String> nounPhrases = getNounPhrase(phrase);
+						for (String nounPhrase : nounPhrases) {
+							// we need to remove "the" if it appears at the start of a noun phrase
+							if (nounPhrase.startsWith("the ")){
+								nounPhrase = nounPhrase.replaceFirst("the ", "");
+							}
+							questionList.add(topicList.get(i) + ":\n" + sentencesList.get(i).replaceAll("\\b" + Pattern.quote(nounPhrase) + "\\b", "__________________"));
 							answerList.add(nounPhrase);
 						}
 					}
@@ -1472,6 +1482,10 @@ public class SentenceSimplifier {
 			int size = questionList.size();
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < size; i++) {
+				//double check to ensure there is a blank to fill
+				if (!questionList.get(i).contains("__________________")) {
+					continue;
+				}
 				sb.append(questionList.get(i)).append("\n");
 				sb.append("a) ").append(answerList.get(i)).append("\n");
 				sb.append("b) ").append(answerList.get((i+1)%size)).append("\n");
@@ -1494,20 +1508,21 @@ public class SentenceSimplifier {
 		return "Error occurred";
 	}
 
-	private static String getNounPhrase(Tree phrase) {
+	private static List<String> getNounPhrase(Tree phrase) {
+		List<String> nouns = new ArrayList<>();
 		if (phrase.isLeaf()) {
-			return null;
+			return nouns;
 		}
 		for (Tree phrase2 : phrase.children()) {
-			String s;
+			List<String> s;
 			if (phrase2.value().equals("NP") && AnalysisUtilities.getCleanedUpYield(phrase2).trim().split(" ").length < 5) {
 		//		System.out.println("the noun phrase is: " + AnalysisUtilities.getCleanedUpYield(phrase2));
-				return AnalysisUtilities.getCleanedUpYield(phrase2);
-			} else if ((s = getNounPhrase(phrase2)) != null) {
-				return s;
+				nouns.add(" " + AnalysisUtilities.getCleanedUpYield(phrase2));
+			} else if ((s = getNounPhrase(phrase2)) != null && s.size() != 0) {
+				nouns.addAll(s);
 			}
 		}
-		return null;
+		return nouns;
 	}
 
 
