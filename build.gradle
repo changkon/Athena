@@ -49,6 +49,11 @@ war {
     archiveName = "ROOT.$extension"
 }
 
+// remove slf4j conflict problem
+configurations.all {
+    exclude module: 'slf4j-log4j12'
+}
+
 dependencies {
     // jaxrs implementation
     compile "org.jboss.resteasy:resteasy-jaxrs:+"
@@ -74,7 +79,9 @@ dependencies {
     //stanford parser
     compile files('lib/jaws-bin.jar')
     compile files('lib/stanford-parser-2008-10-26.jar')
-    compile files('lib/jwnl.jar')
+
+    compile "net.sf.extjwnl:extjwnl:+"
+
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'commons-logging:commons-logging:1.2'
 

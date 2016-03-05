@@ -23,9 +23,9 @@
 
 package blaze.athena.QuestionGeneration;
 
-import net.didion.jwnl.*;
-import net.didion.jwnl.data.*;
-import net.didion.jwnl.dictionary.Dictionary;
+import net.sf.extjwnl.data.IndexWord;
+import net.sf.extjwnl.data.POS;
+import net.sf.extjwnl.dictionary.Dictionary;
 
 import java.io.*;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class VerbConjugator {
 		baseFormCountMap = new HashMap<String, Long>();
 		conjugationMap = new HashMap<String, String>();
 		try{
-			JWNL.initialize(new FileInputStream("config"+File.separator+"file_properties.xml"));
+			Dictionary.getInstance(new FileInputStream("config"+File.separator+"file_properties.xml"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -167,7 +167,7 @@ public class VerbConjugator {
 					}else{
 						String lemma = "";
 						try{
-							IndexWord iw = Dictionary.getInstance().lookupIndexWord(POS.VERB, token);
+							IndexWord iw = Dictionary.getDefaultResourceInstance().lookupIndexWord(POS.VERB, token);
 							if(iw == null){
 								continue;
 							}

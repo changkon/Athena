@@ -25,7 +25,8 @@ package blaze.athena.QuestionGeneration;
 
 import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.ling.Label;
-import edu.stanford.nlp.parser.lexparser.*;
+import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
+import edu.stanford.nlp.parser.lexparser.Options;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.trees.*;
 import edu.stanford.nlp.trees.tregex.TregexMatcher;
@@ -33,9 +34,9 @@ import edu.stanford.nlp.trees.tregex.TregexPattern;
 import edu.stanford.nlp.trees.tregex.tsurgeon.Tsurgeon;
 import edu.stanford.nlp.trees.tregex.tsurgeon.TsurgeonPattern;
 import edu.stanford.nlp.util.Pair;
-import net.didion.jwnl.data.IndexWord;
-import net.didion.jwnl.data.POS;
-import net.didion.jwnl.dictionary.Dictionary;
+import net.sf.extjwnl.data.IndexWord;
+import net.sf.extjwnl.data.POS;
+import net.sf.extjwnl.dictionary.Dictionary;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
@@ -355,10 +356,10 @@ public class AnalysisUtilities {
 				//Iterator<String> iter = Dictionary.getInstance().getMorphologicalProcessor().lookupAllBaseForms(POS.VERB, res).iterator();
 				
 				IndexWord iw;
-				if(pos.startsWith("V")) iw = Dictionary.getInstance().getMorphologicalProcessor().lookupBaseForm(POS.VERB, res);
-				else if(pos.startsWith("N")) iw = Dictionary.getInstance().getMorphologicalProcessor().lookupBaseForm(POS.NOUN, res);
-				else if(pos.startsWith("J")) iw = Dictionary.getInstance().getMorphologicalProcessor().lookupBaseForm(POS.ADJECTIVE, res);
-				else iw = Dictionary.getInstance().getMorphologicalProcessor().lookupBaseForm(POS.ADVERB, res);
+				if(pos.startsWith("V")) iw = Dictionary.getDefaultResourceInstance().getMorphologicalProcessor().lookupBaseForm(POS.VERB, res);
+				else if(pos.startsWith("N")) iw = Dictionary.getDefaultResourceInstance().getMorphologicalProcessor().lookupBaseForm(POS.NOUN, res);
+				else if(pos.startsWith("J")) iw = Dictionary.getDefaultResourceInstance().getMorphologicalProcessor().lookupBaseForm(POS.ADJECTIVE, res);
+				else iw = Dictionary.getDefaultResourceInstance().getMorphologicalProcessor().lookupBaseForm(POS.ADVERB, res);
 					
 				if(iw == null) return res;
 				res = iw.getLemma();
