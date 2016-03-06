@@ -28,6 +28,8 @@ import edu.stanford.nlp.ling.Label;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.parser.lexparser.Options;
 import edu.stanford.nlp.process.DocumentPreprocessor;
+import edu.stanford.nlp.simple.Document;
+import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.trees.*;
 import edu.stanford.nlp.trees.tregex.TregexMatcher;
 import edu.stanford.nlp.trees.tregex.TregexPattern;
@@ -46,6 +48,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 public class AnalysisUtilities {
@@ -88,40 +91,13 @@ public class AnalysisUtilities {
 	
 	
 	public static List<String> getSentences(String document) {
-		DocumentPreprocessor dp = new DocumentPreprocessor(false);
-		List<String> res = new ArrayList<String>();
-		String sentence;
-		
+		Document doc = new Document(preprocess(document));
 
-		document = preprocess(document);
-		
-		StringReader reader = new StringReader(document);
-		
-		List<List<? extends HasWord>> docs = new ArrayList<List<? extends HasWord>>();
-		Iterator<List<? extends HasWord>> iter1 ;
-		Iterator<? extends HasWord> iter2;
-		
-		try{
-			docs = dp.getSentencesFromText(reader);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		
-		iter1 = docs.iterator();
-		while(iter1.hasNext()){
-			iter2 = iter1.next().iterator();
-			sentence = "";
-			while(iter2.hasNext()){
-				String tmp = iter2.next().word().toString();
-				sentence += tmp;
-				if(iter2.hasNext()){
-					sentence += " ";
-				}
-			}
-			res.add(sentence);
-		}
-		
-		return res;
+		List<String> sentences =  doc.sentences().parallelStream()
+				.map(Sentence::text)
+				.collect(Collectors.toList());
+
+		return sentences;
 	}
 	
 	public static String abbrevTree(Tree tree) {
@@ -309,24 +285,24 @@ public class AnalysisUtilities {
 			try {
 				Options op = new Options();
 				String serializedInputFileOrUrl = GlobalProperties.getProperties().getProperty("parserGrammarFile", "config"+File.separator+"englishFactored.ser.gz");
-				parser = new LexicalizedParser(serializedInputFileOrUrl, op);
+				parser = LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishFactored.ser.gz");
+//				parser = LexicalizedParser.getParserFromFile(serializedInputFileOrUrl, op);
 				int maxLength = new Integer(GlobalProperties.getProperties().getProperty("parserMaxLength", "40")).intValue();
-				parser.setMaxLength(maxLength);
-				parser.setOptionFlags("-outputFormat", "oneline");
-			} catch (Exception e){
+				parser.setOptionFlags("-outputFormat", "oneline", "-maxLength", maxLength + "");
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
 		try{
-			if(parser.parse(sentence)){
-				parse = parser.getBestParse();
+			if(parser.parse(sentence) != null) {
+				parse = parser.lexicalizedParserQuery().getBestParse();
 				
 				//remove all the parent annotations (this is a hacky way to do it)
 				String ps = parse.toString().replaceAll("\\[[^\\]]+/[^\\]]+\\]", "");
 				parse = AnalysisUtilities.getInstance().readTreeFromString(ps);
 
-				parseScore = parser.getPCFGScore();
+				parseScore = parser.lexicalizedParserQuery().getPCFGScore();
 
 				parse.setScore(parseScore);
 				return new ParseResult(true, parse, parseScore);
@@ -437,7 +413,7 @@ public class AnalysisUtilities {
 	
 	
 	public static String getCleanedUpYield(Tree inputTree){
-		Tree copyTree = inputTree.deeperCopy();
+		Tree copyTree = inputTree.deepCopy();
 
 		if(GlobalProperties.getDebug())System.err.println(copyTree.toString());
 

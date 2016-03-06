@@ -227,7 +227,7 @@ public class SentenceSimplifier {
 		//add original tree
 		Question orig = new Question();
 		orig.setSourceTree(sentence);
-		orig.setIntermediateTree(sentence.deeperCopy());
+		orig.setIntermediateTree(sentence.deepCopy());
 
 		//if the input contains any UCP or other odd nodes, then just return the original sentence
 		//such nodes indicate that the parse failed, or at least that our system will likely produce bad output
@@ -368,7 +368,7 @@ public class SentenceSimplifier {
 
 			conjoinedNode = matcher.getNode("child");
 			//store the conjoined nodes' index into their parent's list of children
-			int idx = parent.indexOf(conjoinedNode);
+			int idx = parent.objectIndexOf(conjoinedNode);
 			if(!nodeIndexes.contains(idx)) nodeIndexes.add(idx);
 		}
 
@@ -399,7 +399,7 @@ public class SentenceSimplifier {
 			//if there is an trivial unary "NP -> NP",
 			//remove the parent and put the child in its place
 			if(parent.numChildren() == 1 && parent.getChild(0).label().equals("NP")){
-				int tmpIndex = gparent.indexOf(parent);
+				int tmpIndex = gparent.objectIndexOf(parent);
 				gparent.removeChild(tmpIndex);
 				gparent.addChild(tmpIndex, parent.getChild(0));
 			}
@@ -460,7 +460,7 @@ public class SentenceSimplifier {
 				}else{ //default
 					newVerb = AnalysisUtilities.getInstance().getSurfaceForm(verbLemma, newVerbPOS);
 				}
-				tmpIndex = verbPreterminal.parent(uncle).indexOf(verbPreterminal);
+				tmpIndex = verbPreterminal.parent(uncle).objectIndexOf(verbPreterminal);
 				Tree verbParent = verbPreterminal.parent(uncle);
 				verbParent.removeChild(tmpIndex);
 				verbParent.addChild(tmpIndex, AnalysisUtilities.getInstance().readTreeFromString("("+newVerbPOS+" "+newVerb+")"));
@@ -504,7 +504,7 @@ public class SentenceSimplifier {
 			nodeindex = conjoinedNode.nodeNumber(input.getIntermediateTree());
 
 			//make a copy of the input for this iteration
-			newTree = input.getIntermediateTree().deeperCopy();
+			newTree = input.getIntermediateTree().deepCopy();
 			removeConjoinedSiblingsHelper(newTree, nodeindex);
 
 			//for conjoined main clauses, add punctuation if necessary
@@ -530,7 +530,7 @@ public class SentenceSimplifier {
 		Tree parent = child.parent(copy);
 		Tree gparent = parent.parent(copy);
 
-		int parentIdx = gparent.indexOf(parent);
+		int parentIdx = gparent.objectIndexOf(parent);
 
 		//By an annoying PTB convention, some verb phrase conjunctions
 		//can conjoin two verb preterminals under a VP,
@@ -664,11 +664,11 @@ public class SentenceSimplifier {
 		matcher = matchPattern.matcher(input.getIntermediateTree());
 		while(matcher.find()){
 			String verbPOS = findTense(matcher.getNode("tense"));
-			Tree p = matcher.getNode("participial").deeperCopy();
+			Tree p = matcher.getNode("participial").deepCopy();
 			Tree verb = matcher.getNode("verb");
 			String verbLemma =  AnalysisUtilities.getInstance().getLemma(verb.getChild(0).label().toString(), verb.label().toString());
 			String newVerb = AnalysisUtilities.getInstance().getSurfaceForm(verbLemma, verbPOS);
-			int verbIndex = p.indexOf(verb);
+			int verbIndex = p.objectIndexOf(verb);
 			p.removeChild(verbIndex);
 			p.addChild(verbIndex, AnalysisUtilities.getInstance().readTreeFromString("("+verbPOS+" "+newVerb+")"));
 			String treeStr = "(ROOT (S "+matcher.getNode("subj").toString()+" "+p.toString()+" (. .)))";
@@ -720,7 +720,7 @@ public class SentenceSimplifier {
 		while(matcher.find()){
 			Tree newTree = factory.newTreeNode("ROOT", new ArrayList<Tree>());
 			subord = matcher.getNode("sub");
-			newTree.addChild(subord.deeperCopy());
+			newTree.addChild(subord.deepCopy());
 
 			AnalysisUtilities.addPeriodIfNeeded(newTree);
 			addQuotationMarksIfNeeded(newTree);
@@ -757,7 +757,7 @@ public class SentenceSimplifier {
 			if(!verbImpliesComplement(verbLemma)){
 				continue;
 			}
-			newTree.addChild(subord.deeperCopy());
+			newTree.addChild(subord.deepCopy());
 
 			AnalysisUtilities.addPeriodIfNeeded(newTree);
 			addQuotationMarksIfNeeded(newTree);
@@ -807,7 +807,7 @@ public class SentenceSimplifier {
 		matcher = matchPattern.matcher(input.getIntermediateTree());
 		while(matcher.find()){
 			Tree verbtree = matcher.getNode("mainverb");
-			Tree nountree = matcher.getNode("noun").deeperCopy();
+			Tree nountree = matcher.getNode("noun").deepCopy();
 			Tree appositivetree = matcher.getNode("appositive");
 
 			makeDeterminerDefinite(nountree);
@@ -900,15 +900,15 @@ public class SentenceSimplifier {
 			Tree missingArgumentTree = matcher.getNode("np");
 			Tree relclause = matcher.getNode("relclause");
 			if(missingArgumentTree == null || relclause == null) continue;
-			missingArgumentTree = missingArgumentTree.deeperCopy();
-			relclause = relclause.deeperCopy();
+			missingArgumentTree = missingArgumentTree.deepCopy();
+			relclause = relclause.deepCopy();
 			Tree possessive = matcher.getNode("possessive");
-			Tree sbar = matcher.getNode("sbar").deeperCopy();
+			Tree sbar = matcher.getNode("sbar").deepCopy();
 
 			makeDeterminerDefinite(missingArgumentTree);
 
 			if(possessive != null){
-				possessive = possessive.deeperCopy();
+				possessive = possessive.deepCopy();
 				possessive.removeChild(0);
 				String newTree = "(NP (NP "+missingArgumentTree.toString()+ " (POS 's))";
 				for(int i=0; i<possessive.numChildren(); i++) newTree += possessive.getChild(i).toString() + " ";
@@ -973,10 +973,10 @@ public class SentenceSimplifier {
 				}
 
 				if(subjectMovement){	//subject
-					newparenttree.addChild(newparenttree.indexOf(verbtree), missingArgumentTree);
+					newparenttree.addChild(newparenttree.objectIndexOf(verbtree), missingArgumentTree);
 				}else{ // newparentlabel is VP
 					if(ppRelativeClause) newparenttree.addChild(newparenttree.numChildren(), missingArgumentTree);
-					else newparenttree.addChild(newparenttree.indexOf(verbtree)+1, missingArgumentTree);
+					else newparenttree.addChild(newparenttree.objectIndexOf(verbtree)+1, missingArgumentTree);
 				}
 
 
@@ -1024,12 +1024,12 @@ public class SentenceSimplifier {
 		List<Tree> modifiers = new ArrayList<Tree>();
 		while(matcher.find()){
 			if(mainvp == null){
-				mainvp = matcher.getNode("mainvp").deeperCopy();
-				subj = matcher.getNode("subj").deeperCopy();
+				mainvp = matcher.getNode("mainvp").deepCopy();
+				subj = matcher.getNode("subj").deepCopy();
 			}
 			Tree mainclause = matcher.getNode("mainclause");
-			Tree modifier = matcher.getNode("modifier").deeperCopy();
-			int idx = mainclause.indexOf(modifier);
+			Tree modifier = matcher.getNode("modifier").deepCopy();
+			int idx = mainclause.objectIndexOf(modifier);
 			if(modifiers.contains(modifier)) continue; //just in case the tregex expression catches duplicates
 			//add commas and quotation marks if they appeared in the original
 			if(idx > 0 && mainclause.getChild(idx-1).label().toString().equals("``")){
@@ -1091,7 +1091,7 @@ public class SentenceSimplifier {
 		matchPattern = TregexPatternFactory.getPattern(tregexOpStr);
 		matcher = matchPattern.matcher(input.getIntermediateTree());
 		while(matcher.find()){
-			Tree nountree = matcher.getNode("subj").deeperCopy();
+			Tree nountree = matcher.getNode("subj").deepCopy();
 			Tree vptree = matcher.getNode("modifier");
 			Tree verb = matcher.getNode("tense");
 			makeDeterminerDefinite(nountree);
@@ -1106,8 +1106,8 @@ public class SentenceSimplifier {
 				//e.g., walking to the store -> walked to the store
 				String verbLemma =  AnalysisUtilities.getInstance().getLemma(verb.getChild(0).label().toString(), verb.label().toString());
 				String newVerb = AnalysisUtilities.getInstance().getSurfaceForm(verbLemma, verbPOS);
-				int verbIndex = vptree.indexOf(verb);
-				vptree = vptree.deeperCopy();
+				int verbIndex = vptree.objectIndexOf(verb);
+				vptree = vptree.deepCopy();
 				vptree.removeChild(verbIndex);
 				vptree.addChild(verbIndex, AnalysisUtilities.getInstance().readTreeFromString("("+verbPOS+" "+newVerb+")"));
 				newTreeStr = "(ROOT (S "+matcher.getNode("subj").toString()+" "+vptree.toString()+" (. .)))";

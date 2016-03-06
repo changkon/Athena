@@ -1,6 +1,7 @@
 package blaze.athena.QuestionGeneration;
 
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
+import edu.stanford.nlp.parser.lexparser.LexicalizedParserQuery;
 import edu.stanford.nlp.parser.lexparser.Options;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreePrint;
@@ -74,13 +75,15 @@ public class StanfordParserServer {
 			System.exit(0);
 		}
 		try {
-			lp = new LexicalizedParser(serializedInputFileOrUrl, op);
+//			lp = LexicalizedParser.getParserFromFile(serializedInputFileOrUrl, op);
+			lp = LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishFactored.ser.gz");
+//			lp = LexicalizedParser.getParserFromFile(serializedInputFileOrUrl, op);
 		} catch (IllegalArgumentException e) {
 			System.err.println("Error loading parser, exiting...");
 			System.exit(0);
 		}
-		lp.setMaxLength(maxLength);
-		lp.setOptionFlags("-outputFormat", "oneline");
+
+		lp.setOptionFlags("-outputFormat", "oneline", "-maxLength", maxLength + "");
 		
 		// declare a server socket and a client socket for the server
 		// declare an input and an output stream
@@ -119,18 +122,19 @@ public class StanfordParserServer {
 					lp.parse(doc);
 					
 					//OUTPUT RESULT
-					Tree bestParse = lp.getBestParse();
+					LexicalizedParserQuery query = lp.lexicalizedParserQuery();
+					Tree bestParse = query.getBestParse();
 					TreePrint tp = lp.getTreePrint();
 					tp.printTree(bestParse, outputWriter);
-					outputWriter.println(lp.getPCFGScore());
+					outputWriter.println(lp.lexicalizedParserQuery().getPCFGScore());
 					//String output = bestParse.toString();
 					//outputWriter.println(output);
 					//System.err.println("sent: " + output);
 						
 					int k=5;
-					System.err.println("best factored parse:\n"+lp.getBestParse().toString());
+					System.err.println("best factored parse:\n"+lp.lexicalizedParserQuery().getBestParse().toString());
 					System.err.println("k-best PCFG parses:");
-					List<ScoredObject<Tree>> kbest = lp.getKBestPCFGParses(k);
+					List<ScoredObject<Tree>> kbest = lp.lexicalizedParserQuery().getKBestPCFGParses(k);
 					for(int i=0; i<kbest.size(); i++){
 						System.err.println(kbest.get(i).object().toString());
 					}

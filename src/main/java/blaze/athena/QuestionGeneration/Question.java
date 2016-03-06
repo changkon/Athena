@@ -103,11 +103,11 @@ public class Question implements Comparable<Question>, Serializable{
 		res.copyFeatures(featureMap);
 		res.setScore(score);
 		res.setSourceSentenceNumber(sourceSentenceNumber);
-		if(tree != null) res.setTree(tree.deeperCopy());
+		if(tree != null) res.setTree(tree.deepCopy());
 		res.setLabelScore(labelScore);
-		if(answerPhraseTree != null) res.setAnswerPhraseTree(answerPhraseTree.deeperCopy());
-		if(sourceTree != null) res.setSourceTree(sourceTree.deeperCopy());
-		if(intermediateTree != null) res.setIntermediateTree(intermediateTree.deeperCopy());
+		if(answerPhraseTree != null) res.setAnswerPhraseTree(answerPhraseTree.deepCopy());
+		if(sourceTree != null) res.setSourceTree(sourceTree.deepCopy());
+		if(intermediateTree != null) res.setIntermediateTree(intermediateTree.deepCopy());
 		
 		res.setSourceArticleName(this.sourceArticleName);
 		res.setSourceDocument(this.sourceDocument);

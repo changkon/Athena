@@ -42,6 +42,7 @@ jettyRun {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -78,12 +79,20 @@ dependencies {
 
     //stanford parser
     compile files('lib/jaws-bin.jar')
-    compile files('lib/stanford-parser-2008-10-26.jar')
+
+    compile "edu.stanford.nlp:stanford-corenlp:+",
+            "edu.stanford.nlp:stanford-corenlp:+:models-english"
+
+    compile "edu.stanford.nlp:stanford-parser:+",
+            "edu.stanford.nlp:stanford-parser:+:models"
 
     compile "net.sf.extjwnl:extjwnl:+"
 
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'commons-logging:commons-logging:1.2'
+
+    // dependency for stanford
+    compile 'com.google.protobuf:protobuf-java:2.6.1'
 
 
     // resteasy multipart provider
