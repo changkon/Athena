@@ -1,0 +1,13 @@
+#header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px; }
+
+#dashboard-container {
+  display: flex; }
+  #dashboard-container .sidebar {
+    flex: 1; }
+  #dashboard-container .content {
+    flex: 5; }
+
+/*# sourceMappingURL=style.css.map */
