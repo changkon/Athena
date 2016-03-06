@@ -20,7 +20,7 @@ import javax.servlet.ServletContextListener;
  * @since 29 Feb 2016
  */
 @SpringBootApplication
-@ComponentScan({"blaze.athena.controller"})
+@ComponentScan({"blaze.athena"})
 @EnableAutoConfiguration
 public class AthenaSpringApplication {
 
