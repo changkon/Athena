@@ -83,8 +83,7 @@ dependencies {
     //stanford parser
     compile files('lib/jaws-bin.jar')
 
-    compile "edu.stanford.nlp:stanford-corenlp:+",
-            "edu.stanford.nlp:stanford-corenlp:+:models-english"
+    compile "edu.stanford.nlp:stanford-corenlp:+"
 
     compile "edu.stanford.nlp:stanford-parser:+",
             "edu.stanford.nlp:stanford-parser:+:models"

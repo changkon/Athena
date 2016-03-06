@@ -24,7 +24,6 @@
 package blaze.athena.QuestionGeneration;
 
 import blaze.athena.dto.QuestionDTO;
-import edu.smu.tspell.wordnet.WordNetDatabase;
 import edu.stanford.nlp.trees.LabeledScoredTreeFactory;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeFactory;
@@ -1392,7 +1391,7 @@ public class SentenceSimplifier {
 
 		GlobalProperties.loadProperties(propertiesFile);
 	//	System.setProperty("wordnet.database.dir", "C:\\Program Files (x86)\\WordNet\\2.1\\dict");
-		WordNetDatabase database = WordNetDatabase.getFileInstance();
+	//	WordNetDatabase database = WordNetDatabase.getFileInstance();
 
 		Tree parsed;
 
@@ -1500,7 +1499,6 @@ public class SentenceSimplifier {
 			}
 
 			int size = questionList.size();
-			StringBuilder sb = new StringBuilder();
 			List<QuestionDTO> questionDTOList = new ArrayList<>();
 
 			for (int i = 0; i < size; i++) {
@@ -1517,12 +1515,6 @@ public class SentenceSimplifier {
 				q.setAnswer(0);
 				questionDTOList.add(q);
 
-				sb.append(questionList.get(i)).append("\n");
-				sb.append("a) ").append(answerList.get(i)).append("\n");
-				sb.append("b) ").append(answerList.get((i+1)%size)).append("\n");
-				sb.append("c) ").append(answerList.get((i+2)%size)).append("\n");
-				sb.append("d) ").append(answerList.get((i+3)%size)).append("\n\n");
-
 				System.out.println(questionList.get(i));
 				System.out.println("a) " + answerList.get(i));
 				System.out.println("b) " + answerList.get((i+1)%size));
@@ -1532,7 +1524,6 @@ public class SentenceSimplifier {
 			}
 			System.err.println("Seconds Elapsed:\t"+((System.currentTimeMillis()-startTime)/1000.0));
 			return questionDTOList;
-			//return sb.toString();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
