@@ -4,11 +4,15 @@ angular.module('athena', ['ui.router'])
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('dashboard', {
-            url: '',
-            templateUrl: '/templates/dashboard.html',
-            controller: 'DashboardCtrl'
+            abstract: true,
+            templateUrl: '/templates/dashboard.html'
+        })
+        .state('dashboard.question', {
+            url: '/question',
+            templateUrl: '/templates/dashboard-question.html',
+            controller: 'DashboardQuestionCtrl'
         });
 
-    // For any unmatched url, redirect to /dashboard
-    $urlRouterProvider.otherwise("");
+    // For any unmatched url, redirect to /question
+    $urlRouterProvider.otherwise("/question");
 });
