@@ -25,6 +25,7 @@ package blaze.athena.QuestionGeneration;
 
 import edu.stanford.nlp.trees.*;
 import edu.stanford.nlp.trees.tregex.*;
+import edu.stanford.nlp.ling.Sentence;
 
 import java.io.Serializable;
 import java.util.*;
@@ -86,11 +87,11 @@ public class Question implements Comparable<Question>, Serializable{
 	public String toString(){
 		String res = "";
 		
-		if(tree != null) res += tree.yield().toString();
+		if(tree != null) res += Sentence.listToString(tree.yieldWords());
 		res += "\t";
-		if(intermediateTree != null) res += "Intermediate:"+intermediateTree.yield().toString();
+		if(intermediateTree != null) res += "Intermediate:"+Sentence.listToString(intermediateTree.yieldWords());
 		res += "\t";
-		if(sourceTree != null) res += "Source:"+sourceTree.yield().toString();
+		if(sourceTree != null) res += "Source:"+Sentence.listToString(sourceTree.yieldWords());
 		
 		
 		
@@ -153,7 +154,8 @@ public class Question implements Comparable<Question>, Serializable{
 	public String yield(){
 		if(yield == null ){
 			if(tree != null){
-				yield = AnalysisUtilities.getCleanedUpYield(tree);
+				//yield = AnalysisUtilities.getCleanedUpYield(tree);
+				yield = Sentence.listToString(tree.yieldWords());
 			}else{
 				yield = "";
 			}
@@ -297,7 +299,7 @@ public class Question implements Comparable<Question>, Serializable{
 		List<Tree> res = new ArrayList<Tree>();
 		
 		Tree pred = intermediateTree.getChild(0).headPreTerminal(AnalysisUtilities.getInstance().getHeadFinder());
-		String lemma = AnalysisUtilities.getInstance().getLemma(pred.yield().toString(), pred.label().toString());
+		String lemma = AnalysisUtilities.getInstance().getLemma(Sentence.listToString(pred.yieldWords()), pred.label().toString());
 		
 		String tregexOpStr;
 		TregexPattern matchPattern;

@@ -23,6 +23,7 @@
 
 package blaze.athena.QuestionGeneration;
 
+import blaze.athena.dto.QuestionDTO;
 import edu.smu.tspell.wordnet.WordNetDatabase;
 import edu.stanford.nlp.trees.LabeledScoredTreeFactory;
 import edu.stanford.nlp.trees.Tree;
@@ -32,6 +33,7 @@ import edu.stanford.nlp.trees.tregex.TregexPattern;
 import edu.stanford.nlp.trees.tregex.tsurgeon.Tsurgeon;
 import edu.stanford.nlp.trees.tregex.tsurgeon.TsurgeonPattern;
 import edu.stanford.nlp.util.Pair;
+import edu.stanford.nlp.ling.Sentence;
 
 import java.io.File;
 import java.util.*;
@@ -61,10 +63,10 @@ public class SentenceSimplifier {
 	}
 
 
-	public List<Question> simplifyHelper(Question input){
+	public List<blaze.athena.QuestionGeneration.Question> simplifyHelper(blaze.athena.QuestionGeneration.Question input){
 		if(GlobalProperties.getDebug()) System.err.println("simplifyHelper: "+input.getIntermediateTree());
 		numSimplifyHelperCalls++;
-		List<Question> treeCollection = new ArrayList<Question>();
+		List<blaze.athena.QuestionGeneration.Question> treeCollection = new ArrayList<blaze.athena.QuestionGeneration.Question>();
 
 
 		//move fronted PPs to the end of the sentence
@@ -83,12 +85,12 @@ public class SentenceSimplifier {
 			addIfNovel(treeCollection, input);
 		}else{
 
-			List<Question> extracted = new ArrayList<Question>();
+			List<blaze.athena.QuestionGeneration.Question> extracted = new ArrayList<blaze.athena.QuestionGeneration.Question>();
 			//if there is a conjunction of NPs within this small chunk, also extract separate sentences using each conjunct NP.
 			if(breakNPs) extractConjoinedNPs(extracted, input);
 			extractConjoinedPhrases(extracted, input);
 
-			for(Question e: extracted){
+			for(blaze.athena.QuestionGeneration.Question e: extracted){
 				//recur
 				addAllIfNovel(treeCollection, simplifyHelper(e));
 			}
@@ -108,7 +110,7 @@ public class SentenceSimplifier {
 	 * which syntactically look like participial phrases.
 	 *
 	 */
-	private boolean mainVerbOK(Question input) {
+	private boolean mainVerbOK(blaze.athena.QuestionGeneration.Question input) {
 		String tregexOpStr;
 		TregexPattern matchPattern;
 		TregexMatcher matcher;
@@ -125,7 +127,7 @@ public class SentenceSimplifier {
 
 
 
-	private boolean hasBreakableConjunction(Question input) {
+	private boolean hasBreakableConjunction(blaze.athena.QuestionGeneration.Question input) {
 		String tregexOpStr;
 		TregexPattern matchPattern;
 		TregexMatcher matcher;
@@ -172,7 +174,7 @@ public class SentenceSimplifier {
 	 * @param input
 	 * @return
 	 */
-	private boolean hasSubjectAndFiniteMainVerb(Question input) {
+	private boolean hasSubjectAndFiniteMainVerb(blaze.athena.QuestionGeneration.Question input) {
 		String tregexOpStr;
 		TregexPattern matchPattern;
 		TregexMatcher matcher;
@@ -192,7 +194,7 @@ public class SentenceSimplifier {
 
 
 
-	private void removeNestedElements(Question input) {
+	private void removeNestedElements(blaze.athena.QuestionGeneration.Question input) {
 		removeAppositives(input);
 		removeVerbalModifiersAfterCommas(input);
 		removeClauseLevelModifiers(input);
@@ -205,7 +207,7 @@ public class SentenceSimplifier {
 
 
 
-	public List<Question> simplify(Tree sentence){
+	public List<blaze.athena.QuestionGeneration.Question> simplify(Tree sentence){
 		return simplify(sentence, true);
 	}
 
@@ -220,27 +222,27 @@ public class SentenceSimplifier {
 	 * @param fixCapitalization
 	 * @return
 	 */
-	public List<Question> simplify(Tree sentence, boolean fixCapitalization){
-		List<Question> treeList = new ArrayList<Question>();
+	public List<blaze.athena.QuestionGeneration.Question> simplify(Tree sentence, boolean fixCapitalization){
+		List<blaze.athena.QuestionGeneration.Question> treeList = new ArrayList<blaze.athena.QuestionGeneration.Question>();
 		numSimplifyHelperCalls = 0;
 		if(GlobalProperties.getDebug()) System.err.println("simplify input:"+ sentence);
 		//add original tree
-		Question orig = new Question();
+		blaze.athena.QuestionGeneration.Question orig = new blaze.athena.QuestionGeneration.Question();
 		orig.setSourceTree(sentence);
 		orig.setIntermediateTree(sentence.deepCopy());
 
 		//if the input contains any UCP or other odd nodes, then just return the original sentence
 		//such nodes indicate that the parse failed, or at least that our system will likely produce bad output
-		if(uglyParse(sentence)){
-			treeList.add(orig);
-			return treeList;
-		}
+//		if(uglyParse(sentence)){
+//			treeList.add(orig);
+//			return treeList;
+//		}
 
 		AnalysisUtilities.downcaseFirstToken(orig.getIntermediateTree());
 		//treeSet.add(originalWithFeatures);
-		Question current = orig.deeperCopy();
+		blaze.athena.QuestionGeneration.Question current = orig.deeperCopy();
 
-		List<Question> extracted = new ArrayList<Question>();
+		List<blaze.athena.QuestionGeneration.Question> extracted = new ArrayList<blaze.athena.QuestionGeneration.Question>();
 
 		//for each nested element in the INPUT... (nested elements include finite verbs, non-restrictive relative clauses, appositives, conjunction of VPs, conjunction of clauses, participial phrases)
 		//transform the nested element into a declarative sentence (preserving tense), removing conjunctions, etc.
@@ -253,7 +255,7 @@ public class SentenceSimplifier {
 		//extractWITHPartcipialPhrases(extracted, orig); //too rare to worry about
 		if(extractFromVerbComplements) extractComplementClauses(extracted, orig);
 
-		for(Question q: extracted){
+		for(blaze.athena.QuestionGeneration.Question q: extracted){
 			addAllIfNovel(treeList, simplifyHelper(q));
 		}
 
@@ -264,13 +266,13 @@ public class SentenceSimplifier {
 
 		if(fixCapitalization){
 			//upcase the first tokens of all output trees.
-			for(Question q: treeList){
+			for(blaze.athena.QuestionGeneration.Question q: treeList){
 				AnalysisUtilities.upcaseFirstToken(q.getIntermediateTree());
 			}
 		}
 
 		//clean up the output
-		for(Question q: treeList){
+		for(blaze.athena.QuestionGeneration.Question q: treeList){
 			AnalysisUtilities.removeExtraQuotes(q.getIntermediateTree());
 		}
 
@@ -293,6 +295,7 @@ public class SentenceSimplifier {
 //			//TODO use this or not?
 //		}
 //		return false;
+		System.out.println(t.score());
 		return t.score() < -150;
 	}
 
@@ -305,9 +308,9 @@ public class SentenceSimplifier {
 	 * @param treeSet
 	 * @param q
 	 */
-	private void addIfNovel(Collection<Question> treeSet, Question q) {
+	private void addIfNovel(Collection<blaze.athena.QuestionGeneration.Question> treeSet, blaze.athena.QuestionGeneration.Question q) {
 		boolean exists = false;
-		for(Question old: treeSet){
+		for(blaze.athena.QuestionGeneration.Question old: treeSet){
 			if(old.getIntermediateTree().equals(q.getIntermediateTree())){
 				exists = true;
 				break;
@@ -327,8 +330,8 @@ public class SentenceSimplifier {
 	 * @param treeSet
 	 * @param extracted
 	 */
-	private void addAllIfNovel(Collection<Question> treeSet, Collection<Question> extracted) {
-		for(Question q: extracted){
+	private void addAllIfNovel(Collection<blaze.athena.QuestionGeneration.Question> treeSet, Collection<blaze.athena.QuestionGeneration.Question> extracted) {
+		for(blaze.athena.QuestionGeneration.Question q: extracted){
 			this.addIfNovel(treeSet, q);
 		}
 	}
@@ -338,14 +341,14 @@ public class SentenceSimplifier {
 	 * e.g., John and James like Susan.  ->  John likes Susan.
 	 *
 	 */
-	private void extractConjoinedNPs(Collection<Question> extracted, Question input) {
+	private void extractConjoinedNPs(Collection<blaze.athena.QuestionGeneration.Question> extracted, blaze.athena.QuestionGeneration.Question input) {
 		String tregexOpStr;
 		TregexPattern matchPattern;
 		Tree conjoinedNode;
 		Tree parent;
 
 		TregexMatcher matcher;
-		Question newQuestion;
+		blaze.athena.QuestionGeneration.Question newQuestion;
 
 		//only extract conjoined NPs that are arguments or adjuncts of the main verb
 		// in the tree, this means the closest S will be the one under the root
@@ -436,7 +439,7 @@ public class SentenceSimplifier {
 				//original main verb was plural but the conjoined subject word is singular
 				//e.g., John (and Mary) like Bill.  -> John like Bill.
 				if((verbPreterminal.label().toString().equals("VB") || verbPreterminal.label().toString().equals("VBP"))){ //the parser confuses VBP with VB
-					if(subject.yield().toString().equals("I") || subject.yield().toString().equals("you")){
+					if(Sentence.listToString(subject.yieldWords()).equals("I") || Sentence.listToString(subject.yieldWords()).equals("you")){
 						newVerbPOS = "VBP";
 					}else{
 						newVerbPOS = "VBZ";
@@ -455,7 +458,7 @@ public class SentenceSimplifier {
 				if(verbLemma.equals("be") && newVerbPOS.equals("VBD")){
 					if(subject.label().toString().endsWith("S")) newVerb = "were";
 					else  newVerb = "was";
-				}else if(verbLemma.equals("be") && subject.yield().toString().equals("I") && newVerbPOS.equals("VBP")){
+				}else if(verbLemma.equals("be") && Sentence.listToString(subject.yieldWords()).equals("I") && newVerbPOS.equals("VBP")){
 					newVerb = "am";
 				}else{ //default
 					newVerb = AnalysisUtilities.getInstance().getSurfaceForm(verbLemma, newVerbPOS);
@@ -472,7 +475,7 @@ public class SentenceSimplifier {
 	 * e.g., John ran and Bill walked.  -> John ran. Bill walked.
 	 *
 	 */
-	private void extractConjoinedPhrases(Collection<Question> extracted, Question input) {
+	private void extractConjoinedPhrases(Collection<blaze.athena.QuestionGeneration.Question> extracted, blaze.athena.QuestionGeneration.Question input) {
 		String tregexOpStr;
 		TregexPattern matchPattern;
 		Tree conjoinedNode;
@@ -513,7 +516,7 @@ public class SentenceSimplifier {
 			//make a new Question object and add it
 			addQuotationMarksIfNeeded(newTree);
 
-			Question newTreeWithFeatures = input.deeperCopy();
+			blaze.athena.QuestionGeneration.Question newTreeWithFeatures = input.deeperCopy();
 			newTreeWithFeatures.setIntermediateTree(newTree);
 			if(GlobalProperties.getDebug()) System.err.println("extractConjoinedPhrases: "+newTree.toString());
 			if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromConjoinedPhrases", 1.0); //old feature name
@@ -556,7 +559,7 @@ public class SentenceSimplifier {
 	 * @param q
 	 * @return
 	 */
-	private boolean removeClauseLevelModifiers(Question q) {
+	private boolean removeClauseLevelModifiers(blaze.athena.QuestionGeneration.Question q) {
 		List<Pair<TregexPattern, TsurgeonPattern>> ops;
 		String tregexOpStr;
 		TregexPattern matchPattern;
@@ -604,7 +607,7 @@ public class SentenceSimplifier {
 	 *
 	 * @return whether or not a change was made
 	 */
-	private boolean removeVerbalModifiersAfterCommas(Question q) {
+	private boolean removeVerbalModifiersAfterCommas(blaze.athena.QuestionGeneration.Question q) {
 		List<Pair<TregexPattern, TsurgeonPattern>> ops;
 		String tregexOpStr;
 		TregexPattern matchPattern;
@@ -650,7 +653,7 @@ public class SentenceSimplifier {
 	 * @param extracted
 	 * @param input
 	 */
-	private void extractVerbParticipialModifiers(Collection<Question> extracted, Question input) {
+	private void extractVerbParticipialModifiers(Collection<blaze.athena.QuestionGeneration.Question> extracted, blaze.athena.QuestionGeneration.Question input) {
 		String tregexOpStr;
 		TregexPattern matchPattern;
 		TregexMatcher matcher;
@@ -666,9 +669,11 @@ public class SentenceSimplifier {
 			String verbPOS = findTense(matcher.getNode("tense"));
 			Tree p = matcher.getNode("participial").deepCopy();
 			Tree verb = matcher.getNode("verb");
-			String verbLemma =  AnalysisUtilities.getInstance().getLemma(verb.getChild(0).label().toString(), verb.label().toString());
+//			String verbLemma =  AnalysisUtilities.getInstance().getLemma(verb.getChild(0).label().toString(), verb.label().toString());
+			String verbLemma =  AnalysisUtilities.getInstance().getLemma(verb.yieldWords().get(0).toString(), verb.label().toString());
 			String newVerb = AnalysisUtilities.getInstance().getSurfaceForm(verbLemma, verbPOS);
 			int verbIndex = p.objectIndexOf(verb);
+			if (verbIndex < 0) { continue; }
 			p.removeChild(verbIndex);
 			p.addChild(verbIndex, AnalysisUtilities.getInstance().readTreeFromString("("+verbPOS+" "+newVerb+")"));
 			String treeStr = "(ROOT (S "+matcher.getNode("subj").toString()+" "+p.toString()+" (. .)))";
@@ -676,7 +681,7 @@ public class SentenceSimplifier {
 			correctTense(newTree.getChild(0).getChild(0), newTree.getChild(0));
 
 			addQuotationMarksIfNeeded(newTree);
-			Question newTreeWithFeatures = input.deeperCopy();
+			blaze.athena.QuestionGeneration.Question newTreeWithFeatures = input.deeperCopy();
 			newTreeWithFeatures.setIntermediateTree(newTree);
 			if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromParticipial", 1.0);
 			if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromVerbParticipial", 1.0);
@@ -689,7 +694,7 @@ public class SentenceSimplifier {
 
 	private String findTense(Tree node) {
 		if(node.label().equals("MD")){
-			if(node.yield().toString().matches("^(would|could)$")){
+			if(Sentence.listToString(node.yieldWords()).matches("^(would|could)$")){
 				return "VBD";
 			}
 		}
@@ -704,7 +709,7 @@ public class SentenceSimplifier {
 	 * e.g., As John slept, I studied. ->  John slept.
 	 *
 	 */
-	private void extractSubordinateClauses(Collection<Question> extracted, Question input) {
+	private void extractSubordinateClauses(Collection<blaze.athena.QuestionGeneration.Question> extracted, blaze.athena.QuestionGeneration.Question input) {
 		Tree subord;
 		String tregexOpStr;
 		TregexPattern matchPattern;
@@ -724,7 +729,7 @@ public class SentenceSimplifier {
 
 			AnalysisUtilities.addPeriodIfNeeded(newTree);
 			addQuotationMarksIfNeeded(newTree);
-			Question newTreeWithFeatures = input.deeperCopy();
+			blaze.athena.QuestionGeneration.Question newTreeWithFeatures = input.deeperCopy();
 			newTreeWithFeatures.setIntermediateTree(newTree);
 			if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromFiniteClause", 1.0); //old feature name
 			if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromSubordinateClause", 1.0);
@@ -734,7 +739,7 @@ public class SentenceSimplifier {
 	}
 
 
-	private void extractComplementClauses(Collection<Question> extracted, Question input) {
+	private void extractComplementClauses(Collection<blaze.athena.QuestionGeneration.Question> extracted, blaze.athena.QuestionGeneration.Question input) {
 		Tree subord;
 		String tregexOpStr;
 		TregexPattern matchPattern;
@@ -752,7 +757,7 @@ public class SentenceSimplifier {
 			Tree newTree = factory.newTreeNode("ROOT", new ArrayList<Tree>());
 			subord = matcher.getNode("sub");
 			Tree verb = matcher.getNode("verb");
-			String verbLemma = AnalysisUtilities.getInstance().getLemma(verb.yield().toString(), verb.label().toString());
+			String verbLemma = AnalysisUtilities.getInstance().getLemma(Sentence.listToString(verb.yieldWords()), verb.label().toString());
 
 			if(!verbImpliesComplement(verbLemma)){
 				continue;
@@ -761,7 +766,7 @@ public class SentenceSimplifier {
 
 			AnalysisUtilities.addPeriodIfNeeded(newTree);
 			addQuotationMarksIfNeeded(newTree);
-			Question newTreeWithFeatures = input.deeperCopy();
+			blaze.athena.QuestionGeneration.Question newTreeWithFeatures = input.deeperCopy();
 			newTreeWithFeatures.setIntermediateTree(newTree);
 			if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromFiniteClause", 1.0); //old feature name
 			if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromComplementClause", 1.0);
@@ -796,7 +801,7 @@ public class SentenceSimplifier {
 	 * e.g., Lincoln, the 16th president, was tall. -> Lincoln was the 16th president.
 	 * The meeting, in 1984, was important. -> The meeting was in 1984.
 	 */
-	private void extractAppositives(Collection<Question> extracted, Question input) {
+	private void extractAppositives(Collection<blaze.athena.QuestionGeneration.Question> extracted, blaze.athena.QuestionGeneration.Question input) {
 		String tregexOpStr;
 		TregexPattern matchPattern;
 		TregexMatcher matcher;
@@ -839,7 +844,7 @@ public class SentenceSimplifier {
 
 			addQuotationMarksIfNeeded(newTree);
 			if(GlobalProperties.getDebug()) System.err.println("extractAppositives: "+ newTree.toString());
-			Question newTreeWithFeatures = input.deeperCopy();
+			blaze.athena.QuestionGeneration.Question newTreeWithFeatures = input.deeperCopy();
 			newTreeWithFeatures.setIntermediateTree(newTree);
 			if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromAppositive", 1.0);
 
@@ -879,7 +884,7 @@ public class SentenceSimplifier {
 	 * e.g., John, who is a friend of mine, likes Susan. -> John is a friend of mine.
 	 *
 	 */
-	private void extractNonRestrictiveRelativeClauses(Collection<Question> extracted, Question input) {
+	private void extractNonRestrictiveRelativeClauses(Collection<blaze.athena.QuestionGeneration.Question> extracted, blaze.athena.QuestionGeneration.Question input) {
 		String tregexOpStr;
 		TregexPattern matchPattern;
 		TregexMatcher matcher;
@@ -967,7 +972,7 @@ public class SentenceSimplifier {
 					ppRelativeClause = true;
 					subjectMovement = false;
 				}else if(matcher.getNode("preposition") != null){
-					String tmp = "(PP (IN "+matcher.getNode("preposition").yield().toString()+") "+missingArgumentTree.toString()+")";
+					String tmp = "(PP (IN "+Sentence.listToString(matcher.getNode("preposition").yieldWords())+") "+missingArgumentTree.toString()+")";
 					missingArgumentTree = AnalysisUtilities.getInstance().readTreeFromString(tmp);
 					ppRelativeClause = true;
 				}
@@ -987,7 +992,7 @@ public class SentenceSimplifier {
 
 				if(GlobalProperties.getDebug()) System.err.println("extractRelativeClauses: "+ newTree.toString());
 				addQuotationMarksIfNeeded(newTree);
-				Question newTreeWithFeatures = input.deeperCopy();
+				blaze.athena.QuestionGeneration.Question newTreeWithFeatures = input.deeperCopy();
 				newTreeWithFeatures.setIntermediateTree(newTree);
 				if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromRelativeClause", 1.0);
 				addIfNovel(extracted, newTreeWithFeatures);
@@ -1006,7 +1011,7 @@ public class SentenceSimplifier {
 	 * @param input
 	 * @return
 	 */
-	private void moveLeadingPPsAndQuotes(Question input) {
+	private void moveLeadingPPsAndQuotes(blaze.athena.QuestionGeneration.Question input) {
 		String tregexOpStr;
 		TregexPattern matchPattern;
 		TregexMatcher matcher;
@@ -1076,7 +1081,7 @@ public class SentenceSimplifier {
 	 * @param extracted
 	 * @param input
 	 */
-	private void extractNounParticipialModifiers(Collection<Question> extracted, Question input) {
+	private void extractNounParticipialModifiers(Collection<blaze.athena.QuestionGeneration.Question> extracted, blaze.athena.QuestionGeneration.Question input) {
 		String tregexOpStr;
 		TregexPattern matchPattern;
 		TregexMatcher matcher;
@@ -1132,7 +1137,7 @@ public class SentenceSimplifier {
 			addQuotationMarksIfNeeded(newTree);
 
 			if(GlobalProperties.getDebug()) System.err.println("extractNounParticipialModifiers: "+ newTree.toString());
-			Question newTreeWithFeatures = input.deeperCopy();
+			blaze.athena.QuestionGeneration.Question newTreeWithFeatures = input.deeperCopy();
 			newTreeWithFeatures.setIntermediateTree(newTree);
 			if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromParticipial", 1.0); //old feature name
 			if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromNounParticipial", 1.0);
@@ -1182,7 +1187,7 @@ public class SentenceSimplifier {
 	 * e.g., John, who hoped to get a good grade, studied. -> John studied.
 	 *
 	 */
-	private boolean removeNonRestrRelClausesAndParticipials(Question q) {
+	private boolean removeNonRestrRelClausesAndParticipials(blaze.athena.QuestionGeneration.Question q) {
 		List<Pair<TregexPattern, TsurgeonPattern>> ops = new ArrayList<Pair<TregexPattern, TsurgeonPattern>>();
 		String tregexOpStr;
 		TregexPattern matchPattern;
@@ -1227,7 +1232,7 @@ public class SentenceSimplifier {
 	 *
 	 * @return whether or not a change was made
 	 */
-	private boolean removeParentheticals(Question q) {
+	private boolean removeParentheticals(blaze.athena.QuestionGeneration.Question q) {
 		List<Pair<TregexPattern, TsurgeonPattern>> ops = new ArrayList<Pair<TregexPattern, TsurgeonPattern>>();
 		String tregexOpStr;
 		TregexPattern matchPattern;
@@ -1288,7 +1293,7 @@ public class SentenceSimplifier {
 	 * @param q
 	 * @return whether or not a change was made
 	 */
-	private boolean removeAppositives(Question q) {
+	private boolean removeAppositives(blaze.athena.QuestionGeneration.Question q) {
 		List<Pair<TregexPattern, TsurgeonPattern>> ops = new ArrayList<Pair<TregexPattern, TsurgeonPattern>>();
 		String tregexOpStr;
 		TregexPattern matchPattern;
@@ -1346,7 +1351,7 @@ public class SentenceSimplifier {
 	}
 
 
-	private static String simplificationFeatureString(Question q) {
+	private static String simplificationFeatureString(blaze.athena.QuestionGeneration.Question q) {
 		String res = "";
 
 		res += q.getFeatureValue("extractedFromAppositive");
@@ -1372,12 +1377,16 @@ public class SentenceSimplifier {
 
 	/**
 	 */
-	public String run(String doc) {
+	public List<QuestionDTO> run(String doc) {
 		Runnable r = () -> StanfordParserServer.main(new String[]{});
 		Thread thread = new Thread(r);
 		thread.start();
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
-		SentenceSimplifier ss = new SentenceSimplifier();
 		boolean verbose = false;
 		String propertiesFile = "config"+File.separator+"factual-statement-extractor.properties";
 
@@ -1396,7 +1405,7 @@ public class SentenceSimplifier {
 			List<String> sentences = AnalysisUtilities.getSentences(doc);
 
 			//iterate over each segmented sentence and generate questions
-			List<Question> output = new ArrayList<Question>();
+			List<blaze.athena.QuestionGeneration.Question> output = new ArrayList<blaze.athena.QuestionGeneration.Question>();
 
 			List<String> sentencesList = new ArrayList<String>();
 			List<Tree> parsedList = new ArrayList<Tree>();
@@ -1421,23 +1430,32 @@ public class SentenceSimplifier {
 					continue; //don't include sentences that are fewer than 5 words
 				}
 				parsed = AnalysisUtilities.getInstance().parseSentence(sentence).parse;
+				if (!parsed.firstChild().label().value().equals("S")) {
+					System.out.println(parsed.firstChild().label().value());
+					continue;
+				}
 
-				if(GlobalProperties.getDebug()) System.err.println("input: "+parsed.yield().toString());
+				if(GlobalProperties.getDebug()) System.err.println("input: "+Sentence.listToString(parsed.yieldWords()));
 				if(GlobalProperties.getDebug()) System.err.println("parse: "+sentence);
 				//if no parse, print the original sentence
-				if(parsed.yield().toString().equals(".")){
+				if(Sentence.listToString(parsed.yieldWords()).equals(".")){
 					System.out.print(sentence);
 					if(verbose) System.out.print("\t"+sentence);
 					System.out.println();
 					continue;
 				}
 
-				output.clear();
-				output.addAll(ss.simplify(parsed));
+				sentencesList.add(sentence);
+				parsedList.add(parsed);
+				topicList.add(topic);
 
-				for(Question q: output){
+				output.clear();
+				output.addAll(simplify(parsed));
+
+				for(blaze.athena.QuestionGeneration.Question q: output){
 					Tree intermediateTree = q.getIntermediateTree();
-					String s = AnalysisUtilities.getCleanedUpYield(intermediateTree);
+				//	String s = AnalysisUtilities.getCleanedUpYield(intermediateTree);
+					String s = Sentence.listToString(intermediateTree.yieldWords());
 					if (s.split(" ").length < 5) {
 						continue; //skip questions that are less than 5 words
 					}
@@ -1447,7 +1465,7 @@ public class SentenceSimplifier {
 						parsedList.add(intermediateTree.children()[0]);
 						topicList.add(topic);
 					}
-					if(verbose) System.out.print("\t"+AnalysisUtilities.getCleanedUpYield(q.getSourceTree()));
+				//	if(verbose) System.out.print("\t"+AnalysisUtilities.getCleanedUpYield(q.getSourceTree()));
 					if(verbose) System.out.print("\t"+simplificationFeatureString(q));
 					System.out.println();
 				}
@@ -1460,7 +1478,9 @@ public class SentenceSimplifier {
 			for (int i = 0; i < sentencesList.size(); i++) {
 				Tree taggedWords = parsedList.get(i);
 				boolean nounPhrasePresent = false;
-				for (Tree phrase : taggedWords.children()) {
+				Tree[] children = taggedWords.firstChild().children();
+
+				for (Tree phrase : children) {
 					if (phrase.value().equals("NP")) {
 						nounPhrasePresent = true;
 						// there should be some noun phrase before the verb phrase for a valid sentence
@@ -1481,11 +1501,22 @@ public class SentenceSimplifier {
 
 			int size = questionList.size();
 			StringBuilder sb = new StringBuilder();
+			List<QuestionDTO> questionDTOList = new ArrayList<>();
+
 			for (int i = 0; i < size; i++) {
 				//double check to ensure there is a blank to fill
 				if (!questionList.get(i).contains("__________________")) {
 					continue;
 				}
+
+				QuestionDTO q = new QuestionDTO(questionList.get(i));
+				q.addAnswer(answerList.get(i));
+				q.addAnswer(answerList.get((i+1)%size));
+				q.addAnswer(answerList.get((i+2)%size));
+				q.addAnswer(answerList.get((i+3)%size));
+				q.setAnswer(0);
+				questionDTOList.add(q);
+
 				sb.append(questionList.get(i)).append("\n");
 				sb.append("a) ").append(answerList.get(i)).append("\n");
 				sb.append("b) ").append(answerList.get((i+1)%size)).append("\n");
@@ -1500,12 +1531,12 @@ public class SentenceSimplifier {
 				System.out.println();
 			}
 			System.err.println("Seconds Elapsed:\t"+((System.currentTimeMillis()-startTime)/1000.0));
-
-			return sb.toString();
+			return questionDTOList;
+			//return sb.toString();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return "Error occurred";
+		return null;
 	}
 
 	private static List<String> getNounPhrase(Tree phrase) {
@@ -1515,9 +1546,10 @@ public class SentenceSimplifier {
 		}
 		for (Tree phrase2 : phrase.children()) {
 			List<String> s;
-			if (phrase2.value().equals("NP") && AnalysisUtilities.getCleanedUpYield(phrase2).trim().split(" ").length < 5) {
-		//		System.out.println("the noun phrase is: " + AnalysisUtilities.getCleanedUpYield(phrase2));
-				nouns.add(" " + AnalysisUtilities.getCleanedUpYield(phrase2));
+			String phrase2String = Sentence.listToString(phrase2.yieldWords());
+			if (phrase2.value().equals("NP") && phrase2String.trim().split(" ").length < 5) {
+			//	System.out.println("the noun phrase is: " + Sentence.listToString(phrase2.yieldWords()));
+				nouns.add(" " + phrase2String);
 			} else if ((s = getNounPhrase(phrase2)) != null && s.size() != 0) {
 				nouns.addAll(s);
 			}

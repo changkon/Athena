@@ -108,7 +108,7 @@ public class StanfordParserServer {
 				clientSocket = parseServer.accept();
 				System.err.println("Connection Accepted From: "+clientSocket.getInetAddress());
 				br = new BufferedReader(new InputStreamReader(new DataInputStream(clientSocket.getInputStream())));
-				outputWriter = new PrintWriter(new PrintStream(clientSocket.getOutputStream()));
+				outputWriter = new PrintWriter(new PrintStream(clientSocket.getOutputStream()), false);
 
 				String doc = "";
 
@@ -119,32 +119,19 @@ public class StanfordParserServer {
 				
 				//PARSE
 				try{
-					lp.parse(doc);
+					Tree bestParse = lp.parse(doc);
 					
 					//OUTPUT RESULT
-					LexicalizedParserQuery query = lp.lexicalizedParserQuery();
-					Tree bestParse = query.getBestParse();
 					TreePrint tp = lp.getTreePrint();
 					tp.printTree(bestParse, outputWriter);
-					outputWriter.println(lp.lexicalizedParserQuery().getPCFGScore());
-					//String output = bestParse.toString();
-					//outputWriter.println(output);
-					//System.err.println("sent: " + output);
-						
+
 					int k=5;
-					System.err.println("best factored parse:\n"+lp.lexicalizedParserQuery().getBestParse().toString());
-					System.err.println("k-best PCFG parses:");
-					List<ScoredObject<Tree>> kbest = lp.lexicalizedParserQuery().getKBestPCFGParses(k);
-					for(int i=0; i<kbest.size(); i++){
-						System.err.println(kbest.get(i).object().toString());
-					}
-					
+					System.err.println("best factored parse:\n"+bestParse.toString());
+
 				}catch(Exception e){
 					outputWriter.println("(ROOT (. .))");
-					outputWriter.println("-999999999.0");
 					e.printStackTrace();
 				}
-				
 				outputWriter.flush();
 				outputWriter.close();
 

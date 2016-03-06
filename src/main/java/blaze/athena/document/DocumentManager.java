@@ -32,30 +32,32 @@ public interface DocumentManager {
 
     default String formatText(String input) {
         String[] lines = input.split(lineSeparator);
-        for (int i =0; i < lines.length-1; i++) {
+        int mergeCount = 0;
+        for (int i =0; i < lines.length-1 && i+1+mergeCount < lines.length; i++) {
             String firstLine = lines[i].trim();
-            String secondLine = lines[i+1].trim();
-            int next = 1;
-            if (secondLine.equals("") && i < lines.length - 2) {
-                secondLine = lines[i+2].trim();
-                next = 2;
-            }
+            String secondLine = lines[i+1+mergeCount].trim();
+//            int next = 1;
+//            if (secondLine.equals("") && i < lines.length - 2) {
+//                next++;
+//                secondLine = lines[i+next].trim();
+//            }
             if (firstLine.length() == 0 || secondLine.length() == 0) {
+                mergeCount = 0;
                 continue;
             }
             char secondLineFirstLetter = secondLine.charAt(0);
             char firstLineLastLetter = firstLine.charAt(firstLine.length()-1);
-            if (firstLineLastLetter != '.' &&
-                    (Character.isLowerCase(secondLineFirstLetter) ||
-                            Character.isLetter(secondLineFirstLetter) && !lines[i].replace(" ", "").contains("==========."))) {
+            if (firstLineLastLetter != '.' && !secondLine.contains("==========") &&
+                    (Character.isLetter(secondLineFirstLetter) || Character.isDigit(secondLineFirstLetter) || secondLineFirstLetter == '(')) {
                 lines[i] = firstLine + " " + secondLine;
-                lines[i+next] = "";
+                lines[i+1+mergeCount] = "";
                 i--; //reset i to test this line again
+                mergeCount++;
             }
-            if (i >= 0) {
-                lines[i] = lines[i].trim();
-            }
-            lines[i+next] = lines[i+next].trim();
+//            if (i >= 0) {
+//                lines[i] = lines[i].trim();
+//            }
+//            lines[i+1+mergeCount] = lines[i+1+mergeCount].trim();
         }
         for (int i = 0; i < lines.length; i++) {
             if (!lines[i].trim().equals("")) {

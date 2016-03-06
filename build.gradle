@@ -65,6 +65,9 @@ dependencies {
     // jackson provider
     compile "org.jboss.resteasy:resteasy-jackson2-provider:+"
 
+    //jackson
+    compile 'com.fasterxml.jackson.core:jackson-core:2.7.2'
+
     // spring boot starter
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
 

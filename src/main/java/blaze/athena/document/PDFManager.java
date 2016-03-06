@@ -41,13 +41,14 @@ public class PDFManager implements DocumentManager {
         int y = 0;
         int width = 1000;
         pdDoc = new PDDocument(cosDoc);
-        float height = pdDoc.getPage(0).getMediaBox().getHeight() - 50;
+        float height = pdDoc.getPage(0).getMediaBox().getHeight() - 10;
 
         Rectangle2D region = new Rectangle2D.Double(x, y, width, height);
         String regionName = "region";
         PDFTextStripperByArea pdfTextStripper;
 
         pdfTextStripper = new PDFTextStripperByArea();
+        pdfTextStripper.setDropThreshold(2);
         pdfTextStripper.setParagraphEnd(lineSeparator);
 
         pdfTextStripper.addRegion(regionName, region);

@@ -112,7 +112,7 @@ public class AnalysisUtilities {
 		Tree firstWordTree = inputTree.getLeaves().get(0);
 		if(firstWordTree == null)	return;
 		Tree preterm = firstWordTree.parent(inputTree);
-		String firstWord = firstWordTree.yield().toString();
+		String firstWord = edu.stanford.nlp.ling.Sentence.listToString(firstWordTree.yieldWords());
 		if(!preterm.label().toString().matches("^NNP.*") && !firstWord.equals("I")){	
 		//if(firstWord.indexOf('-') == -1 && !firstWord.equals("I")){
 			firstWord = firstWord.substring(0,1).toLowerCase() + firstWord.substring(1);
@@ -127,7 +127,7 @@ public class AnalysisUtilities {
 		Tree firstWordTree = inputTree.getLeaves().get(0);
 		if(firstWordTree == null)	return;
 		
-		String firstWord = firstWordTree.yield().toString();
+		String firstWord = edu.stanford.nlp.ling.Sentence.listToString(firstWordTree.yieldWords());
 		firstWord = firstWord.substring(0,1).toUpperCase() + firstWord.substring(1);
 		firstWordTree.label().setValue(firstWord);
 
@@ -247,35 +247,29 @@ public class AnalysisUtilities {
 			pw.flush(); //flush to complete the transmission
 
             while((line = br.readLine())!= null){
-                //if(!line.matches(".*\\S.*")){
-                //        System.out.println();
-                //}
-                if(br.ready()){
-                	line = line.replaceAll("\n", "");
-                    line = line.replaceAll("\\s+", " ");
-                	result += line + " ";
-                }else{
-                	parseScore = new Double(line);
-					parse.setScore(parseScore);
-                }
+				line = line.replaceAll("\n", "");
+				line = line.replaceAll("\\s+", " ");
+				result += line + " ";
             }
 
 			br.close();
 			pw.close();
 			client.close();
-			
-			if(parse == null){
-				parse = readTreeFromString("(ROOT (. .))");
-				parseScore = -99999.0;
-			}
+//
+//			if(parse == null){
+//				parse = readTreeFromString("(ROOT (. .))");
+//				parseScore = -99999.0;
+//			}
 		
 			if(GlobalProperties.getDebug()) System.err.println("result (parse):"+result);
 			parse = readTreeFromString(result);
+//			parseScore = new Double(line);
+//			parse.setScore(parseScore);
 			return new ParseResult(true, parse, parseScore);
 			
 		} catch (Exception ex) {
 			if(GlobalProperties.getDebug()) System.err.println("Could not connect to parser server.");
-			//ex.printStackTrace();
+			ex.printStackTrace();
 		}
         
 		System.err.println("parsing:"+sentence);
@@ -295,8 +289,8 @@ public class AnalysisUtilities {
 		}
 
 		try{
-			if(parser.parse(sentence) != null) {
-				parse = parser.lexicalizedParserQuery().getBestParse();
+			if((parse = parser.parse(sentence)) != null) {
+				//parse = parser.lexicalizedParserQuery().getBestParse();
 				
 				//remove all the parent annotations (this is a hacky way to do it)
 				String ps = parse.toString().replaceAll("\\[[^\\]]+/[^\\]]+\\]", "");
@@ -308,6 +302,7 @@ public class AnalysisUtilities {
 				return new ParseResult(true, parse, parseScore);
 			}
 		}catch(Exception e){
+			e.printStackTrace();
 		}
 
 		parse = readTreeFromString("(ROOT (. .))");
@@ -332,6 +327,7 @@ public class AnalysisUtilities {
 				//Iterator<String> iter = Dictionary.getInstance().getMorphologicalProcessor().lookupAllBaseForms(POS.VERB, res).iterator();
 				
 				IndexWord iw;
+				System.out.println("res is " + res);
 				if(pos.startsWith("V")) iw = Dictionary.getDefaultResourceInstance().getMorphologicalProcessor().lookupBaseForm(POS.VERB, res);
 				else if(pos.startsWith("N")) iw = Dictionary.getDefaultResourceInstance().getMorphologicalProcessor().lookupBaseForm(POS.NOUN, res);
 				else if(pos.startsWith("J")) iw = Dictionary.getDefaultResourceInstance().getMorphologicalProcessor().lookupBaseForm(POS.ADJECTIVE, res);
@@ -412,13 +408,13 @@ public class AnalysisUtilities {
 	}
 	
 	
-	public static String getCleanedUpYield(Tree inputTree){
-		Tree copyTree = inputTree.deepCopy();
-
-		if(GlobalProperties.getDebug())System.err.println(copyTree.toString());
-
-		return cleanUpSentenceString(copyTree.yield().toString());
-	}
+//	public static String getCleanedUpYield(Tree inputTree){
+//		Tree copyTree = inputTree.deepCopy();
+//
+//		if(GlobalProperties.getDebug())System.err.println(copyTree.toString());
+//
+//		return cleanUpSentenceString(copyTree.yield().toString());
+//	}
 	
 	
 	
