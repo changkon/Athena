@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module('athena');
 
-    app.controller('DashboardQuestionCtrl', ['$scope','Post', function($scope, Post) {
+    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', function($scope, FilePost) {
 
         $scope.uploadFile = function(){
             var file = $scope.myFile;
@@ -10,7 +10,7 @@
             var fd = new FormData();
             fd.append('uploadedFile', file);
 
-            Post.create({}, fd).$promise.then(function(res){
+            FilePost.create({}, fd).$promise.then(function(res){
                 console.log(res);
             }).catch(function (err) {
                 console.log("error: ");
