@@ -1,7 +1,17 @@
 #header {
   display: flex;
   justify-content: space-between;
-  padding: 0 20px; }
+  padding: 20px 125px;
+  color: white !important;
+  background-color: #886aea; }
+  #header .logo {
+    font-size: 1.5em; }
+    #header .logo a {
+      color: white;
+      text-decoration: none; }
+  #header .icon-container {
+    display: flex;
+    align-items: center; }
 
 #dashboard-container {
   display: flex; }

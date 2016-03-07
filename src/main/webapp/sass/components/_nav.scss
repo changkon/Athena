@@ -2,5 +2,24 @@
 {
     display: flex;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 20px 125px;
+    color: white !important;
+    background-color: $primary-color;
+
+    .logo
+    {
+        font-size: 1.5em;
+
+        a
+        {
+            color: white;
+            text-decoration: none;
+        }
+    }
+
+    .icon-container
+    {
+        display: flex;
+        align-items: center;
+    }
 }
