@@ -141,7 +141,7 @@ public class AnalysisUtilities {
 		//remove single words in parentheses.  
 		//the stanford parser api messed up on these
 		//by removing the parentheses but not the word in them
-		sentence = sentence.replaceAll("\\(\\S*\\)","");
+		//sentence = sentence.replaceAll("\\(\\S*\\)","");
 		
 		//some common unicode characters that the tokenizer throws out otherwise
 		sentence = sentence.replaceAll("—", "--");
@@ -169,11 +169,11 @@ public class AnalysisUtilities {
 		//simply remove other unicode characters
 		//if not, the tokenizer replaces them with spaces, 
 		//which wreaks havoc on the final parse sometimes
-		for(int i=0;i<sentence.length();i++){
-			if(sentence.charAt(i) > 'z'){
-				sentence = sentence.substring(0,i)+sentence.substring(i+1);
-			}
-		}
+//		for(int i=0;i<sentence.length();i++){
+//			if(sentence.charAt(i) > 'z'){
+//				sentence = sentence.substring(0,i)+sentence.substring(i+1);
+//			}
+//		}
 		
 		
 		//add punctuation to the end if necessary

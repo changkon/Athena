@@ -1403,8 +1403,8 @@ public class SentenceSimplifier {
 
 			for(String sentence: sentences){
 				int numWords = sentence.split(" ").length;
-
-				if (sentence.replaceAll("[^a-zA-Z ]", "").split(" ").length <= 5 &&
+				String copy = sentence;
+				if (copy.replaceAll("[^a-zA-Z ]", "").split(" ").length <= 5 &&
 						(oldSentence.equals("INITIAL SENTENCE IS EMPTY") || oldSentence.replace(" ", "").equals("==========."))) {
 					topic = sentence.replace(".", "").trim();
 					System.out.println("topic is: " + sentence);
@@ -1439,26 +1439,26 @@ public class SentenceSimplifier {
 				parsedList.add(parsed);
 				topicList.add(topic);
 
-				output.clear();
-				output.addAll(simplify(parsed));
-
-				for(blaze.athena.QuestionGeneration.Question q: output){
-					Tree intermediateTree = q.getIntermediateTree();
-				//	String s = AnalysisUtilities.getCleanedUpYield(intermediateTree);
-					String s = Sentence.listToString(intermediateTree.yieldWords());
-					if (s.split(" ").length < 5) {
-						continue; //skip questions that are less than 5 words
-					}
-					System.out.print(s);
-					if (intermediateTree.children().length > 0) {
-						sentencesList.add(s);
-						parsedList.add(intermediateTree.children()[0]);
-						topicList.add(topic);
-					}
-				//	if(verbose) System.out.print("\t"+AnalysisUtilities.getCleanedUpYield(q.getSourceTree()));
-					if(verbose) System.out.print("\t"+simplificationFeatureString(q));
-					System.out.println();
-				}
+//				output.clear();
+//				output.addAll(simplify(parsed));
+//
+//				for(blaze.athena.QuestionGeneration.Question q: output){
+//					Tree intermediateTree = q.getIntermediateTree();
+//				//	String s = AnalysisUtilities.getCleanedUpYield(intermediateTree);
+//					String s = Sentence.listToString(intermediateTree.yieldWords());
+//					if (s.split(" ").length < 5) {
+//						continue; //skip questions that are less than 5 words
+//					}
+//					System.out.print(s);
+//					if (intermediateTree.children().length > 0) {
+//						sentencesList.add(s);
+//						parsedList.add(intermediateTree.children()[0]);
+//						topicList.add(topic);
+//					}
+//				//	if(verbose) System.out.print("\t"+AnalysisUtilities.getCleanedUpYield(q.getSourceTree()));
+//					if(verbose) System.out.print("\t"+simplificationFeatureString(q));
+//					System.out.println();
+//				}
 				oldSentence = sentence;
 			}
 

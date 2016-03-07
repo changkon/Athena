@@ -12,7 +12,7 @@ public class QuestionDTO {
     private int answer;
 
     public QuestionDTO(String question) {
-        this.setQuestion(question);
+        this.setQuestion(question.replaceAll("(\\r|\\n|\\r\\n)+", "\\\\n"));
     }
 
     public String getQuestion() {
