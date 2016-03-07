@@ -1,6 +1,6 @@
 // Athena angularjs app
 // loads config and routing
-angular.module('athena', ['ui.router'])
+angular.module('athena', ['ui.router','ngResource'])
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('dashboard', {
@@ -15,4 +15,13 @@ angular.module('athena', ['ui.router'])
 
     // For any unmatched url, redirect to /question
     $urlRouterProvider.otherwise("/question");
+})
+.factory('Post', function ($resource) {
+    return $resource('/services/pdf/generate',null,{
+        create: {
+            method: "POST",
+            transformRequest: angular.identity,
+            headers: { 'Content-Type': undefined }
+        }
+    });
 });
