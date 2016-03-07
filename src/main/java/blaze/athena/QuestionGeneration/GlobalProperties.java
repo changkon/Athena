@@ -37,14 +37,10 @@ public class GlobalProperties {
 	}
 	
 	public static void loadProperties(String propertiesFile){
-		if(!(new File(propertiesFile).exists())){
-			System.err.println("properties file not found at the location, "+propertiesFile+".  Please specify with --properties PATH.");
-			System.exit(0);
-		}
-		
 		properties = new Properties();
 		try{
-			properties.load(new FileInputStream(propertiesFile));
+			ClassLoader loader = Thread.currentThread().getContextClassLoader();
+			properties.load(loader.getResourceAsStream(propertiesFile));
 		}catch(Exception e){
 			e.printStackTrace();
 			System.exit(0);

@@ -23,11 +23,9 @@
 
 package blaze.athena.QuestionGeneration;
 
-import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.ling.Label;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.parser.lexparser.Options;
-import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.simple.Document;
 import edu.stanford.nlp.simple.Sentence;
 import edu.stanford.nlp.trees.*;
@@ -44,7 +42,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -278,7 +275,7 @@ public class AnalysisUtilities {
 		if(parser == null){
 			try {
 				Options op = new Options();
-				String serializedInputFileOrUrl = GlobalProperties.getProperties().getProperty("parserGrammarFile", "config"+File.separator+"englishFactored.ser.gz");
+				String serializedInputFileOrUrl = GlobalProperties.getProperties().getProperty("parserGrammarFile", "config"+File.separator+ "config/englishFactored.ser.gz");
 				parser = LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishFactored.ser.gz");
 //				parser = LexicalizedParser.getParserFromFile(serializedInputFileOrUrl, op);
 				int maxLength = new Integer(GlobalProperties.getProperties().getProperty("parserMaxLength", "40")).intValue();

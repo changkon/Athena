@@ -15,7 +15,9 @@ public class StanfordParserServer {
 	private LexicalizedParser lp;
 
 	public Tree parse(String doc) {
-		return lp.parse(doc);
+		Tree bestParse = lp.parse(doc);
+		System.err.println(bestParse);
+		return bestParse;
 	}
 
 	public StanfordParserServer() {
@@ -66,7 +68,8 @@ public class StanfordParserServer {
 			System.exit(0);
 		}
 		try {
-			lp = LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishFactored.ser.gz");
+//			lp = LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishFactored.ser.gz");
+			lp = LexicalizedParser.loadModel("config/englishFactored.ser.gz");
 		} catch (IllegalArgumentException e) {
 			System.err.println("Error loading parser, exiting...");
 			System.exit(0);

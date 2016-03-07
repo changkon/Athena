@@ -41,10 +41,10 @@ public interface DocumentManager {
                 mergeCount = 0;
                 continue;
             }
-            char secondLineFirstLetter = secondLine.charAt(0);
+            String secondLineFirstLetter = String.valueOf(secondLine.charAt(0));
             char firstLineLastLetter = firstLine.charAt(firstLine.length()-1);
             if (firstLineLastLetter != '.' && !secondLine.contains("==========") &&
-                    (Character.isLetter(secondLineFirstLetter) || Character.isDigit(secondLineFirstLetter) || secondLineFirstLetter == '(')) {
+                    !secondLineFirstLetter.matches("[\\u2022\\u2023\\u25E6\\u2043\\u2219]")) { //check if its not a bullet point
                 lines[i] = firstLine + " " + secondLine;
                 lines[i+1+mergeCount] = "";
                 i--; //reset i to test this line again

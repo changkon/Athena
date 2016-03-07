@@ -85,8 +85,7 @@ dependencies {
 
     compile "edu.stanford.nlp:stanford-corenlp:+"
 
-    compile "edu.stanford.nlp:stanford-parser:+",
-            "edu.stanford.nlp:stanford-parser:+:models"
+    compile "edu.stanford.nlp:stanford-parser:+"
 
     compile "net.sf.extjwnl:extjwnl:+"
 
