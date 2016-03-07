@@ -48,7 +48,7 @@ public class PDFManager implements DocumentManager {
         PDFTextStripperByArea pdfTextStripper;
 
         pdfTextStripper = new PDFTextStripperByArea();
-        pdfTextStripper.setDropThreshold(2);
+        pdfTextStripper.setDropThreshold(2.5f);
         pdfTextStripper.setParagraphEnd(lineSeparator);
 
         pdfTextStripper.addRegion(regionName, region);

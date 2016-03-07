@@ -1377,22 +1377,12 @@ public class SentenceSimplifier {
 	/**
 	 */
 	public List<QuestionDTO> run(String doc) {
-		Runnable r = () -> StanfordParserServer.main(new String[]{});
-		Thread thread = new Thread(r);
-		thread.start();
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		StanfordParserServer server = new StanfordParserServer();
 
 		boolean verbose = false;
 		String propertiesFile = "config"+File.separator+"factual-statement-extractor.properties";
 
 		GlobalProperties.loadProperties(propertiesFile);
-	//	System.setProperty("wordnet.database.dir", "C:\\Program Files (x86)\\WordNet\\2.1\\dict");
-	//	WordNetDatabase database = WordNetDatabase.getFileInstance();
-
 		Tree parsed;
 
 		//pre-load
@@ -1428,9 +1418,10 @@ public class SentenceSimplifier {
 				if (numWords < 5) {
 					continue; //don't include sentences that are fewer than 5 words
 				}
-				parsed = AnalysisUtilities.getInstance().parseSentence(sentence).parse;
+				//parsed = AnalysisUtilities.getInstance().parseSentence(sentence).parse;
+				parsed = server.parse(sentence);
+				//not a proper sentence structure, so continue
 				if (!parsed.firstChild().label().value().equals("S")) {
-					System.out.println(parsed.firstChild().label().value());
 					continue;
 				}
 

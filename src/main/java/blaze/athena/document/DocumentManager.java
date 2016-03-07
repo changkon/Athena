@@ -36,11 +36,7 @@ public interface DocumentManager {
         for (int i =0; i < lines.length-1 && i+1+mergeCount < lines.length; i++) {
             String firstLine = lines[i].trim();
             String secondLine = lines[i+1+mergeCount].trim();
-//            int next = 1;
-//            if (secondLine.equals("") && i < lines.length - 2) {
-//                next++;
-//                secondLine = lines[i+next].trim();
-//            }
+
             if (firstLine.length() == 0 || secondLine.length() == 0) {
                 mergeCount = 0;
                 continue;
@@ -54,10 +50,6 @@ public interface DocumentManager {
                 i--; //reset i to test this line again
                 mergeCount++;
             }
-//            if (i >= 0) {
-//                lines[i] = lines[i].trim();
-//            }
-//            lines[i+1+mergeCount] = lines[i+1+mergeCount].trim();
         }
         for (int i = 0; i < lines.length; i++) {
             if (!lines[i].trim().equals("")) {
