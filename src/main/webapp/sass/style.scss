@@ -1,0 +1,9 @@
+// Load partials
+@import 'partials/variables';
+@import 'partials/commons';
+
+// Load components
+@import 'components/nav';
+
+// import pages
+@import 'pages/dashboard';

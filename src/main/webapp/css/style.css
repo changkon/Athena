@@ -1,0 +1,76 @@
+#main-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; }
+
+#header {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 125px;
+  color: white !important;
+  background-color: #886aea; }
+  #header .logo {
+    font-size: 1.5em; }
+    #header .logo a {
+      color: white;
+      text-decoration: none; }
+  #header .icon-container {
+    display: flex;
+    align-items: center; }
+
+#dashboard-container {
+  flex-grow: 1;
+  display: flex; }
+  #dashboard-container .sidebar {
+    flex: 1;
+    background-color: #181818;
+    color: white; }
+    #dashboard-container .sidebar .user-profile {
+      text-align: center;
+      padding: 30px 0px; }
+      #dashboard-container .sidebar .user-profile .user-name {
+        text-transform: uppercase;
+        font-weight: bold; }
+    #dashboard-container .sidebar .list .list-item a {
+      display: block;
+      padding: 20px;
+      color: #886aea;
+      font-size: 1.5em;
+      text-decoration: none; }
+    #dashboard-container .sidebar .list .list-item a:hover {
+      background-color: #131313; }
+  #dashboard-container .content {
+    flex: 10; }
+
+
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label, .uploadButton {
+    max-width: 80%;
+    font-size: 1.25rem;
+    /* 20px */
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.625rem 1.25rem;
+    color: #f1e5e6;
+    background-color: #d3394c;
+    /* 10px 20px */
+}
+
+.selectFile {
+    font-family: Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+
+/*# sourceMappingURL=style.css.map */
