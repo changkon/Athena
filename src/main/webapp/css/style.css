@@ -82,4 +82,20 @@
     margin-right: auto;
 }
 
+.question {
+    margin-top: 20px;
+}
+
+.btn-answer {
+    margin: 10px;
+}
+
+.questionText {
+    text-align: center;
+    background-color: #572CE6;
+    padding: 10px;
+    color: #FFFFFF;
+    margin: 10px;
+}
+
 /*# sourceMappingURL=style.css.map */
