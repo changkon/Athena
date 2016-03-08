@@ -1,5 +1,8 @@
 <h1>Question view</h1>
 <form>
-    <div><input type="file" name="uploadedFile" accept="*.pdf" file-model="myFile"/></div>
-    <button ng-click="uploadFile()">upload me</button>
+    <div class="selectFile">
+        <input type="file" id="file" accept="*.pdf" file-model="myFile" class="inputfile"/>
+        <label for="file"><span>Choose a file&hellip;</span></label>
+    </div>
+    <button class="uploadButton" ng-click="uploadFile()">upload me</button>
 </form>
