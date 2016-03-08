@@ -2,6 +2,7 @@
     var app = angular.module('athena');
 
     app.controller('DashboardQuestionCtrl', ['$scope','FilePost', function($scope, FilePost) {
+        $scope.fileName = "Your PDF File";
 
         $scope.uploadFile = function(){
             var file = $scope.myFile;

@@ -64,13 +64,22 @@
     overflow: hidden;
     padding: 0.625rem 1.25rem;
     color: #f1e5e6;
-    background-color: #d3394c;
+    background-color: #572CE6;
+    border-width: 0px;
+    margin: 10px;
     /* 10px 20px */
 }
 
 .selectFile {
+    display: flex;
+    justify-content: center;
     font-family: Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
 }
 
+#fileTextField {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 /*# sourceMappingURL=style.css.map */
