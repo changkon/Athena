@@ -1,8 +1,12 @@
+$dropzone-width: 80;
+
+
 .selectFile
 {
-  display: flex;
-  justify-content: center;
+  display: block;
+  margin-left: percentage(((100 - $dropzone-width) / 2) / 100);
   font-family: Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
+  margin-bottom: 10px;
 }
 
 #fileTextField
@@ -42,7 +46,7 @@
   background-color: #AC95F7;
   margin-left: auto;
   margin-right: auto;
-  width: 80%;
+  width: percentage($dropzone-width/100);
   min-height: 400px;
   display: flex;
 }

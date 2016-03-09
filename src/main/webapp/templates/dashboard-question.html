@@ -6,6 +6,9 @@
 
         <div class="row">
             <form>
+                <div class="selectFile">
+                    <button class="btn btn-success" ng-click="uploadFile()"><i class="fa fa-plus"></i> upload</button>
+                </div>
                 <div class="outer-dropzone">
                     <div ng-click="openFileModal()" class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
                          file="myFile" file-name="fileName" data-max-file-size="50">
@@ -17,10 +20,6 @@
 
                 <div class="image-container">
                     <span class="file-name">{{imageFileName}}</span>
-                </div>
-
-                <div class="selectFile">
-                    <button class="btn btn-primary" ng-click="uploadFile()">upload me</button>
                 </div>
             </form>
         </div>

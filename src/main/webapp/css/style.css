@@ -19,9 +19,10 @@
     align-items: center; }
 
 .selectFile {
-  display: flex;
-  justify-content: center;
-  font-family: Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif; }
+  display: block;
+  margin-left: 10%;
+  font-family: Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
+  margin-bottom: 10px; }
 
 #fileTextField {
   width: 80%;
