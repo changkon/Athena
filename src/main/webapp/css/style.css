@@ -22,7 +22,7 @@
   flex-grow: 1;
   display: flex; }
   #dashboard-container .sidebar {
-    flex: 1;
+    width: 255px;
     background-color: #181818;
     color: white; }
     #dashboard-container .sidebar .user-profile {
@@ -34,7 +34,7 @@
     #dashboard-container .sidebar .list .list-item a {
       display: block;
       padding: 20px;
-      color: #886aea;
+      color: #FFFFFF;
       font-size: 1.5em;
       text-decoration: none; }
     #dashboard-container .sidebar .list .list-item a:hover {
@@ -98,4 +98,36 @@
     margin: 10px;
 }
 
+.dropzone {
+  padding-top: 168px;
+  width: 500px;
+  height: 400px;
+  border: 5px dashed #888;
+  text-align: center;
+  margin: 20px;
+  font-family: Arial;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 32px;
+  color: #888;
+  cursor: pointer;
+}
+
+.dropzone:hover {
+ color: #bfbfbf;
+ border: 5px dashed #bfbfbf;
+}
+
+#page-wrapper {
+    width: 100%;
+    padding: 0;
+    background-color: #fff;
+}
+
+@media(min-width:768px) {
+
+    #page-wrapper {
+        padding: 10px;
+    }
+}
 /*# sourceMappingURL=style.css.map */
