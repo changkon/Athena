@@ -1,7 +1,9 @@
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
-            <h1 class="page-header">Quick Start</h1>
+            <div class="col-lg-12">
+                <h1 class="page-header">Quick Start</h1>
+            </div>
         </div>
 
         <div class="row">
@@ -15,7 +17,7 @@
                         <p ng-show="myFile == null">Drop Files Here</p>
                         <p ng-show="myFile == null" class="underline">Choose file</p>
                         <p ng-show="myFile != null">{{myFile.name}}</p>
-                        <input id="inputFileElement" type="file" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]" file="myFile" file-name="fileName" data-max-file-size="50" />
+                        <input id="inputFileElement" type="file" accept="*.pdf" file-model="myFile"/>
                     </div>
                 </div>
 
@@ -26,26 +28,35 @@
         </div>
 
         <div id="question-container" class="row" ng-if="questions">
-            <div class="question">
-                <h1>{{question.question}}</h1>
-                <div class="answers">
-                    <div class="answer" ng-repeat="answer in question.answers" ng-click="checkAnswer($index)">{{answer}}</div>
+            <div class="col-lg-12">
+                <div class="panel panel-default" style="margin-top: 20px;">
+                    <div class="panel-heading">
+                        <h3 style=" margin-top: 0px; margin-bottom: 0px;">Questions</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="question">
+                            <h1>{{question.question}}</h1>
+                            <div class="answers">
+                                <div class="answer" ng-repeat="answer in question.answers" id="answer-{{$index}}" ng-click="checkAnswer($index)">{{answer}}</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Pagination -->
-            <uib-pagination
-                    class="pagination-sm"
-                    previous-text="&lsaquo;"
-                    next-text="&rsaquo;" first-text="&laquo;"
-                    last-text="&raquo;"
-                    ng-model="pag.currentPage"
-                    total-items="pag.numfound"
-                    items-per-page="pag.length"
-                    ng-change="update(pag.currentPage)"
-                    rotate="false"
-                    max-size="pag.maxSize"
-                    boundary-links="true"></uib-pagination>
+                <!-- Pagination -->
+                <uib-pagination
+                        class="pagination-sm"
+                        previous-text="&lsaquo;"
+                        next-text="&rsaquo;" first-text="&laquo;"
+                        last-text="&raquo;"
+                        ng-model="pag.currentPage"
+                        total-items="pag.numfound"
+                        items-per-page="pag.length"
+                        ng-change="update(pag.currentPage)"
+                        rotate="false"
+                        max-size="pag.maxSize"
+                        boundary-links="true"></uib-pagination>
+            </div>
         </div>
 
     </div>

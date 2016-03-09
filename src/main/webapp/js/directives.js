@@ -12,8 +12,7 @@
                     scope.$apply(function(){
                         modelSetter(scope, element[0].files[0]);
                     });
-                    //scope.fileName = element[0].files[0].name;
-                    angular.element(document.querySelector("#fileTextField")).val(element[0].files[0].name);
+                    scope.fileName = element[0].files[0].name;
                 });
             }
         };

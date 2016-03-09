@@ -101,4 +101,24 @@
 #question-container .question .answers .answer {
   cursor: pointer; }
 
+.answer {
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #555;
+    font-size 18;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.correct {
+    border: 2px solid #5cb85c;
+    color : #fff;
+    background-color:#5cb85c;
+}
+
+.incorrect {
+    border: 2px solid #d9534f;
+    color : #fff;
+    background-color:#d9534f;
+}
 /*# sourceMappingURL=style.css.map */
