@@ -7,10 +7,11 @@
         <div class="row">
             <form>
                 <div class="outer-dropzone">
-                    <div class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
+                    <div ng-click="openFileModal()" class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
                          file="myFile" file-name="fileName" data-max-file-size="50">
                         <p>Drop Files Here</p>
                         <p class="underline">Choose file</p>
+                        <input id="inputFileElement" type="file" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]" file="myFile" file-name="fileName" data-max-file-size="50" />
                     </div>
                 </div>
 

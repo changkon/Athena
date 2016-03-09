@@ -42,6 +42,8 @@
   flex-grow: 1; }
   .dropzone .underline {
     text-decoration: underline; }
+  .dropzone input {
+    display: none; }
 
 .outer-dropzone {
   background-color: #AC95F7;

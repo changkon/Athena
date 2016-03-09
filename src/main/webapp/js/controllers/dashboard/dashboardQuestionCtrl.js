@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module('athena');
 
-    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', function($scope, FilePost) {
+    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', '$timeout', function($scope, FilePost, $timeout) {
         $scope.myFile = null;
         $scope.fileName = "Your PDF File";
 
@@ -18,6 +18,13 @@
                 console.log("error: ");
                 console.log(err);
             });
+        };
+
+        $scope.openFileModal = function() {
+            var inputFileElement = document.getElementById('inputFileElement');
+            $timeout(function() {
+                inputFileElement.click();
+            }, 0);
         };
     }]);
 })();
