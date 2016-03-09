@@ -6,7 +6,7 @@
 #header {
   display: flex;
   justify-content: space-between;
-  padding: 20px 125px;
+  padding: 10px 10px;
   color: white !important;
   background-color: #886aea; }
   #header .logo {
@@ -43,33 +43,6 @@
     flex: 10; }
 
 
-.inputfile {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
-}
-
-.inputfile + label, .uploadButton {
-    max-width: 80%;
-    font-size: 1.25rem;
-    /* 20px */
-    font-weight: 700;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    cursor: pointer;
-    display: inline-block;
-    overflow: hidden;
-    padding: 0.625rem 1.25rem;
-    color: #f1e5e6;
-    background-color: #572CE6;
-    border-width: 0px;
-    margin: 10px;
-    /* 10px 20px */
-}
-
 .selectFile {
     display: flex;
     justify-content: center;
@@ -99,22 +72,27 @@
 }
 
 .dropzone {
+  background-color: #8f71f4;
   padding-top: 168px;
   width: 500px;
   height: 400px;
-  border: 5px dashed #888;
+  border: 5px dashed #4512ed;
   text-align: center;
   margin: 20px;
   font-family: Arial;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 10px;
   font-size: 32px;
-  color: #888;
+  color: #FFF;
   cursor: pointer;
 }
 
+.outer-dropzone {
+  background-color: #AC95F7;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .dropzone:hover {
- color: #bfbfbf;
  border: 5px dashed #bfbfbf;
 }
 

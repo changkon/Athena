@@ -6,16 +6,19 @@
 
         <div class="row">
             <form>
-                <div class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
-                     file="myFile" file-name="fileName" data-max-file-size="50">
-                    Drop Files Here
+                <div class="outer-dropzone">
+                    <div class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
+                         file="myFile" file-name="fileName" data-max-file-size="50">
+                        Drop Files Here
+                    </div>
                 </div>
+
                 <div class="image-container">
                     <span class="file-name">{{imageFileName}}</span>
                 </div>
-                <input type="text" id="fileTextField" class="form-control" ng-model="fileName" ng-change="update()" disabled>
+
                 <div class="selectFile">
-                <button class="uploadButton" ng-click="uploadFile()">upload me</button>
+                <button class="btn btn-primary" ng-click="uploadFile()">upload me</button>
                 </div>
             </form>
         </div>
