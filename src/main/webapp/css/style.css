@@ -96,4 +96,9 @@
   color: #FFFFFF;
   margin: 10px; }
 
+#question-container .question h1 {
+  white-space: pre-wrap; }
+#question-container .question .answers .answer {
+  cursor: pointer; }
+
 /*# sourceMappingURL=style.css.map */

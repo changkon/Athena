@@ -21,3 +21,22 @@
   color: #FFFFFF;
   margin: 10px;
 }
+
+#question-container
+{
+  .question
+  {
+    h1
+    {
+      white-space: pre-wrap;
+    }
+
+    .answers
+    {
+      .answer
+      {
+        cursor: pointer;
+      }
+    }
+  }
+}

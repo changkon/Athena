@@ -12,8 +12,9 @@
                 <div class="outer-dropzone">
                     <div ng-click="openFileModal()" class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
                          file="myFile" file-name="fileName" data-max-file-size="50">
-                        <p>Drop Files Here</p>
-                        <p class="underline">Choose file</p>
+                        <p ng-show="myFile == null">Drop Files Here</p>
+                        <p ng-show="myFile == null" class="underline">Choose file</p>
+                        <p ng-show="myFile != null">{{myFile.name}}</p>
                         <input id="inputFileElement" type="file" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]" file="myFile" file-name="fileName" data-max-file-size="50" />
                     </div>
                 </div>
@@ -23,5 +24,29 @@
                 </div>
             </form>
         </div>
+
+        <div id="question-container" class="row" ng-if="questions">
+            <div class="question">
+                <h1>{{question.question}}</h1>
+                <div class="answers">
+                    <div class="answer" ng-repeat="answer in question.answers" ng-click="checkAnswer($index)">{{answer}}</div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <uib-pagination
+                    class="pagination-sm"
+                    previous-text="&lsaquo;"
+                    next-text="&rsaquo;" first-text="&laquo;"
+                    last-text="&raquo;"
+                    ng-model="pag.currentPage"
+                    total-items="pag.numfound"
+                    items-per-page="pag.length"
+                    ng-change="update(pag.currentPage)"
+                    rotate="false"
+                    max-size="pag.maxSize"
+                    boundary-links="true"></uib-pagination>
+        </div>
+
     </div>
 </div>
