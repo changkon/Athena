@@ -2,6 +2,7 @@
     var app = angular.module('athena');
 
     app.controller('DashboardQuestionCtrl', ['$scope','FilePost', '$timeout', function($scope, FilePost, $timeout) {
+        $scope.showQuestions = false;
         $scope.myFile = null;
         $scope.fileName = "Your PDF File";
         $scope.questions = null;
@@ -43,6 +44,11 @@
             }
         };
 
+        $scope.returnMenu = function() {
+            $scope.myFile = null;
+            $scope.showQuestions = false;
+        }
+
         $scope.uploadFile = function(){
             var file = $scope.myFile;
             console.log("file recived");
@@ -50,7 +56,7 @@
             var fd = new FormData();
             fd.append('uploadedFile', file);
 
-            FilePost.create({}, fd).$promise.then(function(res){
+            $scope.myPromise = FilePost.create({}, fd).$promise.then(function(res){
                 $scope.questions = res;
 
                 $scope.question.answer = res.body[0].answer;
@@ -60,6 +66,7 @@
                 $scope.pag.numfound = res.body.length;
                 $scope.pag.currentPage = 1;
                 console.log(res);
+                $scope.showQuestions = true;
             }).catch(function (err) {
                 console.log("error: ");
                 console.log(err);

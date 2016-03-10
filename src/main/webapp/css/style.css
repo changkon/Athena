@@ -99,17 +99,23 @@
 #question-container .question h1 {
   white-space: pre-wrap; }
 #question-container .question .answers .answer {
-  cursor: pointer; }
+  cursor: pointer;
+
+}
 
 .answer {
     padding: 10px;
     border-radius: 5px;
     border: 2px solid #555;
-    font-size 18;
+    font-size 20px;
     margin-bottom: 10px;
     margin-top: 10px;
+    background-color: #fff;
 }
 
+.answers {
+    margin-top:20px;
+}
 .correct {
     border: 2px solid #5cb85c;
     color : #fff;
@@ -121,4 +127,31 @@
     color : #fff;
     background-color:#d9534f;
 }
+
+#question-container {
+    width: 60%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.outer-dropzone {
+    width:100%;
+}
+
+.selectFile {
+    margin-left: 0px;
+}
+
+#upload-container {
+    width: 60%;
+    margin-left: auto;
+    margin-right:auto;
+}
+
+.panel-body {
+    background-color: #E0B8E0;
+}
+
+
+
 /*# sourceMappingURL=style.css.map */
