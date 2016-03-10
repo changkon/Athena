@@ -1483,7 +1483,7 @@ public class SentenceSimplifier {
 								nounPhrase = nounPhrase.replaceFirst("the ", "");
 							}
 							questionList.add(topicList.get(i) + ":\n" + sentencesList.get(i).replaceAll("\\b" + Pattern.quote(nounPhrase) + "\\b", "__________________"));
-							answerList.add(nounPhrase);
+							answerList.add(nounPhrase.replace("-LRB- ", "(").replace(" -RRB-", ")"));
 						}
 					}
 				}
@@ -1513,6 +1513,7 @@ public class SentenceSimplifier {
 				System.out.println("d) " + answerList.get((i+3)%size));
 				System.out.println();
 			}
+			Collections.shuffle(questionDTOList);
 			System.err.println("Seconds Elapsed:\t"+((System.currentTimeMillis()-startTime)/1000.0));
 			return questionDTOList;
 		}catch(Exception e){
