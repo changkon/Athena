@@ -36,6 +36,7 @@ import edu.stanford.nlp.ling.Sentence;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Pattern;
 
 /**
@@ -1499,18 +1500,20 @@ public class SentenceSimplifier {
 				}
 
 				QuestionDTO q = new QuestionDTO(questionList.get(i));
-				q.addAnswer(answerList.get(i));
-				q.addAnswer(answerList.get((i+1)%size));
-				q.addAnswer(answerList.get((i+2)%size));
-				q.addAnswer(answerList.get((i+3)%size));
-				q.setAnswer(0);
+				List<String> answers = getAnswerSet(q.getQuestion(), answerList, i);
+				String correctAnswer = answerList.get(i);
+				q.addAnswer(answers.get(0));
+				q.addAnswer(answers.get(1));
+				q.addAnswer(answers.get(2));
+				q.addAnswer(answers.get(3));
+				q.setAnswer(answers.indexOf(correctAnswer));
 				questionDTOList.add(q);
 
 				System.out.println(questionList.get(i));
-				System.out.println("a) " + answerList.get(i));
-				System.out.println("b) " + answerList.get((i+1)%size));
-				System.out.println("c) " + answerList.get((i+2)%size));
-				System.out.println("d) " + answerList.get((i+3)%size));
+				System.out.println("a) " + answers.get(0));
+				System.out.println("b) " + answers.get(1));
+				System.out.println("c) " + answers.get(2));
+				System.out.println("d) " + answers.get(3));
 				System.out.println();
 			}
 			Collections.shuffle(questionDTOList);
@@ -1520,6 +1523,21 @@ public class SentenceSimplifier {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private List<String> getAnswerSet(String question, List<String> answersList, int answerIndex) {
+		Set<String> answersSet = new HashSet<>();
+		answersSet.add(answersList.get(answerIndex));
+		while (answersSet.size() < 4) {
+			String a = answersList.get(ThreadLocalRandom.current().nextInt(answersList.size()));
+			if (!question.contains(a)) {
+				answersSet.add(a);
+			}
+		}
+		List<String> answers = new ArrayList<>();
+		answers.addAll(answersSet);
+		Collections.shuffle(answers);
+		return answers;
 	}
 
 	private static List<String> getNounPhrase(Tree phrase) {
