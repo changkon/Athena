@@ -1483,7 +1483,7 @@ public class SentenceSimplifier {
 							if (nounPhrase.startsWith("the ")){
 								nounPhrase = nounPhrase.replaceFirst("the ", "");
 							}
-							questionList.add(topicList.get(i) + ":\n" + sentencesList.get(i).replaceAll("\\b" + Pattern.quote(nounPhrase) + "\\b", "__________________"));
+							questionList.add(topicList.get(i) + ":\n" + sentencesList.get(i).replaceAll("\\b" + Pattern.quote(nounPhrase) + "\\b", " __________________"));
 							answerList.add(nounPhrase.replace("-LRB- ", "(").replace(" -RRB-", ")"));
 						}
 					}
