@@ -1,8 +1,68 @@
-<h1>Question view</h1>
-<form>
-    <div class="selectFile">
-        <input type="file" id="file" accept="*.pdf" file-model="myFile" class="inputfile"/>
-        <label for="file"><span>Choose a file&hellip;</span></label>
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Quick Start</h1>
+            </div>
+        </div>
+
+        <div class="row" ng-hide="showQuestions" cg-busy="myPromise" id="upload-container">
+            <form>
+                <div class="selectFile">
+                    <button class="btn btn-success" ng-click="uploadFile()"><i class="fa fa-plus"></i> upload</button>
+                </div>
+                <div class="outer-dropzone">
+                    <div ng-click="openFileModal()" class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
+                         file="myFile" file-name="fileName" data-max-file-size="50">
+                        <p ng-show="myFile == null">Drop Files Here</p>
+                        <p ng-show="myFile == null" class="underline">Choose file</p>
+                        <p ng-show="myFile != null">{{myFile.name}}</p>
+                        <input id="inputFileElement" type="file" accept="*.pdf" file-model="myFile"/>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <div id="question-container" class="row" ng-if="questions" ng-show="showQuestions">
+            <div class="col-lg-2 text-center">
+                <button type="button" class="btn btn-danger returnButton" ng-click="returnMenu()">Back to menu</button>
+            </div>
+            <div class="col-lg-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 style=" margin-top: 0px; margin-bottom: 0px;">Questions</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="question">
+                            <h1>{{question.question}}</h1>
+                            <div class="answers">
+                                <div class="answer" ng-repeat="answer in question.answers" id="answer-{{$index}}" ng-click="checkAnswer($index)">{{answer}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="text-center">
+                <uib-pagination
+                        class="pagination pagination-centered"
+                        previous-text="&lsaquo;"
+                        next-text="&rsaquo;" first-text="&laquo;"
+                        last-text="&raquo;"
+                        ng-model="pag.currentPage"
+                        total-items="pag.numfound"
+                        items-per-page="pag.length"
+                        ng-change="update(pag.currentPage)"
+                        rotate="false"
+                        max-size="pag.maxSize"
+                        boundary-links="true"></uib-pagination>
+                </div>
+            </div>
+            <div class="col-lg-2">
+
+            </div>
+        </div>
+
     </div>
-    <button class="uploadButton" ng-click="uploadFile()">upload me</button>
-</form>
+</div>

@@ -1,0 +1,57 @@
+$dropzone-width: 80;
+
+
+.selectFile
+{
+  display: block;
+  margin-left: percentage(((100 - $dropzone-width) / 2) / 100);
+  font-family: Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
+  margin-bottom: 10px;
+}
+
+#fileTextField
+{
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dropzone
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: #8f71f4;
+  border: 5px dashed #4512ed;
+  font-family: Arial;
+  font-size: 32px;
+  color: #FFF;
+  cursor: pointer;
+  flex-grow: 1;
+
+  .underline
+  {
+    text-decoration: underline;
+  }
+
+  input
+  {
+    display: none;
+  }
+}
+
+.outer-dropzone
+{
+  background-color: #AC95F7;
+  margin-left: auto;
+  margin-right: auto;
+  width: percentage($dropzone-width/100);
+  min-height: 400px;
+  display: flex;
+}
+
+.dropzone:hover
+{
+  border: 5px dashed #bfbfbf;
+}

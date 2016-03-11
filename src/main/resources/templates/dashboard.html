@@ -29,6 +29,10 @@
     <script th:src="@{/js/directives.js}"></script>
     <script th:src="@{/js/controllers/dashboard/dashboardQuestionCtrl.js}"></script>
     <script th:src="@{/js/services/restService.js}"></script>
+
+    <!-- angular-busy for loading indicator-->
+    <script th:src="@{/lib/js/angular-busy.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/css/angular-busy.min.css}" />
 </head>
 <body ng-app="athena">
     <ui-view id="main-content"></ui-view>

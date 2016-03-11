@@ -86,7 +86,8 @@ public class PDFResource implements IPDFResource {
                 joiner.add(pdfManager.toText(inputStream));
             }
 
-            String finalStr = pdfManager.formatText(joiner.toString());
+            String finalStr = pdfManager.formatText(joiner.toString())
+                    .replaceAll("[\\u2022\\u2023\\u25E6\\u2043\\u2219]", "");
             SentenceSimplifier ss = new SentenceSimplifier();
             List<QuestionDTO> questions = ss.run(finalStr);
             return new ResponseEntity<>(questions, HttpStatus.OK);

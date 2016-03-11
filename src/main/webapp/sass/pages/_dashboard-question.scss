@@ -1,0 +1,42 @@
+#page-wrapper
+{
+  width: 100%;
+  padding: 0;
+  background-color: #fff;
+}
+
+@media(min-width:768px)
+{
+  #page-wrapper
+  {
+    padding: 10px;
+  }
+}
+
+.questionText
+{
+  text-align: center;
+  background-color: #572CE6;
+  padding: 10px;
+  color: #FFFFFF;
+  margin: 10px;
+}
+
+#question-container
+{
+  .question
+  {
+    h1
+    {
+      white-space: pre-wrap;
+    }
+
+    .answers
+    {
+      .answer
+      {
+        cursor: pointer;
+      }
+    }
+  }
+}
