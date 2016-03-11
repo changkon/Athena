@@ -25,9 +25,11 @@
         </div>
 
         <div id="question-container" class="row" ng-if="questions" ng-show="showQuestions">
-            <div class="col-lg-12">
-                <button type="button" class="btn btn-danger" ng-click="returnMenu()">Back to menu</button>
-                <div class="panel panel-default" style="margin-top: 20px;">
+            <div class="col-lg-2 text-center">
+                <button type="button" class="btn btn-danger returnButton" ng-click="returnMenu()">Back to menu</button>
+            </div>
+            <div class="col-lg-8">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 style=" margin-top: 0px; margin-bottom: 0px;">Questions</h3>
                     </div>
@@ -44,7 +46,7 @@
                 <!-- Pagination -->
                 <div class="text-center">
                 <uib-pagination
-                        class="pagination-lg pagination-centered"
+                        class="pagination pagination-centered"
                         previous-text="&lsaquo;"
                         next-text="&rsaquo;" first-text="&laquo;"
                         last-text="&raquo;"
@@ -56,6 +58,9 @@
                         max-size="pag.maxSize"
                         boundary-links="true"></uib-pagination>
                 </div>
+            </div>
+            <div class="col-lg-2">
+
             </div>
         </div>
 

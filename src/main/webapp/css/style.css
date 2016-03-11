@@ -129,7 +129,7 @@
 }
 
 #question-container {
-    width: 60%;
+    width: 80%;
     margin-right: auto;
     margin-left: auto;
 }
@@ -150,6 +150,14 @@
 
 .panel-body {
     background-color: #E0B8E0;
+}
+
+.returnButton {
+    margin: 10px;
+}
+
+.panel {
+    margin: 10px;
 }
 
 
