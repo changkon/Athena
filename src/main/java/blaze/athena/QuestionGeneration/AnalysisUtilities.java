@@ -51,9 +51,10 @@ import java.util.stream.Collectors;
 public class AnalysisUtilities {
 	private AnalysisUtilities(){
 		parser = null;
-		
 		conjugator = new VerbConjugator();
-		conjugator.load(GlobalProperties.getProperties().getProperty("verbConjugationsFile", "verbConjugations.txt"));
+//		conjugator.load(GlobalProperties.getProperties().getProperty("verbConjugationsFile", "verbConjugations.txt"));
+		ClassLoader classLoader = getClass().getClassLoader();
+		conjugator.load(classLoader.getResource("verbConjugation.txt").toString());
 		headfinder = new CollinsHeadFinder();
 		tree_factory = new LabeledScoredTreeFactory();
 		tlp = new PennTreebankLanguagePack();

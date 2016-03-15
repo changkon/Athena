@@ -196,8 +196,7 @@ public class VerbConjugator {
 	public static void main(String[] args) {
 		VerbConjugator vc = new VerbConjugator();
 		vc.readFromTreebankFile(args[0]);
-		vc.save("verbConjugations.txt");
-		
+//		vc.save("verbConjugations.txt");
 		//vc.load("verbConjugations.txt");
 		
 		System.err.println(vc.getSurfaceForm("walk", "VBZ"));
