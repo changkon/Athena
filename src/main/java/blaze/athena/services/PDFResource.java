@@ -87,14 +87,14 @@ public class PDFResource implements IPDFResource {
                     joiner.add(pdfManager.toText(inputStream));
                 }
                 finalStr = pdfManager.formatText(joiner.toString())
-                        .replaceAll("[\\u2022\\u2023\\u25E6\\u2043\\u2219]", "");
+                        .replaceAll("[-\\u2022\\u2023\\u25E6\\u2043\\u2219]", "");
             } else {
                 for (InputPart inputPart : textData) {
                     String line = inputPart.getBodyAsString();
                     joiner.add(line);
                 }
                 finalStr = pdfManager.formatTextForText(joiner.toString())
-                        .replaceAll("[\\u2022\\u2023\\u25E6\\u2043\\u2219]", "");
+                        .replaceAll("[-\\u2022\\u2023\\u25E6\\u2043\\u2219]", "");
             }
 
             SentenceSimplifier ss = new SentenceSimplifier();
