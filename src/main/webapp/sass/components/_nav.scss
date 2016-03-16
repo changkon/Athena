@@ -2,13 +2,15 @@
 {
     display: flex;
     justify-content: space-between;
-    padding: 20px 125px;
+    padding: 10px 0;
     color: white !important;
     background-color: $primary-color;
 
     .logo
     {
         font-size: 1.5em;
+        flex: 1;
+        text-align: center;
 
         a
         {
@@ -21,5 +23,8 @@
     {
         display: flex;
         align-items: center;
+        flex: 10;
+        justify-content: flex-end;
+        padding-right: 30px;
     }
 }
