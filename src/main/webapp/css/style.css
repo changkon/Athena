@@ -25,9 +25,12 @@
 
 .selectFile {
   display: block;
-  margin-left: 10%;
   font-family: Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
-  margin-bottom: 10px; }
+  margin-top: 35px;
+  text-align: center; }
+  .selectFile button {
+    padding-left: 50px;
+    padding-right: 50px; }
 
 #fileTextField {
   width: 80%;
@@ -39,11 +42,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #8f71f4;
-  border: 5px dashed #4512ed;
+  background-color: #f2f2f2;
+  border: 5px dashed #adadad;
   font-family: Arial;
   font-size: 32px;
-  color: #FFF;
+  color: #adadad;
   cursor: pointer;
   flex-grow: 1; }
   .dropzone .underline {
@@ -52,11 +55,10 @@
     display: none; }
 
 .outer-dropzone {
-  background-color: #AC95F7;
+  background-color: #f2f2f2;
   margin-left: auto;
   margin-right: auto;
-  width: 80%;
-  min-height: 400px;
+  min-height: 550px;
   display: flex; }
 
 .dropzone:hover {
@@ -78,8 +80,9 @@
     #dashboard-container .sidebar .list .list-item a {
       display: block;
       padding: 20px;
-      color: #886aea;
-      font-size: 1.5em;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
       text-decoration: none; }
     #dashboard-container .sidebar .list .list-item a:hover {
       background-color: #131313; }
@@ -90,6 +93,8 @@
   width: 100%;
   padding: 0;
   background-color: #fff; }
+  #page-wrapper h1 {
+    font-weight: 600; }
 
 @media (min-width: 768px) {
   #page-wrapper {
