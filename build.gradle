@@ -95,12 +95,14 @@ dependencies {
     // dependency for stanford
     compile 'com.google.protobuf:protobuf-java:2.6.1'
 
-
     // resteasy multipart provider
     compile "org.jboss.resteasy:resteasy-multipart-provider:+"
 
     // resteasy client
     compile "org.jboss.resteasy:resteasy-client:+"
+
+    // deployable war file
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }

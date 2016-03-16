@@ -5,8 +5,10 @@ import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -22,10 +24,21 @@ import javax.servlet.ServletContextListener;
 @SpringBootApplication
 @ComponentScan({"blaze.athena"})
 @EnableAutoConfiguration
-public class AthenaSpringApplication {
+public class AthenaSpringApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(AthenaSpringApplication.class, args);
+    }
+
+    /**
+     * <p>Overrides the method to allow configuration of application when launched by the servlet container</p>
+     * @param application
+     * @return
+     */
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(AthenaSpringApplication.class);
     }
 
     @Bean
