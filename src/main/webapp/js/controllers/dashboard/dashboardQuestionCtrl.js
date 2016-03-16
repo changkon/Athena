@@ -54,8 +54,14 @@
             console.log("file recived");
             console.log(file);
             var fd = new FormData();
-            fd.append('uploadedFile', file);
 
+            if (file != null) {
+                fd.append('uploadedFile', file);
+            } else {
+                text = $scope.textModel
+                console.log("text is " + text);
+                fd.append('uploadedText', text);
+            }
             $scope.myPromise = FilePost.create({}, fd).$promise.then(function(res){
                 $scope.questions = res;
 

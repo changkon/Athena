@@ -52,4 +52,15 @@ public interface DocumentManager {
         List<String> list = Arrays.asList(lines);
         return String.join(lineSeparator, list);
     }
+
+    default String formatTextForText(String input) {
+        String[] lines = input.split(lineSeparator);
+        for (int i = 0; i < lines.length-1; i++) {
+            String line = lines[i].trim();
+            //append full stop to end of line
+            lines[i] = line + ".";
+        }
+        List<String> list = Arrays.asList(lines);
+        return String.join(lineSeparator, list);
+    }
 }

@@ -74,20 +74,29 @@ public class PDFResource implements IPDFResource {
 
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         List<InputPart> inputParts = uploadForm.get("uploadedFile");
-
+        List<InputPart> textData = uploadForm.get("uploadedText");
         try {
             StringJoiner joiner = new StringJoiner("\n");
             PDFManager pdfManager = new PDFManager();
+            String finalStr;
+            if (inputParts != null) {
+                for (InputPart inputPart : inputParts) {
+                    // Convert the uploaded file to inputstream
+                    InputStream inputStream = inputPart.getBody(InputStream.class, null);
 
-            for (InputPart inputPart : inputParts) {
-                // Convert the uploaded file to inputstream
-                InputStream inputStream = inputPart.getBody(InputStream.class, null);
-
-                joiner.add(pdfManager.toText(inputStream));
+                    joiner.add(pdfManager.toText(inputStream));
+                }
+                finalStr = pdfManager.formatText(joiner.toString())
+                        .replaceAll("[\\u2022\\u2023\\u25E6\\u2043\\u2219]", "");
+            } else {
+                for (InputPart inputPart : textData) {
+                    String line = inputPart.getBodyAsString();
+                    joiner.add(line);
+                }
+                finalStr = pdfManager.formatTextForText(joiner.toString())
+                        .replaceAll("[\\u2022\\u2023\\u25E6\\u2043\\u2219]", "");
             }
 
-            String finalStr = pdfManager.formatText(joiner.toString())
-                    .replaceAll("[\\u2022\\u2023\\u25E6\\u2043\\u2219]", "");
             SentenceSimplifier ss = new SentenceSimplifier();
             List<QuestionDTO> questions = ss.run(finalStr);
             return new ResponseEntity<>(questions, HttpStatus.OK);

@@ -1416,11 +1416,16 @@ public class SentenceSimplifier {
                 }
 				oldSentence = sentence;
 
-				if (numWords < 5) {
-					continue; //don't include sentences that are fewer than 5 words
-				}
 				//parsed = AnalysisUtilities.getInstance().parseSentence(sentence).parse;
 				parsed = server.parse(sentence);
+
+				if (numWords < 5) {
+					if (Character.isUpperCase(sentence.trim().charAt(0))/* && parsed.firstChild().label().value().equals("NP")*/) {
+						topic = sentence.replace(".", "").trim();
+					}
+					continue; //don't include sentences that are fewer than 5 words
+				}
+
 				//not a proper sentence structure, so continue
 				if (!parsed.firstChild().label().value().equals("S")) {
 					continue;
@@ -1528,6 +1533,11 @@ public class SentenceSimplifier {
 	private List<String> getAnswerSet(String question, List<String> answersList, int answerIndex) {
 		Set<String> answersSet = new HashSet<>();
 		answersSet.add(answersList.get(answerIndex));
+		if (answersList.size() < 4) {
+			answersList.add("test answer1");
+			answersList.add("test answer2");
+			answersList.add("test answer3");
+		}
 		while (answersSet.size() < 4) {
 			String a = answersList.get(ThreadLocalRandom.current().nextInt(answersList.size()));
 			if (!question.contains(a)) {
