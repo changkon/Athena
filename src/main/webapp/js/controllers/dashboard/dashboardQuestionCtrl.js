@@ -26,7 +26,7 @@
             var question = $scope.questions.body[questionNumber-1];
             $scope.question.answer = question.answer;
             $scope.question.answers = question.answers;
-            $scope.question.question = question.question.replace(/\\n|:\\n/g,"");
+            $scope.question.questions = question.question.split(/\\n|:\\n/g);
         };
 
         $scope.checkAnswer = function(answerNumber) {
@@ -51,7 +51,7 @@
 
         $scope.uploadFile = function(){
             var file = $scope.myFile;
-            console.log("file recived");
+            console.log("file received");
             console.log(file);
             var fd = new FormData();
 
@@ -60,14 +60,14 @@
             } else {
                 text = $scope.textModel
                 console.log("text is " + text);
-                fd.append('uploadedText', text);
+                fd.append('uploadedText', text.replace("’", "'"));
             }
             $scope.myPromise = FilePost.create({}, fd).$promise.then(function(res){
                 $scope.questions = res;
 
                 $scope.question.answer = res.body[0].answer;
                 $scope.question.answers = res.body[0].answers;
-                $scope.question.question = res.body[0].question.replace(/\\n|:\\n/g,"");
+                $scope.question.questions = res.body[0].question.split(/\\n|:\\n/g);
 
                 $scope.pag.numfound = res.body.length;
                 $scope.pag.currentPage = 1;
