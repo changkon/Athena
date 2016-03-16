@@ -20,6 +20,11 @@
                         <input id="inputFileElement" type="file" accept="*.pdf" file-model="myFile"/>
                     </div>
                 </div>
+                <br/>
+                <div>
+                    <h3>Or paste your study notes below:</h3>
+                    ​<textarea id="inputTextElement" rows="10" cols="140" ng-model="textModel"></textarea>
+                </div>
 
             </form>
         </div>
@@ -35,7 +40,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="question">
-                            <h1>{{question.question}}</h1>
+                            <h1 ng-repeat="question in question.questions">{{question}}</h1>
                             <div class="answers">
                                 <div class="answer" ng-repeat="answer in question.answers" id="answer-{{$index}}" ng-click="checkAnswer($index)">{{answer}}</div>
                             </div>
