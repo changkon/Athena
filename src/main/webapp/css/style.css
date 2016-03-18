@@ -6,23 +6,34 @@
 #header {
   display: flex;
   justify-content: space-between;
-  padding: 20px 125px;
+  padding: 10px 0;
   color: white !important;
-  background-color: #886aea; }
+  background-color: #333;
+  border-color: #101010;}
   #header .logo {
-    font-size: 1.5em; }
+    font-size: 1.5em;
+    flex: 1;
+    text-align: center; }
     #header .logo a {
+      float: left;
+      padding-left: 15px;
       color: white;
       text-decoration: none; }
   #header .icon-container {
     display: flex;
-    align-items: center; }
+    align-items: center;
+    flex: 10;
+    justify-content: flex-end;
+    padding-right: 30px; }
 
 .selectFile {
   display: block;
-  margin-left: 10%;
   font-family: Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
-  margin-bottom: 10px; }
+  margin-top: 35px;
+  text-align: center; }
+  .selectFile button {
+    padding-left: 50px;
+    padding-right: 50px; }
 
 #fileTextField {
   width: 80%;
@@ -34,11 +45,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: #8f71f4;
-  border: 5px dashed #4512ed;
+  background-color: #f2f2f2;
+  border: 5px dashed #adadad;
   font-family: Arial;
   font-size: 32px;
-  color: #FFF;
+  color: #adadad;
   cursor: pointer;
   flex-grow: 1; }
   .dropzone .underline {
@@ -47,11 +58,10 @@
     display: none; }
 
 .outer-dropzone {
-  background-color: #AC95F7;
+  background-color: #f2f2f2;
   margin-left: auto;
   margin-right: auto;
-  width: 80%;
-  min-height: 200px;
+  min-height: 550px;
   display: flex; }
 
 .dropzone:hover {
@@ -61,8 +71,8 @@
   flex-grow: 1;
   display: flex; }
   #dashboard-container .sidebar {
-    flex: 1;
-    background-color: #181818;
+    width: 150px;
+    background-color: #222;
     color: white; }
     #dashboard-container .sidebar .user-profile {
       text-align: center;
@@ -73,8 +83,8 @@
     #dashboard-container .sidebar .list .list-item a {
       display: block;
       padding: 20px;
-      color: #886aea;
-      font-size: 1.5em;
+      color: white;
+      font-size: 16px;
       text-decoration: none; }
     #dashboard-container .sidebar .list .list-item a:hover {
       background-color: #131313; }
@@ -90,6 +100,8 @@
   width: 100%;
   padding: 0;
   background-color: #fff; }
+  #page-wrapper h1 {
+    font-weight: 600; }
 
 @media (min-width: 768px) {
   #page-wrapper {
@@ -106,67 +118,6 @@
 }
 
 #question-container .question .answers .answer {
-  cursor: pointer;
-
-}
-
-.answer {
-    padding: 10px;
-    border-radius: 5px;
-    border: 2px solid #555;
-    font-size: 20px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    background-color: #fff;
-}
-
-.answers {
-    margin-top:20px;
-}
-.correct {
-    border: 2px solid #5cb85c;
-    color : #fff;
-    background-color:#5cb85c;
-}
-
-.incorrect {
-    border: 2px solid #d9534f;
-    color : #fff;
-    background-color:#d9534f;
-}
-
-#question-container {
-    width: 80%;
-    margin-right: auto;
-    margin-left: auto;
-}
-
-.outer-dropzone {
-    width:100%;
-}
-
-.selectFile {
-    margin-left: 0px;
-}
-
-#upload-container {
-    width: 60%;
-    margin-left: auto;
-    margin-right:auto;
-}
-
-.panel-body {
-    background-color: #E0B8E0;
-}
-
-.returnButton {
-    margin: 10px;
-}
-
-.panel {
-    margin: 10px;
-}
-
-
+  cursor: pointer; }
 
 /*# sourceMappingURL=style.css.map */

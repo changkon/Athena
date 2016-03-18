@@ -1,32 +1,42 @@
 <div id="page-wrapper">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-sm-10 col-sm-offset-1">
                 <h1 class="page-header">Quick Start</h1>
             </div>
         </div>
 
         <div class="row" ng-hide="showQuestions" cg-busy="myPromise" id="upload-container">
-            <form>
-                <div class="selectFile">
-                    <button class="btn btn-success" ng-click="uploadFile()"><i class="fa fa-plus"></i> upload</button>
-                </div>
-                <div class="outer-dropzone">
-                    <div ng-click="openFileModal()" class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
-                         file="myFile" file-name="fileName" data-max-file-size="50">
-                        <p ng-show="myFile == null">Drop Files Here</p>
-                        <p ng-show="myFile == null" class="underline">Choose file</p>
-                        <p ng-show="myFile != null">{{myFile.name}}</p>
-                        <input id="inputFileElement" type="file" accept="*.pdf" file-model="myFile"/>
-                    </div>
-                </div>
-                <br/>
-                <div>
-                    <h3>Or paste your study notes below:</h3>
-                    ​<textarea id="inputTextElement" rows="10" cols="140" ng-model="textModel"></textarea>
-                </div>
+            <div class="col-sm-10 col-sm-offset-1">
+                <form>
+                    <uib-tabset active="active">
+                        <uib-tab index="0" heading="Upload PDF">
+                            <div class="outer-dropzone">
+                                <div ng-click="openFileModal()" class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
+                                     file="myFile.result" file-name="fileName" data-max-file-size="50">
+                                    <p ng-show="myFile.result == null"><i class="fa fa-upload fa-3x"></i></p>
+                                    <p ng-show="myFile.result == null">Drop Files Here</p>
+                                    <p ng-show="myFile.result == null" class="underline">Choose file</p>
+                                    <p ng-show="myFile.result != null">{{myFile.result.name}}</p>
+                                    <input id="inputFileElement" type="file" accept="*.pdf" file-model="myFile.result"/>
+                                </div>
+                            </div>
+                        </uib-tab>
+                        <uib-tab index="1" heading="Notes">
+                            <div>
+                                <h3>Or paste your study notes below:</h3>
+                                ​<textarea id="inputTextElement" rows="20" cols="140" ng-model="textModel.text"></textarea>
+                            </div>
+                        </uib-tab>
 
-            </form>
+                    </uib-tabset>
+
+
+                    <div class="selectFile">
+                        <button class="btn btn-success btn-lg" ng-click="uploadFile()"><i class="fa fa-plus"></i> upload</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div id="question-container" class="row" ng-if="questions" ng-show="showQuestions">

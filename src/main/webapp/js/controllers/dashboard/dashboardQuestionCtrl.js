@@ -3,7 +3,8 @@
 
     app.controller('DashboardQuestionCtrl', ['$scope','FilePost', '$timeout', function($scope, FilePost, $timeout) {
         $scope.showQuestions = false;
-        $scope.myFile = null;
+        $scope.myFile = { result : null };
+        $scope.textModel = { text : null };
         $scope.fileName = "Your PDF File";
         $scope.questions = null;
         $scope.question = {};
@@ -52,7 +53,7 @@
         }
 
         $scope.uploadFile = function(){
-            var file = $scope.myFile;
+            var file = $scope.myFile.result;
             console.log("file received");
             console.log(file);
             var fd = new FormData();
@@ -60,7 +61,7 @@
             if (file != null) {
                 fd.append('uploadedFile', file);
             } else {
-                text = $scope.textModel
+                text = $scope.textModel.text;
                 console.log("text is " + text);
                 fd.append('uploadedText', text.replace("’", "'"));
             }
