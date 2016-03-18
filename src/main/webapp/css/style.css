@@ -102,7 +102,9 @@
   margin: 10px; }
 
 #question-container .question h1 {
-  white-space: pre-wrap; }
+  font-weight: bold;
+}
+
 #question-container .question .answers .answer {
   cursor: pointer;
 

@@ -40,7 +40,8 @@
                     </div>
                     <div class="panel-body">
                         <div class="question">
-                            <h1 ng-repeat="question in question.questions">{{question}}</h1>
+                            <h1>{{question.topic}}</h1>
+                            <h2 ng-style="{'font-size': fontsize}" ng-repeat="question in question.questions">{{question}}</h2>
                             <div class="answers">
                                 <div class="answer" ng-repeat="answer in question.answers" id="answer-{{$index}}" ng-click="checkAnswer($index)">{{answer}}</div>
                             </div>

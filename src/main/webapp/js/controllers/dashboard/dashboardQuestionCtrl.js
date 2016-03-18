@@ -27,6 +27,8 @@
             $scope.question.answer = question.answer;
             $scope.question.answers = question.answers;
             $scope.question.questions = question.question.split(/\\n|:\\n/g);
+            $scope.question.topic = question.topic;
+            setFontSize($scope.question.questions);
         };
 
         $scope.checkAnswer = function(answerNumber) {
@@ -68,6 +70,8 @@
                 $scope.question.answer = res.body[0].answer;
                 $scope.question.answers = res.body[0].answers;
                 $scope.question.questions = res.body[0].question.split(/\\n|:\\n/g);
+                $scope.question.topic = res.body[0].topic;
+                setFontSize($scope.question.questions);
 
                 $scope.pag.numfound = res.body.length;
                 $scope.pag.currentPage = 1;
@@ -85,5 +89,23 @@
                 inputFileElement.click();
             }, 0);
         };
+
+        setFontSize = function(questions) {
+            if (questions.length < 2){
+                $scope.fontsize = "30px";
+                return;
+            }
+            var max = 0;
+            for (var i = 0; i < questions.length; i++) {
+                if (questions[i].length > max) {
+                    max = questions[i].length;
+                }
+            }
+            console.log("max line length is " + max)
+            if (max > 56) {
+                $scope.fontsize = "24px";
+            }
+        };
+
     }]);
 })();

@@ -1416,7 +1416,6 @@ public class SentenceSimplifier {
                 }
 				oldSentence = sentence;
 
-				//parsed = AnalysisUtilities.getInstance().parseSentence(sentence).parse;
 				parsed = server.parse(sentence);
 
 				if (numWords < 5) {
@@ -1444,27 +1443,6 @@ public class SentenceSimplifier {
 				sentencesList.add(sentence);
 				parsedList.add(parsed);
 				topicList.add(topic);
-
-//				output.clear();
-//				output.addAll(simplify(parsed));
-//
-//				for(blaze.athena.QuestionGeneration.Question q: output){
-//					Tree intermediateTree = q.getIntermediateTree();
-//				//	String s = AnalysisUtilities.getCleanedUpYield(intermediateTree);
-//					String s = Sentence.listToString(intermediateTree.yieldWords());
-//					if (s.split(" ").length < 5) {
-//						continue; //skip questions that are less than 5 words
-//					}
-//					System.out.print(s);
-//					if (intermediateTree.children().length > 0) {
-//						sentencesList.add(s);
-//						parsedList.add(intermediateTree.children()[0]);
-//						topicList.add(topic);
-//					}
-//				//	if(verbose) System.out.print("\t"+AnalysisUtilities.getCleanedUpYield(q.getSourceTree()));
-//					if(verbose) System.out.print("\t"+simplificationFeatureString(q));
-//					System.out.println();
-//				}
 				oldSentence = sentence;
 			}
 
@@ -1488,7 +1466,10 @@ public class SentenceSimplifier {
 							if (nounPhrase.startsWith("the ")){
 								nounPhrase = nounPhrase.replaceFirst("the ", "");
 							}
-							questionList.add(topicList.get(i) + ":\n" + sentencesList.get(i).replaceAll("\\b" + Pattern.quote(nounPhrase) + "\\b", " __________________"));
+							if (nounPhrase.length() < 3 || nounPhrase.matches("them|they|you") || nounPhrase.startsWith("http")) { //filter bad answers
+								continue;
+							}
+							questionList.add(topicList.get(i) + ":::" + sentencesList.get(i).replaceAll("\\b" + Pattern.quote(nounPhrase) + "\\b", " __________________"));
 							answerList.add(nounPhrase.replace("-LRB- ", "(").replace(" -RRB-", ")"));
 						}
 					}
@@ -1504,7 +1485,9 @@ public class SentenceSimplifier {
 					continue;
 				}
 
-				QuestionDTO q = new QuestionDTO(questionList.get(i));
+				String topicString = questionList.get(i).split(":::")[0].replaceAll("[^\\x00-\\x7F]", "");
+				String questionString = questionList.get(i).split(":::", 2)[1].replaceAll("[^\\x00-\\x7F]", "");
+				QuestionDTO q = new QuestionDTO(topicString, questionString);
 				List<String> answers = getAnswerSet(q.getQuestion(), answerList, i);
 				String correctAnswer = answerList.get(i);
 				q.addAnswer(answers.get(0));
@@ -1557,10 +1540,10 @@ public class SentenceSimplifier {
 		}
 		for (Tree phrase2 : phrase.children()) {
 			List<String> s;
-			String phrase2String = Sentence.listToString(phrase2.yieldWords());
-			if (phrase2.value().equals("NP") && phrase2String.trim().split(" ").length < 5) {
+			String phrase2String = Sentence.listToString(phrase2.yieldWords()).trim();
+			if (phrase2.value().equals("NP") && phrase2String.split(" ").length < 5) {
 			//	System.out.println("the noun phrase is: " + Sentence.listToString(phrase2.yieldWords()));
-				nouns.add(" " + phrase2String);
+				nouns.add(phrase2String);
 			} else if ((s = getNounPhrase(phrase2)) != null && s.size() != 0) {
 				nouns.addAll(s);
 			}
@@ -1577,63 +1560,3 @@ public class SentenceSimplifier {
 	private TreeFactory factory;
 	private Set<String> verbsThatImplyComplements = null; //not yet fully implemented, can be ignored
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//private void extractWITHPartcipialPhrases(Collection<Question> extracted, Question input) {
-//	String tregexOpStr;
-//	TregexPattern matchPattern;
-//	TregexMatcher matcher;
-//	
-//	tregexOpStr = "ROOT <<# /^VB.*$/=tense " 	//tense determined by top-most verb
-//		+" << (PP < (IN < with|without) < (S=clause < /N.*/=subj < (VP=vp < VBG=verb))) "; 	// e.g., Walking to the store, John saw Susan.
-//	
-//	matchPattern = TregexPatternFactory.getPattern(tregexOpStr);
-//	matcher = matchPattern.matcher(input.getIntermediateTree());
-//	while(matcher.find()){
-//		Tree vptree = matcher.getNode("vp");
-//		Tree verb = matcher.getNode("verb");
-//		Tree clause = matcher.getNode("clause");
-//		Tree subjtree = matcher.getNode("subj");
-//		clause.removeChild(clause.indexOf(vptree));
-//
-//		String verbPOS = findTense(matcher.getNode("tense"));
-//		if(vptree == null || subjtree == null) return;
-//
-//		String verbLemma =  AnalysisUtilities.getInstance().getLemma(verb.getChild(0).label().toString(), verb.label().toString());
-//		String newVerb = AnalysisUtilities.getInstance().getSurfaceForm(verbLemma, verbPOS); 
-//		int verbIndex = vptree.indexOf(verb);
-//		vptree = vptree.deeperCopy();
-//		vptree.removeChild(verbIndex);
-//		vptree.addChild(verbIndex, AnalysisUtilities.getInstance().readTreeFromString("("+verbPOS+" "+newVerb+")"));
-//		clause.addChild(vptree);
-//
-//		Tree newTree = factory.newTreeNode("ROOT", new ArrayList<Tree>());
-//		newTree.addChild(clause);
-//		
-//		addQuotationMarksIfNeeded(newTree);
-//		AnalysisUtilities.addPeriodIfNeeded(newTree);
-//		
-//		if(GlobalProperties.getDebug()) System.err.println("extractWITHPartcipialPhrases: "+ newTree.toString());
-//		Question newTreeWithFeatures = input.deeperCopy();
-//		newTreeWithFeatures.setIntermediateTree(newTree);
-//		if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromParticipial", 1.0); //old feature name
-//		if(GlobalProperties.getComputeFeatures()) newTreeWithFeatures.setFeatureValue("extractedFromWithParticipial", 1.0);
-//		extracted.add(newTreeWithFeatures);
-//	}
-//	
-//	
-//}
-
