@@ -61,7 +61,7 @@
             if (file != null) {
                 fd.append('uploadedFile', file);
             } else {
-                text = $scope.textModel
+                text = $scope.textModel.text;
                 console.log("text is " + text);
                 fd.append('uploadedText', text.replace("’", "'"));
             }
