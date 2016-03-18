@@ -8,12 +8,15 @@
   justify-content: space-between;
   padding: 10px 0;
   color: white !important;
-  background-color: #886aea; }
+  background-color: #333;
+  border-color: #101010;}
   #header .logo {
     font-size: 1.5em;
     flex: 1;
     text-align: center; }
     #header .logo a {
+      float: left;
+      padding-left: 15px;
       color: white;
       text-decoration: none; }
   #header .icon-container {
@@ -68,8 +71,8 @@
   flex-grow: 1;
   display: flex; }
   #dashboard-container .sidebar {
-    flex: 1;
-    background-color: #181818;
+    width: 150px;
+    background-color: #222;
     color: white; }
     #dashboard-container .sidebar .user-profile {
       text-align: center;
