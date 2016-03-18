@@ -92,6 +92,11 @@
   #dashboard-container .content {
     flex: 10; }
 
+#inputTextElement {
+   border: solid 1px black;
+   width: 100%;
+}
+
 #page-wrapper {
   width: 100%;
   padding: 0;
@@ -110,7 +115,9 @@
   margin: 10px; }
 
 #question-container .question h1 {
-  white-space: pre-wrap; }
+  font-weight: bold;
+}
+
 #question-container .question .answers .answer {
   cursor: pointer; }
 

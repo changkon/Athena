@@ -44,10 +44,21 @@ public interface DocumentManager {
                 }
                 char prevLastLetter = prevLine.charAt(prevLine.length() - 1);
                 String firstLetter = String.valueOf(line.charAt(0));
-                if (prevLastLetter != '.' && firstLetter.matches("[\\u2022\\u2023\\u25E6\\u2043\\u2219]")) { //check if its not a bullet point) [
+                if (prevLastLetter != '.' && firstLetter.matches("[-\\u2022\\u2023\\u25E6\\u2043\\u2219]")) { //check if its not a bullet point) [
                     lines[i - 1] = prevLine + ".";
                 }
             }
+        }
+        List<String> list = Arrays.asList(lines);
+        return String.join(lineSeparator, list);
+    }
+
+    default String formatTextForText(String input) {
+        String[] lines = input.split(lineSeparator);
+        for (int i = 0; i < lines.length-1; i++) {
+            String line = lines[i].trim();
+            //append full stop to end of line
+            lines[i] = line + ".";
         }
         List<String> list = Arrays.asList(lines);
         return String.join(lineSeparator, list);

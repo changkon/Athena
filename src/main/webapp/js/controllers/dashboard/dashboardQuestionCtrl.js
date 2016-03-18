@@ -3,7 +3,8 @@
 
     app.controller('DashboardQuestionCtrl', ['$scope','FilePost', '$timeout', function($scope, FilePost, $timeout) {
         $scope.showQuestions = false;
-        $scope.myFile = null;
+        $scope.myFile = { result : null };
+        $scope.textModel = { text : null };
         $scope.fileName = "Your PDF File";
         $scope.questions = null;
         $scope.question = {};
@@ -26,7 +27,9 @@
             var question = $scope.questions.body[questionNumber-1];
             $scope.question.answer = question.answer;
             $scope.question.answers = question.answers;
-            $scope.question.question = question.question.replace(/\\n|:\\n/g,"");
+            $scope.question.questions = question.question.split(/\\n|:\\n/g);
+            $scope.question.topic = question.topic;
+            setFontSize($scope.question.questions);
         };
 
         $scope.checkAnswer = function(answerNumber) {
@@ -50,18 +53,26 @@
         }
 
         $scope.uploadFile = function(){
-            var file = $scope.myFile;
-            console.log("file recived");
+            var file = $scope.myFile.result;
+            console.log("file received");
             console.log(file);
             var fd = new FormData();
-            fd.append('uploadedFile', file);
 
+            if (file != null) {
+                fd.append('uploadedFile', file);
+            } else {
+                text = $scope.textModel
+                console.log("text is " + text);
+                fd.append('uploadedText', text.replace("’", "'"));
+            }
             $scope.myPromise = FilePost.create({}, fd).$promise.then(function(res){
                 $scope.questions = res;
 
                 $scope.question.answer = res.body[0].answer;
                 $scope.question.answers = res.body[0].answers;
-                $scope.question.question = res.body[0].question.replace(/\\n|:\\n/g,"");
+                $scope.question.questions = res.body[0].question.split(/\\n|:\\n/g);
+                $scope.question.topic = res.body[0].topic;
+                setFontSize($scope.question.questions);
 
                 $scope.pag.numfound = res.body.length;
                 $scope.pag.currentPage = 1;
@@ -79,5 +90,23 @@
                 inputFileElement.click();
             }, 0);
         };
+
+        setFontSize = function(questions) {
+            if (questions.length < 2){
+                $scope.fontsize = "30px";
+                return;
+            }
+            var max = 0;
+            for (var i = 0; i < questions.length; i++) {
+                if (questions[i].length > max) {
+                    max = questions[i].length;
+                }
+            }
+            console.log("max line length is " + max)
+            if (max > 56) {
+                $scope.fontsize = "24px";
+            }
+        };
+
     }]);
 })();
