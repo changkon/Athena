@@ -1378,7 +1378,7 @@ public class SentenceSimplifier {
 	/**
 	 */
 	public List<QuestionDTO> run(String doc) {
-		StanfordParserServer server = new StanfordParserServer();
+		StanfordParserServer server = StanfordParserServer.getInstance();
 
 		boolean verbose = false;
 		String propertiesFile = "config"+File.separator+"factual-statement-extractor.properties";
@@ -1425,7 +1425,7 @@ public class SentenceSimplifier {
 					continue; //don't include sentences that are fewer than 5 words
 				}
 
-				//not a proper sentence structure, so continue
+//				//not a proper sentence structure, so continue
 				if (!parsed.firstChild().label().value().equals("S")) {
 					continue;
 				}
@@ -1506,6 +1506,7 @@ public class SentenceSimplifier {
 			}
 			Collections.shuffle(questionDTOList);
 			System.err.println("Seconds Elapsed:\t"+((System.currentTimeMillis()-startTime)/1000.0));
+			System.gc();
 			return questionDTOList;
 		}catch(Exception e){
 			e.printStackTrace();

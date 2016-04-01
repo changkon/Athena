@@ -1,7 +1,7 @@
 package blaze.athena.QuestionGeneration;
 
-import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
-import edu.stanford.nlp.parser.lexparser.Options;
+import edu.stanford.nlp.parser.lexparser.*;
+import edu.stanford.nlp.tagger.maxent.MaxentTagger;
 import edu.stanford.nlp.trees.Tree;
 
 /**
@@ -13,11 +13,30 @@ import edu.stanford.nlp.trees.Tree;
  */
 public class StanfordParserServer {
 	private LexicalizedParser lp;
+	private MaxentTagger tagger;
+	private static StanfordParserServer server;
 
 	public Tree parse(String doc) {
-		Tree bestParse = lp.parse(doc);
-		System.err.println(bestParse);
-		return bestParse;
+		//DocumentPreprocessor tokenizer = new DocumentPreprocessor(new StringReader(doc));
+		//for (List<HasWord> sentence : tokenizer) {
+		//	List<TaggedWord> tagged = tagger.tagSentence(sentence);
+			
+		//	Tree bestParse = lp.apply(tagged);
+		//	GrammaticalStructure bestParse = lp.predict(tagged);
+			//Tree bestParse = lp.parse(doc);
+			Tree bestParse = lp.parse(doc);
+			System.err.println(bestParse);
+		//	System.err.println(tagged);
+			return bestParse;
+		//}
+		//return null;
+	}
+
+	public static StanfordParserServer getInstance() {
+		if (server == null) {
+			server = new StanfordParserServer();
+		}
+		return server;
 	}
 
 	public StanfordParserServer() {
@@ -68,8 +87,10 @@ public class StanfordParserServer {
 			System.exit(0);
 		}
 		try {
-//			lp = LexicalizedParser.loadModel("edu/stanford/nlp/models/lexparser/englishFactored.ser.gz");
-			lp = LexicalizedParser.loadModel("config/englishFactored.ser.gz");
+			lp = LexicalizedParser.loadModel("config/englishPCFG.ser.gz");
+			//String taggerPath = "config/english-left3words-distsim.tagger";
+			//tagger = new MaxentTagger(taggerPath);
+
 		} catch (IllegalArgumentException e) {
 			System.err.println("Error loading parser, exiting...");
 			System.exit(0);
@@ -77,6 +98,5 @@ public class StanfordParserServer {
 
 		lp.setOptionFlags("-outputFormat", "oneline", "-maxLength", maxLength + "");
 	}
-
 }
 
