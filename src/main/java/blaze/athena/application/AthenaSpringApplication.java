@@ -1,17 +1,20 @@
 package blaze.athena.application;
 
+import com.microsoft.applicationinsights.web.internal.WebRequestTrackingFilter;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
+import javax.servlet.Filter;
 import javax.servlet.ServletContextListener;
 
 /**
@@ -39,6 +42,22 @@ public class AthenaSpringApplication extends SpringBootServletInitializer {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(AthenaSpringApplication.class);
+    }
+
+    @Bean
+    public FilterRegistrationBean filterRegistration() {
+        FilterRegistrationBean insightFilter = new FilterRegistrationBean();
+
+        insightFilter.setFilter(applicationInsightFilter());
+        insightFilter.addUrlPatterns("/*");
+        insightFilter.setName("ApplicationInsightsWebFilter");
+
+        return insightFilter;
+    }
+
+    @Bean(name = "ApplicationInsightsWebFilter")
+    public Filter applicationInsightFilter() {
+        return new WebRequestTrackingFilter();
     }
 
     @Bean
