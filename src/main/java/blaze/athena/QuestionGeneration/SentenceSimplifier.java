@@ -439,7 +439,7 @@ public class SentenceSimplifier {
 				//original main verb was plural but the conjoined subject word is singular
 				//e.g., John (and Mary) like Bill.  -> John like Bill.
 				if((verbPreterminal.label().toString().equals("VB") || verbPreterminal.label().toString().equals("VBP"))){ //the parser confuses VBP with VB
-					if(Sentence.listToString(subject.yieldWords()).equals("I") || Sentence.listToString(subject.yieldWords()).equals("you")){
+					if(getStringFromTree(subject).equals("I") || getStringFromTree(subject).equals("you")){
 						newVerbPOS = "VBP";
 					}else{
 						newVerbPOS = "VBZ";
@@ -458,7 +458,7 @@ public class SentenceSimplifier {
 				if(verbLemma.equals("be") && newVerbPOS.equals("VBD")){
 					if(subject.label().toString().endsWith("S")) newVerb = "were";
 					else  newVerb = "was";
-				}else if(verbLemma.equals("be") && Sentence.listToString(subject.yieldWords()).equals("I") && newVerbPOS.equals("VBP")){
+				}else if(verbLemma.equals("be") && getStringFromTree(subject).equals("I") && newVerbPOS.equals("VBP")){
 					newVerb = "am";
 				}else{ //default
 					newVerb = AnalysisUtilities.getInstance().getSurfaceForm(verbLemma, newVerbPOS);
@@ -694,7 +694,7 @@ public class SentenceSimplifier {
 
 	private String findTense(Tree node) {
 		if(node.label().equals("MD")){
-			if(Sentence.listToString(node.yieldWords()).matches("^(would|could)$")){
+			if(getStringFromTree(node).matches("^(would|could)$")){
 				return "VBD";
 			}
 		}
@@ -757,7 +757,7 @@ public class SentenceSimplifier {
 			Tree newTree = factory.newTreeNode("ROOT", new ArrayList<Tree>());
 			subord = matcher.getNode("sub");
 			Tree verb = matcher.getNode("verb");
-			String verbLemma = AnalysisUtilities.getInstance().getLemma(Sentence.listToString(verb.yieldWords()), verb.label().toString());
+			String verbLemma = AnalysisUtilities.getInstance().getLemma(getStringFromTree(verb), verb.label().toString());
 
 			if(!verbImpliesComplement(verbLemma)){
 				continue;
@@ -972,7 +972,7 @@ public class SentenceSimplifier {
 					ppRelativeClause = true;
 					subjectMovement = false;
 				}else if(matcher.getNode("preposition") != null){
-					String tmp = "(PP (IN "+Sentence.listToString(matcher.getNode("preposition").yieldWords())+") "+missingArgumentTree.toString()+")";
+					String tmp = "(PP (IN "+getStringFromTree(matcher.getNode("preposition"))+") "+missingArgumentTree.toString()+")";
 					missingArgumentTree = AnalysisUtilities.getInstance().readTreeFromString(tmp);
 					ppRelativeClause = true;
 				}
@@ -1430,10 +1430,10 @@ public class SentenceSimplifier {
 					continue;
 				}
 
-				if(GlobalProperties.getDebug()) System.err.println("input: "+Sentence.listToString(parsed.yieldWords()));
+				if(GlobalProperties.getDebug()) System.err.println("input: "+getStringFromTree(parsed));
 				if(GlobalProperties.getDebug()) System.err.println("parse: "+sentence);
 				//if no parse, print the original sentence
-				if(Sentence.listToString(parsed.yieldWords()).equals(".")){
+				if(getStringFromTree(parsed).equals(".")){
 					System.out.print(sentence);
 					if(verbose) System.out.print("\t"+sentence);
 					System.out.println();
@@ -1447,7 +1447,7 @@ public class SentenceSimplifier {
 			}
 
 			List<String> questionList = new ArrayList<String>();
-			List<String> answerList = new ArrayList<String>();
+			List<Tree> answerList = new ArrayList<Tree>();
 
 			for (int i = 0; i < sentencesList.size(); i++) {
 				Tree taggedWords = parsedList.get(i);
@@ -1460,17 +1460,22 @@ public class SentenceSimplifier {
 						// there should be some noun phrase before the verb phrase for a valid sentence
 						// Learning objectives tend to start with "Understand" - these are not questionable sentences
 					} else if (phrase.value().equals("VP") && nounPhrasePresent && !sentencesList.get(i).startsWith("Understand")) {
-						List<String> nounPhrases = getNounPhrase(phrase);
-						for (String nounPhrase : nounPhrases) {
+						List<Tree> nounPhrases = getNounPhrase(phrase);
+						for (Tree nounPhrase : nounPhrases) {
+							String nounPhraseString = getStringFromTree(nounPhrase);
 							// we need to remove "the" if it appears at the start of a noun phrase
-							if (nounPhrase.startsWith("the ")){
-								nounPhrase = nounPhrase.replaceFirst("the ", "");
+							if (nounPhraseString.startsWith("the ")){
+								nounPhraseString = nounPhraseString.replaceFirst("the ", "");
 							}
-							if (nounPhrase.length() < 3 || nounPhrase.matches("them|they|you") || nounPhrase.startsWith("http")) { //filter bad answers
+							if (nounPhraseString.length() < 3 || nounPhraseString.matches("them|they|you") || nounPhraseString.startsWith("http")) { //filter bad answers
 								continue;
 							}
-							questionList.add(topicList.get(i) + ":::" + sentencesList.get(i).replaceAll("\\b" + Pattern.quote(nounPhrase) + "\\b", " __________________"));
-							answerList.add(nounPhrase.replace("-LRB- ", "(").replace(" -RRB-", ")"));
+							if (sentencesList.get(i).matches("[\\s\\S]*\\([\\s\\S]*" + Pattern.quote(nounPhraseString) + "[\\s\\S]*\\)[\\s\\S]")) {
+								continue;
+							}
+							questionList.add(topicList.get(i) + ":::" + sentencesList.get(i).replaceAll("\\b" + Pattern.quote(nounPhraseString) + "\\b", " __________________"));
+							//answerList.add(nounPhraseString.replace("-LRB- ", "(").replace(" -RRB-", ")"));
+							answerList.add(nounPhrase);
 						}
 					}
 				}
@@ -1489,7 +1494,7 @@ public class SentenceSimplifier {
 				String questionString = questionList.get(i).split(":::", 2)[1].replaceAll("[^\\x00-\\x7F]", "");
 				QuestionDTO q = new QuestionDTO(topicString, questionString);
 				List<String> answers = getAnswerSet(q.getQuestion(), answerList, i);
-				String correctAnswer = answerList.get(i);
+				String correctAnswer = getStringFromTree(answerList.get(i));
 				q.addAnswer(answers.get(0));
 				q.addAnswer(answers.get(1));
 				q.addAnswer(answers.get(2));
@@ -1514,16 +1519,16 @@ public class SentenceSimplifier {
 		return null;
 	}
 
-	private List<String> getAnswerSet(String question, List<String> answersList, int answerIndex) {
+	private List<String> getAnswerSet(String question, List<Tree> answersList, int answerIndex) {
 		Set<String> answersSet = new HashSet<>();
-		answersSet.add(answersList.get(answerIndex));
+		answersSet.add(getStringFromTree(answersList.get(answerIndex)));
 		if (answersList.size() < 4) {
-			answersList.add("test answer1");
-			answersList.add("test answer2");
-			answersList.add("test answer3");
+			answersSet.add("test answer1");
+			answersSet.add("test answer2");
+			answersSet.add("test answer3");
 		}
 		while (answersSet.size() < 4) {
-			String a = answersList.get(ThreadLocalRandom.current().nextInt(answersList.size()));
+			String a = getStringFromTree(answersList.get(ThreadLocalRandom.current().nextInt(answersList.size())));
 			if (!question.contains(a)) {
 				answersSet.add(a);
 			}
@@ -1534,17 +1539,17 @@ public class SentenceSimplifier {
 		return answers;
 	}
 
-	private static List<String> getNounPhrase(Tree phrase) {
-		List<String> nouns = new ArrayList<>();
+	private static List<Tree> getNounPhrase(Tree phrase) {
+		List<Tree> nouns = new ArrayList<>();
 		if (phrase.isLeaf()) {
 			return nouns;
 		}
 		for (Tree phrase2 : phrase.children()) {
-			List<String> s;
-			String phrase2String = Sentence.listToString(phrase2.yieldWords()).trim();
+			List<Tree> s;
+			String phrase2String = getStringFromTree(phrase2);
 			if (phrase2.value().equals("NP") && phrase2String.split(" ").length < 5) {
 			//	System.out.println("the noun phrase is: " + Sentence.listToString(phrase2.yieldWords()));
-				nouns.add(phrase2String);
+				nouns.add(phrase2);
 			} else if ((s = getNounPhrase(phrase2)) != null && s.size() != 0) {
 				nouns.addAll(s);
 			}
@@ -1552,6 +1557,9 @@ public class SentenceSimplifier {
 		return nouns;
 	}
 
+	private static String getStringFromTree(Tree tree) {
+		return Sentence.listToString(tree.yieldWords()).trim();
+	}
 
 	private long numSimplifyHelperCalls; //for debugging, counts the number of call to simplifyHelper to check that duplicate derivations are avoided
 
