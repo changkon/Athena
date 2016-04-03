@@ -101,6 +101,9 @@ dependencies {
     // resteasy client
     compile "org.jboss.resteasy:resteasy-client:+"
 
+    // application insights (analytic)
+    compile 'com.microsoft.azure:applicationinsights-web:+'
+
     // deployable war file
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
