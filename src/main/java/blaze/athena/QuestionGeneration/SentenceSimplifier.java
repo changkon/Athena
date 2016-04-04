@@ -33,6 +33,7 @@ import edu.stanford.nlp.trees.tregex.tsurgeon.Tsurgeon;
 import edu.stanford.nlp.trees.tregex.tsurgeon.TsurgeonPattern;
 import edu.stanford.nlp.util.Pair;
 import edu.stanford.nlp.ling.Sentence;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.*;
@@ -1463,10 +1464,10 @@ public class SentenceSimplifier {
 						List<Tree> nounPhrases = getNounPhrase(phrase);
 						for (Tree nounPhrase : nounPhrases) {
 							String nounPhraseString = getStringFromTree(nounPhrase);
-							// we need to remove "the" if it appears at the start of a noun phrase
-							if (nounPhraseString.startsWith("the ")){
-								nounPhraseString = nounPhraseString.replaceFirst("the ", "");
-							}
+//							// we need to remove "the" if it appears at the start of a noun phrase
+//							if (nounPhraseString.startsWith("the ")){
+//								nounPhraseString = nounPhraseString.replaceFirst("the ", "");
+//							}
 							if (nounPhraseString.length() < 3 || nounPhraseString.matches("them|they|you") || nounPhraseString.startsWith("http")) { //filter bad answers
 								continue;
 							}
@@ -1493,8 +1494,9 @@ public class SentenceSimplifier {
 				String topicString = questionList.get(i).split(":::")[0].replaceAll("[^\\x00-\\x7F]", "");
 				String questionString = questionList.get(i).split(":::", 2)[1].replaceAll("[^\\x00-\\x7F]", "");
 				QuestionDTO q = new QuestionDTO(topicString, questionString);
-				List<String> answers = getAnswerSet(q.getQuestion(), answerList, i);
+				List<String> answers = getAnswerSet(answerList, i);
 				String correctAnswer = getStringFromTree(answerList.get(i));
+				//String correctAnswer = getStringFromTree(answerList.get(i)) + " --- " + answerList.get(i).taggedLabeledYield();
 				q.addAnswer(answers.get(0));
 				q.addAnswer(answers.get(1));
 				q.addAnswer(answers.get(2));
@@ -1511,7 +1513,7 @@ public class SentenceSimplifier {
 			}
 			Collections.shuffle(questionDTOList);
 			System.err.println("Seconds Elapsed:\t"+((System.currentTimeMillis()-startTime)/1000.0));
-			System.gc();
+
 			return questionDTOList;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1519,24 +1521,65 @@ public class SentenceSimplifier {
 		return null;
 	}
 
-	private List<String> getAnswerSet(String question, List<Tree> answersList, int answerIndex) {
+	private List<String> getAnswerSet(List<Tree> answersList, int answerIndex) {
+		Tree currentAnswer = answersList.get(answerIndex);
+		List<Answer> answers = new ArrayList<>();
+		answers.add(new Answer(getStringFromTree(currentAnswer)/* + " --- " + currentAnswer.taggedLabeledYield()*/, -1.00)); //give correct answer the lowest value (lowest is best)
+		int indexOfHighest = 0;
+		double highestValue = -1;
+
 		Set<String> answersSet = new HashSet<>();
-		answersSet.add(getStringFromTree(answersList.get(answerIndex)));
-		if (answersList.size() < 4) {
-			answersSet.add("test answer1");
-			answersSet.add("test answer2");
-			answersSet.add("test answer3");
-		}
-		while (answersSet.size() < 4) {
-			String a = getStringFromTree(answersList.get(ThreadLocalRandom.current().nextInt(answersList.size())));
-			if (!question.contains(a)) {
-				answersSet.add(a);
+		answersSet.add(getStringFromTree(currentAnswer));
+
+		//generate distractors
+		for (Tree t : answersList) {
+			Answer newAnswer = new Answer(getStringFromTree(t)/* + " --- " + t.taggedLabeledYield()*/, getSimilarity(t,currentAnswer));
+			if (answers.size() < 4) {
+				answers.add(newAnswer); //if there's not already 4 answers, then add this and check if it is the newest worst answer
+				if (newAnswer.getValue() > highestValue) {
+					indexOfHighest = answers.size() - 1;
+					highestValue = newAnswer.getValue();
+				}
+			} else {
+				if (newAnswer.getValue() < highestValue) { //only add if this one is better than the current worse
+					answers.set(indexOfHighest, newAnswer);
+					indexOfHighest = answers.size() - 1; //assume the one we added is the worst
+					highestValue = newAnswer.getValue();
+					for (int i = 0; i < answers.size(); i++) {
+						if (answers.get(i).getValue() > highestValue) {
+							indexOfHighest = i;
+							highestValue = answers.get(i).getValue(); //but if any are worse, we set that as highest instead
+						}
+					}
+				}
 			}
+//			if (getSimilarity(t, answersList.get(answerIndex))) {
+//				System.out.println("match! " + getStringFromTree(t) + " --- " + getStringFromTree(answersList.get(answerIndex)));
+//			}
 		}
-		List<String> answers = new ArrayList<>();
-		answers.addAll(answersSet);
+		if (answers.size() < 4) {
+			answers.add(new Answer("Your input was too short, so not enough answers can be generated", 99));
+			answers.add(new Answer("Your input was too short, so not enough answers can be generated", 99));
+			answers.add(new Answer("Your input was too short, so not enough answers can be generated", 99));
+		}
 		Collections.shuffle(answers);
-		return answers;
+		List<String> stringAnswers = new ArrayList<>();
+		for (Answer a : answers) {
+			stringAnswers.add(a.getAnswerText());
+		}
+		return stringAnswers;
+	}
+
+	/**
+	 * gets the similarity between answer structure
+	 * (lower is better!)
+	 */
+	private double getSimilarity(Tree t, Tree t2) {
+		if (t.equals(t2)) {
+			return 999999; //same answer!
+		}
+		double difference = StringUtils.getLevenshteinDistance(t.taggedLabeledYield().toString(), t2.taggedLabeledYield().toString());
+		return difference + Math.abs(getStringFromTree(t).length() - getStringFromTree(t2).length())/10.0; //add on the length difference as a fraction, for tiebreakers
 	}
 
 	private static List<Tree> getNounPhrase(Tree phrase) {
