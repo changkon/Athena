@@ -1,15 +1,23 @@
 <div id="page-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Questions
+            <small>Generate questions from uploaded material</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+            <li class="active">Here</li>
+        </ol>
+    </section>
+
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-10 col-sm-offset-1">
-                <h1 class="page-header">Quick Start</h1>
-            </div>
-        </div>
 
         <div class="row" ng-hide="showQuestions" cg-busy="myPromise" id="upload-container">
             <div class="col-sm-10 col-sm-offset-1">
                 <form>
-                    <uib-tabset active="active">
+                    <uib-tabset active="active" class="nav-tabs-custom">
                         <uib-tab index="0" heading="Upload PDF">
                             <div class="outer-dropzone">
                                 <div ng-click="openFileModal()" class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
@@ -25,7 +33,7 @@
                         <uib-tab index="1" heading="Notes">
                             <div>
                                 <h3>Or paste your study notes below:</h3>
-                                ​<textarea id="inputTextElement" rows="20" cols="140" ng-model="textModel.text"></textarea>
+                                ​<textarea id="inputTextElement" rows="20" ng-model="textModel.text"></textarea>
                             </div>
                         </uib-tab>
 

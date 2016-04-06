@@ -1,12 +1,15 @@
 #page-wrapper
 {
-  width: 100%;
-  padding: 0;
-  background-color: #fff;
-
-  h1
+  .content-header
   {
-    font-weight: 600;
+    margin-bottom: 50px;
+  }
+
+  #inputTextElement
+  {
+    resize: none;
+    width: 100%;
+    overflow-y: scroll;
   }
 }
 

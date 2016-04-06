@@ -53,4 +53,26 @@
     #dashboard-container .wrapper .content-wrapper {
       flex: 1; }
 
+#page-wrapper .content-header {
+  margin-bottom: 50px; }
+#page-wrapper #inputTextElement {
+  resize: none;
+  width: 100%;
+  overflow-y: scroll; }
+
+@media (min-width: 768px) {
+  #page-wrapper {
+    padding: 10px; } }
+.questionText {
+  text-align: center;
+  background-color: #572CE6;
+  padding: 10px;
+  color: #FFFFFF;
+  margin: 10px; }
+
+#question-container .question h1 {
+  white-space: pre-wrap; }
+#question-container .question .answers .answer {
+  cursor: pointer; }
+
 /*# sourceMappingURL=style.css.map */
