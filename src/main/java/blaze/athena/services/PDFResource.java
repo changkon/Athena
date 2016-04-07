@@ -1,6 +1,8 @@
 package blaze.athena.services;
 
+import blaze.athena.DatabaseQueries.SelectQuery;
 import blaze.athena.QuestionGeneration.SentenceSimplifier;
+import blaze.athena.config.DatabaseConnection;
 import blaze.athena.document.PDFManager;
 import blaze.athena.dto.QuestionDTO;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
@@ -14,6 +16,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -99,10 +105,19 @@ public class PDFResource implements IPDFResource {
 
             SentenceSimplifier ss = new SentenceSimplifier();
             List<QuestionDTO> questions = ss.run(finalStr);
+
+            saveQuestionToDB();
+
             return new ResponseEntity<>(questions, HttpStatus.OK);
         } catch (IOException e) {
             // error occurred processing input
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+    }
+
+    private void saveQuestionToDB() {
+        SelectQuery sq = new SelectQuery();
+        List<String> results = sq.select("SELECT * from dbo.Questions");
+        System.err.println(results);
     }
 }
