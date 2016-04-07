@@ -25,7 +25,13 @@
         };
 
         $scope.update = function(questionNumber) {
-             $scope.answerOnce = false;
+            $scope.answerOnce = false;
+            // remove classes
+            for (i=0; i< $scope.question.answers.length; i++) {
+                var element = angular.element( document.querySelector( '#answer-' + i ) );
+                element.removeClass('correct');
+                element.removeClass('incorrect');
+            }
             $scope.question = $scope.questions.body[questionNumber-1];
             setFontSize($scope.question.questions);
         };

@@ -61,7 +61,7 @@
                                 <h1>{{question.topic}}</h1>
                                 <h2 ng-style="{'font-size': fontsize}" ng-repeat="question in question.questions">{{question}}</h2>
                                 <div class="answers">
-                                    <div class="answer" ng-repeat="answer in question.answers" id="answer-{{$index}}" ng-click="checkAnswer($index)">{{answer}}</div>
+                                    <div class="answer" ng-repeat="answer in question.answers track by $index" id="answer-{{$index}}" ng-click="checkAnswer($index)">{{answer}}</div>
                                 </div>
                             </div>
                         </div>
