@@ -81,7 +81,7 @@ dependencies {
     compile "org.apache.pdfbox:pdfbox:2.0.0-RC3"
 
     //stanford parser
-    compile files('lib/jaws-bin.jar')
+    compile files('lib/sqljdbc4.jar')
 
     compile "edu.stanford.nlp:stanford-corenlp:+"
 

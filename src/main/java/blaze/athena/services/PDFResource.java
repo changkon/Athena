@@ -14,6 +14,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -99,10 +103,53 @@ public class PDFResource implements IPDFResource {
 
             SentenceSimplifier ss = new SentenceSimplifier();
             List<QuestionDTO> questions = ss.run(finalStr);
+
+            saveQuestionToDB();
+
             return new ResponseEntity<>(questions, HttpStatus.OK);
         } catch (IOException e) {
             // error occurred processing input
             return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private void saveQuestionToDB() {
+        try {
+            String driverClass = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+            Class.forName(driverClass);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        String connectionString = "jdbc:sqlserver://teamblaze.database.windows.net:1433;database=athena_db;user=blaze@teamblaze;password=Rosathena123;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+
+        // Declare the JDBC objects.
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            connection = DriverManager.getConnection(connectionString);
+
+            // Create and execute a SELECT SQL statement.
+            String selectSql = "SELECT * from dbo.Questions";
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(selectSql);
+
+            // Print results from select statement
+            while (resultSet.next())
+            {
+                System.out.println(resultSet.getString(2) + " "
+                        + resultSet.getString(3));
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            // Close the connections after the data has been handled.
+            if (resultSet != null) try { resultSet.close(); } catch(Exception e) {}
+            if (statement != null) try { statement.close(); } catch(Exception e) {}
+            if (connection != null) try { connection.close(); } catch(Exception e) {}
         }
     }
 }
