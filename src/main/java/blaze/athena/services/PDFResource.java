@@ -1,6 +1,8 @@
 package blaze.athena.services;
 
+import blaze.athena.DatabaseQueries.SelectQuery;
 import blaze.athena.QuestionGeneration.SentenceSimplifier;
+import blaze.athena.config.DatabaseConnection;
 import blaze.athena.document.PDFManager;
 import blaze.athena.dto.QuestionDTO;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
@@ -114,42 +116,8 @@ public class PDFResource implements IPDFResource {
     }
 
     private void saveQuestionToDB() {
-        try {
-            String driverClass = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-            Class.forName(driverClass);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        String connectionString = "jdbc:sqlserver://teamblaze.database.windows.net:1433;database=athena_db;user=blaze@teamblaze;password=Rosathena123;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
-
-        // Declare the JDBC objects.
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet = null;
-
-        try {
-            connection = DriverManager.getConnection(connectionString);
-
-            // Create and execute a SELECT SQL statement.
-            String selectSql = "SELECT * from dbo.Questions";
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(selectSql);
-
-            // Print results from select statement
-            while (resultSet.next())
-            {
-                System.out.println(resultSet.getString(2) + " "
-                        + resultSet.getString(3));
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            // Close the connections after the data has been handled.
-            if (resultSet != null) try { resultSet.close(); } catch(Exception e) {}
-            if (statement != null) try { statement.close(); } catch(Exception e) {}
-            if (connection != null) try { connection.close(); } catch(Exception e) {}
-        }
+        SelectQuery sq = new SelectQuery();
+        List<String> results = sq.select("SELECT * from dbo.Questions");
+        System.err.println(results);
     }
 }
