@@ -1,14 +1,6 @@
 (function() {
     var app = angular.module('athena');
 
-    // custom filter for progressPag
-    app.filter('progressRes', function() {
-        return function(input, arr, pageNumber, itemsPerPage) {
-            var startIndex = (pageNumber - 1)*itemsPerPage;
-            return arr.slice(startIndex, startIndex+itemsPerPage);
-        }
-    });
-
     app.controller('DashboardQuestionCtrl', ['$scope','FilePost', '$timeout', function($scope, FilePost, $timeout) {
         $scope.showQuestions = false;
         $scope.myFile = { result : null };
@@ -34,35 +26,21 @@
 
         $scope.update = function(questionNumber) {
              $scope.answerOnce = false;
-            for (i=0; i< $scope.question.answers.length; i++) {
-                var element = angular.element( document.querySelector( '#answer-' + i ) );
-                element.removeClass('correct');
-                element.removeClass('incorrect');
-            }
-            var question = $scope.questions.body[questionNumber-1];
-            $scope.question.answer = question.answer;
-            $scope.question.answers = question.answers;
-            $scope.question.questions = question.question.split(/\\n|:\\n/g);
-            $scope.question.topic = question.topic;
+            $scope.question = $scope.questions.body[questionNumber-1];
             setFontSize($scope.question.questions);
         };
-
-//        $scope.progressUpdate = function(pageNumber) {
-//            var startIndex = $scope.progressPag.maxSize * pageNumber - $scope.progressPag.maxSize;
-//            $scope.progressPag.res = $scope.questions.body.slice(startIndex, startIndex + $scope.progressPag.maxSize);
-//        };
 
         $scope.checkAnswer = function(answerNumber) {
             if (!$scope.answerOnce) {
                 var correctElement = angular.element( document.querySelector( '#answer-' + $scope.question.answer ) );
                 if (answerNumber == $scope.question.answer) {
                     console.log('correct answer');
-                    $scope.question.gotCorrect = true;
+                    $scope.question.correctAnswer = true;
                 } else {
                     console.log('incorrect answer');
                     var incorrectElement = angular.element( document.querySelector( '#answer-' + answerNumber ) );
                     incorrectElement.addClass('incorrect');
-                    $scope.question.gotCorrect = false;
+                    $scope.question.correctAnswer = false;
                 }
                 correctElement.addClass('correct');
                 $scope.answerOnce = true;
@@ -96,10 +74,6 @@
                 $scope.questions = res;
 
                 $scope.question = $scope.questions.body[0];
-//                $scope.question.answer = res.body[0].answer;
-//                $scope.question.answers = res.body[0].answers;
-//                $scope.question.questions = res.body[0].question.split(/\\n|:\\n/g);
-//                $scope.question.topic = res.body[0].topic;
                 setFontSize($scope.question.questions);
 
                 // set pagination
