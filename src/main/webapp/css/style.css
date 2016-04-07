@@ -3,29 +3,6 @@
   flex-direction: column;
   min-height: 100vh; }
 
-#header {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  color: white !important;
-  background-color: #333;
-  border-color: #101010;}
-  #header .logo {
-    font-size: 1.5em;
-    flex: 1;
-    text-align: center; }
-    #header .logo a {
-      float: left;
-      padding-left: 15px;
-      color: white;
-      text-decoration: none; }
-  #header .icon-container {
-    display: flex;
-    align-items: center;
-    flex: 10;
-    justify-content: flex-end;
-    padding-right: 30px; }
-
 .selectFile {
   display: block;
   font-family: Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -68,40 +45,20 @@
   border: 5px dashed #bfbfbf; }
 
 #dashboard-container {
-  flex-grow: 1;
-  display: flex; }
-  #dashboard-container .sidebar {
-    width: 150px;
-    background-color: #222;
-    color: white; }
-    #dashboard-container .sidebar .user-profile {
-      text-align: center;
-      padding: 30px 0px; }
-      #dashboard-container .sidebar .user-profile .user-name {
-        text-transform: uppercase;
-        font-weight: bold; }
-    #dashboard-container .sidebar .list .list-item a {
-      display: block;
-      padding: 20px;
-      color: white;
-      font-size: 16px;
-      text-decoration: none; }
-    #dashboard-container .sidebar .list .list-item a:hover {
-      background-color: #131313; }
-  #dashboard-container .content {
-    flex: 10; }
+  flex-grow: 1; }
+  #dashboard-container .wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; }
+    #dashboard-container .wrapper .content-wrapper {
+      flex: 1; }
 
-#inputTextElement {
-   border: solid 1px black;
-   width: 100%;
-}
-
-#page-wrapper {
+#page-wrapper .content-header {
+  margin-bottom: 50px; }
+#page-wrapper #inputTextElement {
+  resize: none;
   width: 100%;
-  padding: 0;
-  background-color: #fff; }
-  #page-wrapper h1 {
-    font-weight: 600; }
+  overflow-y: scroll; }
 
 @media (min-width: 768px) {
   #page-wrapper {
@@ -114,9 +71,7 @@
   margin: 10px; }
 
 #question-container .question h1 {
-  font-weight: bold;
-}
-
+  white-space: pre-wrap; }
 #question-container .question .answers .answer {
   cursor: pointer; }
 
