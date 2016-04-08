@@ -108,7 +108,7 @@ public class PDFResource implements IPDFResource {
             SentenceSimplifier ss = new SentenceSimplifier();
             List<QuestionDTO> questions = ss.run(finalStr);
 
-            saveQuestionsToDB(questions);
+   //         saveQuestionsToDB(questions);
 
             return new ResponseEntity<>(questions, HttpStatus.OK);
         } catch (IOException e) {

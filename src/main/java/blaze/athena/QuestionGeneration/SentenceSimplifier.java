@@ -1468,10 +1468,7 @@ public class SentenceSimplifier {
 //							if (nounPhraseString.startsWith("the ")){
 //								nounPhraseString = nounPhraseString.replaceFirst("the ", "");
 //							}
-							if (nounPhraseString.length() < 3 || nounPhraseString.matches("them|they|you") || nounPhraseString.startsWith("http")) { //filter bad answers
-								continue;
-							}
-							if (sentencesList.get(i).matches("[\\s\\S]*\\([\\s\\S]*" + Pattern.quote(nounPhraseString) + "[\\s\\S]*\\)[\\s\\S]")) {
+							if (!filterQuestions(nounPhraseString, topicList.get(i), sentencesList.get(i))) {
 								continue;
 							}
 							questionList.add(topicList.get(i) + ":::" + sentencesList.get(i).replaceAll("\\b" + Pattern.quote(nounPhraseString) + "\\b", " __________________"));
@@ -1519,6 +1516,21 @@ public class SentenceSimplifier {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private boolean filterQuestions(String nounPhraseString, String topic, String sentence) {
+		if (nounPhraseString.length() < 3 || nounPhraseString.matches("them|they|you") || nounPhraseString.startsWith("http")) { //filter bad answers
+			return false;
+		}
+		if (sentence.matches("[\\s\\S]*\\([\\s\\S]*" + Pattern.quote(nounPhraseString.trim()) + "[\\s\\S]*\\)[\\s\\S]*")) { // ignore if answer in brackets
+			return false;
+		}
+		if (StringUtils.containsIgnoreCase(topic, "figure") || StringUtils.containsIgnoreCase(topic, "table")
+				|| StringUtils.containsIgnoreCase(nounPhraseString, "figure") || StringUtils.containsIgnoreCase(nounPhraseString, "table")
+				|| StringUtils.containsIgnoreCase(sentence, "figure") || StringUtils.containsIgnoreCase(sentence, "table")) { //ignore questions related to a figure or table
+			return false;
+		}
+		return true;
 	}
 
 	private List<String> getAnswerSet(List<Tree> answersList, int answerIndex) {

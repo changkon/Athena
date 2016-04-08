@@ -3,6 +3,7 @@
 
     app.controller('DashboardQuestionCtrl', ['$scope','FilePost', '$timeout', function($scope, FilePost, $timeout) {
         $scope.showQuestions = false;
+        $scope.hideRating = true;
         $scope.myFile = { result : null };
         $scope.textModel = { text : null };
         $scope.fileName = "Your PDF File";
@@ -10,6 +11,8 @@
         $scope.question = {};
         $scope.question.question = "No question currently";
         $scope.answerOnce = false;
+        var currentQuestion = -1;
+
         // query pagination settings
         $scope.pag = {
             currentPage: 1,
@@ -33,7 +36,9 @@
                 element.removeClass('incorrect');
             }
             $scope.question = $scope.questions.body[questionNumber-1];
+            currentQuestion = $scope.question;
             setFontSize($scope.question.questions);
+            $scope.hideRating = true;
         };
 
         $scope.checkAnswer = function(answerNumber) {
@@ -50,6 +55,7 @@
                 }
                 correctElement.addClass('correct');
                 $scope.answerOnce = true;
+                $scope.hideRating = false;
             }
         };
 
@@ -102,6 +108,10 @@
                 inputFileElement.click();
             }, 0);
         };
+
+        $scope.rateQuestion = function() {
+            console.log("rating question " + currentQuestion);
+        }
 
         setFontSize = function(questions) {
             if (questions.length < 2){
