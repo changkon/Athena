@@ -10,6 +10,19 @@
         $scope.question = {};
         $scope.question.question = "No question currently";
         $scope.answerOnce = false;
+
+        // settings
+        $scope.settings = {
+            category: {
+                selected: "",
+                options: [
+                    { topic: 'Cells', subject: 'Biology' },
+                    { topic: 'Evolution', subject: 'Biology' },
+                    { topic: 'Anatomy', subject: 'Biology' }
+                ]
+            }
+        };
+
         // query pagination settings
         $scope.pag = {
             currentPage: 1,
