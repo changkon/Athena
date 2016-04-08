@@ -1,5 +1,6 @@
 package blaze.athena.services;
 
+import blaze.athena.DatabaseQueries.InsertQuestionQuery;
 import blaze.athena.DatabaseQueries.SelectQuery;
 import blaze.athena.QuestionGeneration.SentenceSimplifier;
 import blaze.athena.config.DatabaseConnection;
@@ -20,6 +21,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -106,7 +108,7 @@ public class PDFResource implements IPDFResource {
             SentenceSimplifier ss = new SentenceSimplifier();
             List<QuestionDTO> questions = ss.run(finalStr);
 
-            saveQuestionToDB();
+   //         saveQuestionsToDB(questions);
 
             return new ResponseEntity<>(questions, HttpStatus.OK);
         } catch (IOException e) {
@@ -115,9 +117,11 @@ public class PDFResource implements IPDFResource {
         }
     }
 
-    private void saveQuestionToDB() {
-        SelectQuery sq = new SelectQuery();
-        List<String> results = sq.select("SELECT * from dbo.Questions");
-        System.err.println(results);
+    private void saveQuestionsToDB(List<QuestionDTO> questions) {
+        InsertQuestionQuery insertQuestionQuery = new InsertQuestionQuery();
+        insertQuestionQuery.insert(questions.get(0));
+       // SelectQuery sq = new SelectQuery();
+        //List<String> results = sq.select("SELECT * from dbo.Questions");
+       // System.err.println(results);
     }
 }
