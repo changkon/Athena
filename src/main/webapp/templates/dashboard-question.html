@@ -72,8 +72,10 @@
                         </div>
                         <div class="box-body">
                             <div class="question">
-                                <h1>{{question.topic}}</h1>
-                                <h2 ng-style="{'font-size': fontsize}" ng-repeat="question in question.questions">{{question}}</h2>
+                                <div style="overflow: auto; max-height: 300px;">
+                                    <h1>{{question.topic}}</h1>
+                                    <h2 ng-style="{'font-size': fontsize}" ng-repeat="question in question.questions">{{question}}</h2>
+                                </div>
                                 <div class="answers">
                                     <div class="answer" ng-repeat="answer in question.answers track by $index" id="answer-{{$index}}" ng-click="checkAnswer($index)">{{answer}}</div>
                                 </div>
@@ -97,7 +99,7 @@
                                 boundary-links="true"></uib-pagination>
                     </div>
                 </div>
-                    <div class="col-sm-3">
+                <div class="col-sm-3">
                         <div class="box">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Question Progress</h3>
@@ -140,7 +142,17 @@
                             </div>
                         </div>
                     </div>
+                <div class="col-sm-3" ng-hide="hideRating">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Rate Question!</h3>
+                        </div>
+                        <button class="btn btn-success btn-lg" ng-click="rateQuestion()"> Good</button>
+                        <button class="btn btn-danger btn-lg" ng-click="rateQuestion()"> Bad</button>
+                    </div>
                 </div>
+
+            </div>
             </div>
         </div>
     </div>
