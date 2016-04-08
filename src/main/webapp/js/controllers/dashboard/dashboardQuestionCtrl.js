@@ -11,15 +11,17 @@
         $scope.question.question = "No question currently";
         $scope.answerOnce = false;
 
+        var categories = [
+            { topic: 'Cells', subject: 'Biology' },
+            { topic: 'Evolution', subject: 'Biology' },
+            { topic: 'Anatomy', subject: 'Biology' }
+        ];
+
         // settings
         $scope.settings = {
             category: {
-                selected: "",
-                options: [
-                    { topic: 'Cells', subject: 'Biology' },
-                    { topic: 'Evolution', subject: 'Biology' },
-                    { topic: 'Anatomy', subject: 'Biology' }
-                ]
+                options: categories,
+                selected: categories[0]
             }
         };
 
@@ -73,12 +75,14 @@
 
         $scope.uploadFile = function(){
             var file = $scope.myFile.result;
+            var category = $scope.settings.category.selected.topic;
             console.log("file received");
             console.log(file);
             var fd = new FormData();
 
             if (file != null) {
                 fd.append('uploadedFile', file);
+                fd.append('uploadedCategory', category);
             } else {
                 text = $scope.textModel.text;
                 console.log("text is " + text);

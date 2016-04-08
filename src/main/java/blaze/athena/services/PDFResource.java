@@ -81,6 +81,7 @@ public class PDFResource implements IPDFResource {
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         List<InputPart> inputParts = uploadForm.get("uploadedFile");
         List<InputPart> textData = uploadForm.get("uploadedText");
+        List<InputPart> categoryData = uploadForm.get("uploadedCategory");
         try {
             StringJoiner joiner = new StringJoiner("\n");
             PDFManager pdfManager = new PDFManager();
@@ -103,9 +104,11 @@ public class PDFResource implements IPDFResource {
                         .replaceAll("[-\\u2022\\u2023\\u25E6\\u2043\\u2219]", "");
             }
 
+            // Get category
+            String category = categoryData.get(0).getBodyAsString();
             SentenceSimplifier ss = new SentenceSimplifier();
             List<QuestionDTO> questions = ss.run(finalStr);
-
+            System.out.println(category);
             saveQuestionToDB();
 
             return new ResponseEntity<>(questions, HttpStatus.OK);
