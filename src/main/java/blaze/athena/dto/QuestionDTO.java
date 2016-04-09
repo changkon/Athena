@@ -9,12 +9,21 @@ import java.util.List;
 public class QuestionDTO {
     private String question;
     private String topic;
+    private String category;
     private List<String> answers = new ArrayList<>();
     private int answer;
 
     public QuestionDTO(String topic, String question) {
         this.topic = topic;
         this.setQuestion(question.replaceAll("(\\r|\\n|\\r\\n)+", "\\\\n"));
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getQuestion() {

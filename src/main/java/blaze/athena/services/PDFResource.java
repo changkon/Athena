@@ -83,6 +83,7 @@ public class PDFResource implements IPDFResource {
         Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
         List<InputPart> inputParts = uploadForm.get("uploadedFile");
         List<InputPart> textData = uploadForm.get("uploadedText");
+        List<InputPart> categoryData = uploadForm.get("uploadedCategory");
         try {
             StringJoiner joiner = new StringJoiner("\n");
             PDFManager pdfManager = new PDFManager();
@@ -105,10 +106,15 @@ public class PDFResource implements IPDFResource {
                         .replaceAll("[-\\u2022\\u2023\\u25E6\\u2043\\u2219]", "");
             }
 
+            // Get category
+            String category = categoryData.get(0).getBodyAsString();
             SentenceSimplifier ss = new SentenceSimplifier();
             List<QuestionDTO> questions = ss.run(finalStr);
 
-   //         saveQuestionsToDB(questions);
+            // set category
+            questions.parallelStream().forEach(q -> q.setCategory(category));
+
+            saveQuestionsToDB(questions);
 
             return new ResponseEntity<>(questions, HttpStatus.OK);
         } catch (IOException e) {
@@ -120,8 +126,5 @@ public class PDFResource implements IPDFResource {
     private void saveQuestionsToDB(List<QuestionDTO> questions) {
         InsertQuestionQuery insertQuestionQuery = new InsertQuestionQuery();
         insertQuestionQuery.insert(questions.get(0));
-       // SelectQuery sq = new SelectQuery();
-        //List<String> results = sq.select("SELECT * from dbo.Questions");
-       // System.err.println(results);
     }
 }
