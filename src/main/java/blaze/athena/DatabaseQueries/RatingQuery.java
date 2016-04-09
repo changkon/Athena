@@ -86,7 +86,7 @@ public class RatingQuery {
 
     private int getIdOfQuestion(Connection connection, QuestionDTO q) throws SQLException {
         Statement statement = connection.createStatement();
-        String query = "SELECT * FROM dbo.Questions WHERE Question='" + q.getQuestion() + "';";
+        String query = "SELECT * FROM dbo.Questions WHERE Question='" + q.getQuestion().replace("'", "''")  + "';";
         System.out.println(query);
         ResultSet resultSet = statement.executeQuery(query);
          // add results from select statement into list

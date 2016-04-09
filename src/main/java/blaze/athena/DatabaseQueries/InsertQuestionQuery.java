@@ -62,9 +62,12 @@ public class InsertQuestionQuery {
         PreparedStatement prepsInsertProduct = null;
 
         try {
+            // Submit category
+            int categoryId = submitCategory(question, connection);
+
             // Create and execute an INSERT SQL prepared statement.
             String insertSql = "INSERT INTO dbo.Questions (Question, Category, Topic, PdfId) VALUES "
-                    + "('"+ question.getQuestion() + "', '1', '" + question.getTopic() + "', '0');";
+                    + "('"+ question.getQuestion().replace("'", "''")  + "', '" + categoryId + "', '" + question.getTopic().replace("'", "''")  + "', '0');";
 
             prepsInsertProduct = connection.prepareStatement(
                     insertSql,
@@ -96,6 +99,57 @@ public class InsertQuestionQuery {
             if (prepsInsertProduct != null) try { prepsInsertProduct.close(); } catch(Exception e) {}
         }
         return "-1";
+    }
+
+    private int submitCategory(QuestionDTO question, Connection connection) {
+        int categoryId = 0;
+
+        ResultSet categoryResultSet = null;
+        PreparedStatement categoryPrepsInsertProduct = null;
+        String category = question.getCategory();
+        try {
+            // Create and execute an INSERT SQL prepared statement.
+            String categoryInsertSql = "INSERT INTO dbo.Categories (GroupName) VALUES "
+                    + "('" + category.replace("'", "''")  + "');";
+
+            categoryPrepsInsertProduct = connection.prepareStatement(
+                    categoryInsertSql,
+                    Statement.RETURN_GENERATED_KEYS);
+            categoryPrepsInsertProduct.execute();
+
+            // Retrieve the generated key from the insert.
+            categoryResultSet = categoryPrepsInsertProduct.getGeneratedKeys();
+
+            // Retrieve the ID of the inserted row.
+            while (categoryResultSet.next()) {
+                categoryId = categoryResultSet.getInt(1);
+            }
+        }
+        catch (Exception e) {
+            // Problem inserting duplicate key
+            // retrieve matching
+            try {
+                String categoryQuerySql = "SELECT Id FROM dbo.Categories WHERE GroupName='" + category.replace("'", "''")  + "';";
+
+                PreparedStatement categoryPrepsQueryProduct = connection.prepareStatement(categoryQuerySql);
+                categoryPrepsQueryProduct.execute();
+
+                categoryResultSet = categoryPrepsQueryProduct.getResultSet();
+
+                while (categoryResultSet.next()) {
+                    categoryId = categoryResultSet.getInt(1);
+                }
+
+            } catch (Exception e1) {
+                e.printStackTrace();
+            }
+        }
+        finally {
+            if (categoryResultSet != null) try { categoryResultSet.close(); } catch(Exception e) {}
+            if (categoryPrepsInsertProduct != null) try { categoryPrepsInsertProduct.close(); } catch(Exception e) {}
+        }
+
+        return categoryId;
     }
 
     private void submitAnswers(QuestionDTO question, Connection connection, int questionId) {

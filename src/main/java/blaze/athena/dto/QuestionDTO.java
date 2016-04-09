@@ -12,6 +12,7 @@ import java.util.List;
 public class QuestionDTO {
     private String question;
     private String topic;
+    private String category;
     private List<String> answers = new ArrayList<>();
     private int answer;
     private double rating;
@@ -23,6 +24,14 @@ public class QuestionDTO {
 
     public QuestionDTO() {
 
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getQuestion() {
