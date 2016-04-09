@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module('athena');
 
-    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', '$timeout', function($scope, FilePost, $timeout) {
+    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', '$timeout', function($scope, FilePost, StoreQuestionPost, $timeout) {
         $scope.showQuestions = false;
         $scope.hideRating = true;
         $scope.myFile = { result : null };
@@ -103,6 +103,7 @@
                 $scope.questions = res;
 
                 $scope.question = $scope.questions.body[0];
+                currentQuestion = $scope.question;
                 setFontSize($scope.question.questions);
 
                 // set pagination
@@ -126,8 +127,14 @@
             }, 0);
         };
 
-        $scope.rateQuestion = function() {
-            console.log("rating question " + currentQuestion);
+        $scope.rateQuestion = function(val) {
+            console.log(currentQuestion);
+            currentQuestion.rating = val;
+            console.log("rating question score of " + val);
+            $scope.myPromise = StoreQuestionPost.create({}, currentQuestion).$promise.then(function(res){
+                console.log(res);
+            });
+            $scope.hideRating = true;
         }
 
         setFontSize = function(questions) {

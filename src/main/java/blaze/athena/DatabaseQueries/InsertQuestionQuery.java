@@ -55,7 +55,7 @@ public class InsertQuestionQuery {
 //        }
 //    }
 
-    public void insert(QuestionDTO question) {
+    public String insert(QuestionDTO question) {
         // Declare the JDBC objects.
         Connection connection = DatabaseConnection.getInstance().getConnection();
         ResultSet resultSet = null;
@@ -67,7 +67,7 @@ public class InsertQuestionQuery {
 
             // Create and execute an INSERT SQL prepared statement.
             String insertSql = "INSERT INTO dbo.Questions (Question, Category, Topic, PdfId) VALUES "
-                    + "('"+ question.getQuestion() + "', '" + categoryId + "', '" + question.getTopic() + "', '0');";
+                    + "('"+ question.getQuestion().replace("'", "''")  + "', '" + categoryId + "', '" + question.getTopic().replace("'", "''")  + "', '0');";
 
             prepsInsertProduct = connection.prepareStatement(
                     insertSql,
@@ -86,15 +86,19 @@ public class InsertQuestionQuery {
 
             //now submit the answers
             submitAnswers(question, connection, Integer.parseInt(resultId));
+            return resultId;
         }
         catch (Exception e) {
-            e.printStackTrace();
+            if (e.getMessage().contains("Violation of UNIQUE KEY constraint")) {
+                System.err.println("Question already exists!");
+            }
         }
         finally {
             // Close the connections after the data has been handled.
             if (resultSet != null) try { resultSet.close(); } catch(Exception e) {}
             if (prepsInsertProduct != null) try { prepsInsertProduct.close(); } catch(Exception e) {}
         }
+        return "-1";
     }
 
     private int submitCategory(QuestionDTO question, Connection connection) {
@@ -106,7 +110,7 @@ public class InsertQuestionQuery {
         try {
             // Create and execute an INSERT SQL prepared statement.
             String categoryInsertSql = "INSERT INTO dbo.Categories (GroupName) VALUES "
-                    + "('" + category + "');";
+                    + "('" + category.replace("'", "''")  + "');";
 
             categoryPrepsInsertProduct = connection.prepareStatement(
                     categoryInsertSql,
@@ -125,7 +129,7 @@ public class InsertQuestionQuery {
             // Problem inserting duplicate key
             // retrieve matching
             try {
-                String categoryQuerySql = "SELECT Id FROM dbo.Categories WHERE GroupName='" + category + "';";
+                String categoryQuerySql = "SELECT Id FROM dbo.Categories WHERE GroupName='" + category.replace("'", "''")  + "';";
 
                 PreparedStatement categoryPrepsQueryProduct = connection.prepareStatement(categoryQuerySql);
                 categoryPrepsQueryProduct.execute();
@@ -155,10 +159,10 @@ public class InsertQuestionQuery {
             // Create and execute an INSERT SQL prepared statement.
             List<String> answers = question.getAnswers();
             String answersInsertSql = "INSERT INTO dbo.Answers (Answer, Question, Correct) VALUES "
-                    + "('" + answers.get(0) + "', '" + questionId + "', '" + (question.getAnswer() == 0) + "'), "
-                    + "('" + answers.get(1) + "', '" + questionId + "', '" + (question.getAnswer() == 1) + "'), "
-                    + "('" + answers.get(2) + "', '" + questionId + "', '" + (question.getAnswer() == 2) + "'), "
-                    + "('" + answers.get(3) + "', '" + questionId + "', '" + (question.getAnswer() == 3) + "');";
+                    + "('" + answers.get(0).replace("'", "''") + "', '" + questionId + "', '" + (question.getAnswer() == 0) + "'), "
+                    + "('" + answers.get(1).replace("'", "''") + "', '" + questionId + "', '" + (question.getAnswer() == 1) + "'), "
+                    + "('" + answers.get(2).replace("'", "''") + "', '" + questionId + "', '" + (question.getAnswer() == 2) + "'), "
+                    + "('" + answers.get(3).replace("'", "''") + "', '" + questionId + "', '" + (question.getAnswer() == 3) + "');";
 
             answersPrepsInsertProduct = connection.prepareStatement(
                     answersInsertSql,

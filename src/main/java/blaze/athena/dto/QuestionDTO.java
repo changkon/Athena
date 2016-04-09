@@ -1,21 +1,29 @@
 package blaze.athena.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Wesley on 6/03/2016.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class QuestionDTO {
     private String question;
     private String topic;
     private String category;
     private List<String> answers = new ArrayList<>();
     private int answer;
+    private double rating;
 
     public QuestionDTO(String topic, String question) {
         this.topic = topic;
         this.setQuestion(question.replaceAll("(\\r|\\n|\\r\\n)+", "\\\\n"));
+    }
+
+    public QuestionDTO() {
+
     }
 
     public String getCategory() {
@@ -58,7 +66,15 @@ public class QuestionDTO {
         return topic;
     }
 
-    public void setTopic(String q) {
-        this.question = q;
+    public void setTopic(String t) {
+        this.topic = t;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

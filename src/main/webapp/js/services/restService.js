@@ -10,4 +10,14 @@
             }
         });
     });
+
+     app.factory('StoreQuestionPost', function ($resource) {
+            return $resource('/services/question/store',null,{
+                create: {
+                    method: "POST",
+                    headers: { 'Content-Type': "application/json" }
+                }
+            });
+        });
+
 })();
