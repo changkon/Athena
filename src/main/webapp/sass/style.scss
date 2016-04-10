@@ -1,0 +1,11 @@
+// Load partials
+@import 'partials/variables';
+@import 'partials/commons';
+
+// Load components
+//@import 'components/nav';
+@import 'components/file';
+
+// import pages
+@import 'pages/dashboard';
+@import 'pages/dashboard-question';

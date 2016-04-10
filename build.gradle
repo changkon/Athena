@@ -42,11 +42,17 @@ jettyRun {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 war {
     archiveName = "ROOT.$extension"
+}
+
+// remove slf4j conflict problem
+configurations.all {
+    exclude module: 'slf4j-log4j12'
 }
 
 dependencies {
@@ -59,6 +65,9 @@ dependencies {
     // jackson provider
     compile "org.jboss.resteasy:resteasy-jackson2-provider:+"
 
+    //jackson
+    compile 'com.fasterxml.jackson.core:jackson-core:2.7.2'
+
     // spring boot starter
     compile "org.springframework.boot:spring-boot-starter-thymeleaf"
 
@@ -70,6 +79,22 @@ dependencies {
 
     //pdfbox
     compile "org.apache.pdfbox:pdfbox:2.0.0-RC3"
+
+    //stanford parser
+    compile files('lib/sqljdbc4.jar')
+
+    compile "edu.stanford.nlp:stanford-corenlp:+"
+
+    compile "edu.stanford.nlp:stanford-parser:+"
+
+    compile "net.sf.extjwnl:extjwnl:+"
+
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'commons-logging:commons-logging:1.2'
+
+    // dependency for stanford
+    compile 'com.google.protobuf:protobuf-java:2.6.1'
+
     // resteasy multipart provider
     compile "org.jboss.resteasy:resteasy-multipart-provider:+"
 
@@ -88,5 +113,15 @@ dependencies {
 
     compile("com.h2database:h2")
 
+    // application insights (analytic)
+    compile 'com.microsoft.azure:applicationinsights-web:+'
+
+    // deployable war file
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+
     testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+springBoot {
+    mainClass = "blaze.athena.application.AthenaSpringApplication"
 }

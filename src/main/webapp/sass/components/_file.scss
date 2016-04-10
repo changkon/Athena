@@ -1,0 +1,64 @@
+$dropzone-width: 95;
+
+
+.selectFile
+{
+  display: block;
+  //margin-left: percentage(((100 - $dropzone-width) / 2) / 100);
+  font-family: Avenir, 'Helvetica Neue', 'Lato', 'Segoe UI', Helvetica, Arial, sans-serif;
+  margin-top: 35px;
+  text-align: center;
+
+  button
+  {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+
+#fileTextField
+{
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dropzone
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: $dashboard-grey;
+  border: 5px dashed $dashboard-grey-alternative;
+  font-family: Arial;
+  font-size: 32px;
+  color: $dashboard-grey-alternative;
+  cursor: pointer;
+  flex-grow: 1;
+
+  .underline
+  {
+    text-decoration: underline;
+  }
+
+  input
+  {
+    display: none;
+  }
+}
+
+.outer-dropzone
+{
+  background-color: $dashboard-grey;
+  margin-left: auto;
+  margin-right: auto;
+  //width: percentage($dropzone-width/100);
+  min-height: 550px;
+  display: flex;
+}
+
+.dropzone:hover
+{
+  border: 5px dashed #bfbfbf;
+}

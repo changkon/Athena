@@ -1,0 +1,162 @@
+<div id="page-wrapper">
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Questions
+            <small>Generate questions from uploaded material</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+            <li class="active">Here</li>
+        </ol>
+    </section>
+
+    <div class="container-fluid">
+
+        <div class="row" ng-hide="showQuestions" cg-busy="myPromise" id="upload-container">
+            <div class="col-sm-10 col-sm-offset-1">
+                <form>
+
+                    <div id="settings-container" class="box box-default">
+                        <div class="box-header with-border"><h3 class="box-title">Settings</h3></div>
+                        <div class="box-body">
+                            <label for="category-select">Category</label>
+                            <ui-select id="category-select" ng-model="settings.category.selected" style="min-width: 250px;">
+                                <ui-select-match placeholder="Choose category"><span ng-bind="$select.selected.topic"></span></ui-select-match>
+                                <ui-select-choices repeat="category in settings.category.options">
+                                    {{category.topic}}
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                    </div>
+
+                    <uib-tabset active="active" class="nav-tabs-custom">
+                        <uib-tab index="0" heading="Upload PDF">
+                            <div class="outer-dropzone">
+                                <div ng-click="openFileModal()" class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
+                                     file="myFile.result" file-name="fileName" data-max-file-size="50">
+                                    <p ng-show="myFile.result == null"><i class="fa fa-upload fa-3x"></i></p>
+                                    <p ng-show="myFile.result == null">Drop Files Here</p>
+                                    <p ng-show="myFile.result == null" class="underline">Choose file</p>
+                                    <p ng-show="myFile.result != null">{{myFile.result.name}}</p>
+                                    <input id="inputFileElement" type="file" accept="*.pdf" file-model="myFile.result"/>
+                                </div>
+                            </div>
+                        </uib-tab>
+                        <uib-tab index="1" heading="Notes">
+                            <div>
+                                ​<textarea id="inputTextElement" rows="20" ng-model="textModel.text" placeholder="Or paste your study notes below"></textarea>
+                            </div>
+                        </uib-tab>
+
+                    </uib-tabset>
+
+
+                    <div class="selectFile">
+                        <button class="btn btn-success btn-lg" ng-click="uploadFile()"><i class="fa fa-plus"></i> upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="question-container" class="row" ng-if="questions" ng-show="showQuestions">
+            <!--<div class="col-lg-2 text-center">-->
+                <!--<button type="button" class="btn btn-danger returnButton" ng-click="returnMenu()">Back to menu</button>-->
+            <!--</div>-->
+            <div class="row">
+                <div class="col-sm-offset-1 col-sm-6">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 style=" margin-top: 0px; margin-bottom: 0px;">Questions</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="question">
+                                <div style="overflow: auto; max-height: 300px;">
+                                    <h1>{{question.topic}}</h1>
+                                    <h2 ng-style="{'font-size': fontsize}" ng-repeat="question in question.questions">{{question}}</h2>
+                                </div>
+                                <div class="answers">
+                                    <div class="answer" ng-repeat="answer in question.answers track by $index" id="answer-{{$index}}" ng-click="checkAnswer($index)">{{answer}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="text-center">
+                        <uib-pagination
+                                class="pagination pagination-centered"
+                                previous-text="&lsaquo;"
+                                next-text="&rsaquo;" first-text="&laquo;"
+                                last-text="&raquo;"
+                                ng-model="pag.currentPage"
+                                total-items="pag.numfound"
+                                items-per-page="pag.length"
+                                ng-change="update(pag.currentPage)"
+                                rotate="true"
+                                max-size="pag.maxSize"
+                                boundary-links="true"></uib-pagination>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Question Progress</h3>
+                            </div>
+                            <div class="box-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Topic</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="progress in questions.body" ng-if="$index >= (progressPag.currentPage - 1)*progressPag.itemsPerPage && $index < (progressPag.currentPage - 1)*progressPag.itemsPerPage + progressPag.itemsPerPage">
+                                        <td>{{$index + (progressPag.itemsPerPage * (progressPag.currentPage-1)) + 1}}</td>
+                                        <td>{{progress.topic}}</td>
+                                        <td>
+                                            <span ng-if="progress.correctAnswer" class="label label-success">Correct</span>
+                                            <span ng-if="progress.correctAnswer != null && !progress.correctAnswer" class="label label-danger">Wrong</span>
+                                            <span ng-if="progress.correctAnswer == null" class="label label-info">Not Attempted</span>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="box-footer clearfix">
+                                <uib-pagination
+                                        class="pagination pagination-centered"
+                                        previous-text="&lsaquo;"
+                                        next-text="&rsaquo;" first-text="&laquo;"
+                                        last-text="&raquo;"
+                                        ng-model="progressPag.currentPage"
+                                        total-items="progressPag.numfound"
+                                        items-per-page="progressPag.itemsPerPage"
+                                        max-size="progressPag.maxSize"
+                                        ng-change="progressUpdate(progressPag.currentPage)"
+                                        rotate="true"
+                                        boundary-links="true"></uib-pagination>
+                            </div>
+                        </div>
+                    </div>
+                <div class="col-sm-3" ng-hide="hideRating">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Rate Question!</h3>
+                        </div>
+                        <button class="btn btn-danger btn-lg" ng-click="rateQuestion(1)"> 1</button>
+                        <button class="btn btn-lg" ng-click="rateQuestion(2)"> 2</button>
+                        <button class="btn btn-lg" ng-click="rateQuestion(3)"> 3</button>
+                        <button class="btn btn-lg" ng-click="rateQuestion(4)"> 4</button>
+                        <button class="btn btn-success btn-lg" ng-click="rateQuestion(5)"> 5</button>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

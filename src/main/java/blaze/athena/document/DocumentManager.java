@@ -32,23 +32,33 @@ public interface DocumentManager {
 
     default String formatText(String input) {
         String[] lines = input.split(lineSeparator);
-        for (int i =0; i < lines.length-1; i++) {
-            String firstLine = lines[i].trim();
-            String secondLine = lines[i+1].trim();
-            int next = 1;
-            if (secondLine.equals("") && i < lines.length - 2) {
-                secondLine = lines[i+2].trim();
-                next = 2;
+        for (int i = lines.length-1; i > 0; i--) {
+            String line = lines[i].trim();
+            String prevLine = lines[i-1].trim();
+
+            if (line.length() < 1) {
+                lines[i - 1] = prevLine + ".";
+            } else {
+                if (prevLine.length() < 1) {
+                    continue;
+                }
+                char prevLastLetter = prevLine.charAt(prevLine.length() - 1);
+                String firstLetter = String.valueOf(line.charAt(0));
+                if (prevLastLetter != '.' && firstLetter.matches("[-\\u2022\\u2023\\u25E6\\u2043\\u2219]")) { //check if its not a bullet point) [
+                    lines[i - 1] = prevLine + ".";
+                }
             }
-            if (firstLine.length() == 0 || secondLine.length() == 0) {
-                continue;
-            }
-            char secondLineFirstLetter = secondLine.charAt(0);
-            char firstLineLastLetter = firstLine.charAt(firstLine.length()-1);
-            if (firstLineLastLetter != '.' && Character.isLowerCase(secondLineFirstLetter)) {
-                lines[i] += secondLine;
-                lines[i+next] = "";
-            }
+        }
+        List<String> list = Arrays.asList(lines);
+        return String.join(lineSeparator, list);
+    }
+
+    default String formatTextForText(String input) {
+        String[] lines = input.split(lineSeparator);
+        for (int i = 0; i < lines.length-1; i++) {
+            String line = lines[i].trim();
+            //append full stop to end of line
+            lines[i] = line + ".";
         }
         List<String> list = Arrays.asList(lines);
         return String.join(lineSeparator, list);
