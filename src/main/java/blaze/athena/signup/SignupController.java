@@ -66,7 +66,7 @@ public class SignupController {
 		if (account != null) {
 			SignInUtils.signin(account.getUsername());
 			providerSignInUtils.doPostSignUp(account.getUsername(), request);
-			return "redirect:greeting";
+			return "redirect:dashboard";
 		}
 		return null;
 	}

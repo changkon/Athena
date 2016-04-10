@@ -13,6 +13,7 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -39,10 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void registerAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+
+
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery("select username, password, true from Account where username = ?")
-                .authoritiesByUsernameQuery("select username, 'ROLE_USER' from Account where username = ?")
+                .usersByUsernameQuery("select Email, Password, Id  from Accounts where Email = ?")
+                .authoritiesByUsernameQuery("select Email, 'ROLE_USER' as Role from Accounts where Email = ?")
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -57,19 +60,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .formLogin()
-                .loginPage("/signin")
-                .loginProcessingUrl("/signin/authenticate")
-                .failureUrl("/signin?param.error=bad_credentials")
+                    .loginPage("/signin")
+                    .loginProcessingUrl("/signin/authenticate")
+                    .successHandler(successHandler())
+                    .failureUrl("/signin?param.error=bad_credentials")
                 .and()
-                .logout()
-                .logoutUrl("/signout")
-                .deleteCookies("JSESSIONID")
+                    .logout()
+                    .logoutUrl("/signout")
+                    .deleteCookies("JSESSIONID")
                 .and()
-                .authorizeRequests()
-                .antMatchers("/admin/**", "/favicon.ico", "/resources/**", "/auth/**","/greeting/**", "/signin/**", "/signup/**", "/disconnect/facebook").permitAll()
-                .antMatchers("/**").authenticated()
+                    .authorizeRequests()
+                    .antMatchers("/admin/**", "/favicon.ico", "/resources/**", "/auth/**","/greeting/**", "/signin/**", "/signup/**", "/disconnect/facebook").permitAll()
+                    .antMatchers("/**").authenticated()
                 .and()
-                .rememberMe();
+                    .rememberMe();
     }
 
     @Bean
@@ -80,5 +84,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public TextEncryptor textEncryptor() {
         return Encryptors.noOpText();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+         return new CustomAuthenticationSuccessHandler();
     }
 }
