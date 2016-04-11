@@ -91,6 +91,8 @@ public class InsertQuestionQuery {
         catch (Exception e) {
             if (e.getMessage().contains("Violation of UNIQUE KEY constraint")) {
                 System.err.println("Question already exists!");
+            } else {
+                e.printStackTrace();
             }
         }
         finally {
