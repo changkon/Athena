@@ -20,4 +20,13 @@
             });
         });
 
+     app.factory('GetCategories', function ($resource) {
+            return $resource('/services/question/categories',null,{
+                create: {
+                    method: "GET",
+                    headers: { 'Content-Type': "application/json" }
+                }
+            });
+        });
+
 })();

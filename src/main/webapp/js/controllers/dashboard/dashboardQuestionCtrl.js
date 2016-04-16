@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module('athena');
 
-    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', '$timeout', function($scope, FilePost, StoreQuestionPost, $timeout) {
+    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', 'GetCategories', '$timeout', function($scope, FilePost, StoreQuestionPost, GetCategories, $timeout) {
         $scope.showQuestions = false;
         $scope.hideRating = true;
         $scope.myFile = { result : null };
@@ -11,6 +11,26 @@
         $scope.question = {};
         $scope.question.question = "No question currently";
         $scope.answerOnce = false;
+        $scope.categories = null;
+
+        $scope.tags = [];
+
+        $scope.loadTags = function(query) {
+            if ($scope.categories != null) {
+                return $scope.categories;
+            } else {
+                $scope.myPromise = GetCategories.create().$promise.then(function(res){
+                    var categories = [];
+                    for (i = 0; i < res.body.length; i++) {
+                        categories.push({ text: res.body[i]})
+                    }
+                    $scope.categories = categories;
+                  //  console.log(categories);
+                    return categories;
+                });
+                return $scope.myPromise;
+            }
+        };
 
         var categories = [
             { topic: 'Cells', subject: 'Biology' },
@@ -89,19 +109,24 @@
 
         $scope.uploadFile = function(){
             var file = $scope.myFile.result;
-            var category = $scope.settings.category.selected.topic;
+            var categoryTags = "";
+            for (i = 0; i < $scope.tags.length; i++) {
+               categoryTags += $scope.tags[i].text + ",";
+            }
             console.log("file received");
             console.log(file);
             var fd = new FormData();
 
             if (file != null) {
                 fd.append('uploadedFile', file);
-                fd.append('uploadedCategory', category);
+                fd.append('uploadedCategory', categoryTags);
             } else {
                 text = $scope.textModel.text;
                 console.log("text is " + text);
+
+
                 fd.append('uploadedText', text.replace("’", "'"));
-                fd.append('uploadedCategory', category);
+                fd.append('uploadedCategory', categoryTags);
             }
             $scope.myPromise = FilePost.create({}, fd).$promise.then(function(res){
                 // update returned object to store gotCorrect

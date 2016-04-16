@@ -21,13 +21,16 @@
                     <div id="settings-container" class="box box-default">
                         <div class="box-header with-border"><h3 class="box-title">Settings</h3></div>
                         <div class="box-body">
-                            <label for="category-select">Category</label>
-                            <ui-select id="category-select" ng-model="settings.category.selected" style="min-width: 250px;">
-                                <ui-select-match placeholder="Choose category"><span ng-bind="$select.selected.topic"></span></ui-select-match>
-                                <ui-select-choices repeat="category in settings.category.options">
-                                    {{category.topic}}
-                                </ui-select-choices>
-                            </ui-select>
+                            <label>Category</label>
+                            <!--<ui-select id="category-select" ng-model="settings.category.selected" style="min-width: 250px;">-->
+                                <!--<ui-select-match placeholder="Choose category"><span ng-bind="$select.selected.topic"></span></ui-select-match>-->
+                                <!--<ui-select-choices repeat="category in settings.category.options">-->
+                                    <!--{{category.topic}}-->
+                                <!--</ui-select-choices>-->
+                            <!--</ui-select>-->
+                            <tags-input ng-model="tags" max-tags="3" style="width:90%">
+                                <auto-complete source="loadTags($query)"></auto-complete>
+                            </tags-input>
                         </div>
                     </div>
 
