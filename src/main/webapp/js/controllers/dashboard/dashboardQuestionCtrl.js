@@ -95,6 +95,7 @@
                 text = $scope.textModel.text;
                 console.log("text is " + text);
                 fd.append('uploadedText', text.replace("’", "'"));
+                fd.append('uploadedCategory', category);
             }
             $scope.myPromise = FilePost.create({}, fd).$promise.then(function(res){
                 // update returned object to store gotCorrect

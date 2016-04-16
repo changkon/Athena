@@ -1471,7 +1471,7 @@ public class SentenceSimplifier {
 							if (!filterQuestions(nounPhraseString, topicList.get(i), sentencesList.get(i))) {
 								continue;
 							}
-							questionList.add(topicList.get(i) + ":::" + sentencesList.get(i).replaceAll("\\b" + Pattern.quote(nounPhraseString) + "\\b", " __________________"));
+							questionList.add(topicList.get(i) + ":::" + sentencesList.get(i).replaceFirst("\\b" + Pattern.quote(nounPhraseString) + "\\b", " __________________"));
 							//answerList.add(nounPhraseString.replace("-LRB- ", "(").replace(" -RRB-", ")"));
 							answerList.add(nounPhrase);
 						}
@@ -1546,14 +1546,14 @@ public class SentenceSimplifier {
 		//generate distractors
 		for (Tree t : answersList) {
 			Answer newAnswer = new Answer(getStringFromTree(t)/* + " --- " + t.taggedLabeledYield()*/, getSimilarity(t,currentAnswer));
-			if (answers.size() < 4) {
+			if (answers.size() < 4 && !answers.contains(newAnswer)) {
 				answers.add(newAnswer); //if there's not already 4 answers, then add this and check if it is the newest worst answer
 				if (newAnswer.getValue() > highestValue) {
 					indexOfHighest = answers.size() - 1;
 					highestValue = newAnswer.getValue();
 				}
 			} else {
-				if (newAnswer.getValue() < highestValue) { //only add if this one is better than the current worse
+				if (newAnswer.getValue() < highestValue && !answers.contains(newAnswer)) { //only add if this one is better than the current worse
 					answers.set(indexOfHighest, newAnswer);
 					indexOfHighest = answers.size() - 1; //assume the one we added is the worst
 					highestValue = newAnswer.getValue();
