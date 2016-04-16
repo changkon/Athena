@@ -77,7 +77,14 @@
         };
 
         $scope.returnMenu = function() {
-            $scope.myFile = null;
+      //      $scope.myFile = null;
+            $scope.answerOnce = false;
+            // remove classes
+            for (i=0; i< $scope.question.answers.length; i++) {
+                var element = angular.element( document.querySelector( '#answer-' + i ) );
+                element.removeClass('correct');
+                element.removeClass('incorrect');
+            }
             $scope.showQuestions = false;
         }
 
