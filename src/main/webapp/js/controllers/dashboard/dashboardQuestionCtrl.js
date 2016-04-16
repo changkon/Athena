@@ -15,7 +15,8 @@
         var categories = [
             { topic: 'Cells', subject: 'Biology' },
             { topic: 'Evolution', subject: 'Biology' },
-            { topic: 'Anatomy', subject: 'Biology' }
+            { topic: 'Anatomy', subject: 'Biology' },
+            { topic: 'Reactions', subject: 'Chemistry' }
         ];
 
         // settings
