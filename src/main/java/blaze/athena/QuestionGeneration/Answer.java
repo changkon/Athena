@@ -27,4 +27,10 @@ public class Answer {
     public void setValue(double value) {
         this.value = value;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        Answer otherAnswer =(Answer) other;
+        return (answerText.equals(otherAnswer.answerText));
+    }
 }
