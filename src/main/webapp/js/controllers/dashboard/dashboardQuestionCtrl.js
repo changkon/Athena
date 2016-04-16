@@ -12,6 +12,8 @@
         $scope.question.question = "No question currently";
         $scope.answerOnce = false;
 
+        console.log(document.cookie);
+
         var categories = [
             { topic: 'Cells', subject: 'Biology' },
             { topic: 'Evolution', subject: 'Biology' },

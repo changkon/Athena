@@ -14,6 +14,9 @@ import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -73,7 +76,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/admin/**", "/favicon.ico", "/resources/**", "/auth/**","/greeting/**", "/signin/**", "/signup/**", "/disconnect/facebook").permitAll()
                     .antMatchers("/**").authenticated()
                 .and()
-                    .rememberMe();
+                    .rememberMe()
+                .and()
+                    .csrf().csrfTokenRepository(csrfTokenRepository())
+                .and()
+                    .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
     }
 
     @Bean
@@ -89,5 +96,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationSuccessHandler successHandler() {
          return new CustomAuthenticationSuccessHandler();
+    }
+
+    private CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
     }
 }
