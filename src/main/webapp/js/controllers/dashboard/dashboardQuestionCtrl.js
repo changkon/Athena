@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module('athena');
 
-    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', '$timeout', function($scope, FilePost, StoreQuestionPost, $timeout) {
+    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', '$timeout','$location', function($scope, FilePost, StoreQuestionPost, $timeout,$location) {
         $scope.showQuestions = false;
         $scope.hideRating = true;
         $scope.myFile = { result : null };
@@ -12,7 +12,9 @@
         $scope.question.question = "No question currently";
         $scope.answerOnce = false;
 
-        console.log(document.cookie);
+        $scope.$watch("accountName", function(){
+            console.log($scope.accountName);
+         });
 
         var categories = [
             { topic: 'Cells', subject: 'Biology' },
