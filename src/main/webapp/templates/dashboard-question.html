@@ -28,7 +28,7 @@
                                     <!--{{category.topic}}-->
                                 <!--</ui-select-choices>-->
                             <!--</ui-select>-->
-                            <tags-input ng-model="tags" max-tags="3" style="width:90%">
+                            <tags-input ng-model="tags" max-tags="3" on-tag-adding="checkTag($tag)" style="width:90%">
                                 <auto-complete source="loadTags($query)"></auto-complete>
                             </tags-input>
                         </div>

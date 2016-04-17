@@ -17,7 +17,9 @@
 
         $scope.loadTags = function(query) {
             if ($scope.categories != null) {
-                return $scope.categories;
+                return $scope.categories.filter(function(category) {
+                  return category.text.toLowerCase().indexOf(query.toLowerCase()) != -1;
+                });
             } else {
                 $scope.myPromise = GetCategories.create().$promise.then(function(res){
                     var categories = [];
@@ -26,11 +28,17 @@
                     }
                     $scope.categories = categories;
                   //  console.log(categories);
-                    return categories;
+                    return categories.filter(function(category) {
+                      return category.text.toLowerCase().indexOf(query.toLowerCase()) != -1;
+                    });
                 });
                 return $scope.myPromise;
             }
         };
+
+        $scope.checkTag = function(tag){
+            return $scope.tags.length < 3;
+        }
 
         var categories = [
             { topic: 'Cells', subject: 'Biology' },
@@ -123,8 +131,6 @@
             } else {
                 text = $scope.textModel.text;
                 console.log("text is " + text);
-
-
                 fd.append('uploadedText', text.replace("’", "'"));
                 fd.append('uploadedCategory', categoryTags);
             }
