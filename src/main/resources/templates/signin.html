@@ -2,55 +2,63 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<title>Spring Social Showcase</title>
-		<link rel="stylesheet" th:href="@{/page.css}" type="text/css" media="screen"></link>
-		<link rel="stylesheet" th:href="@{/form.css}" type="text/css" media="screen"></link>
-		<link rel="stylesheet" th:href="@{/messages/messages.css}" type="text/css" media="screen"></link>
+		<link rel="stylesheet" type="text/css" th:href="@{/lib/css/bootstrap.min.css}" />
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" th:href="@{/dist/css/AdminLTE.css}" />
 	</head>
-	<body>
-		<div id="header">
-			<h1><a th:href="@{/}">Spring Social Showcase</a></h1>
-		</div>
-		
-		<div id="leftNav">
-			Left nav menu
-		</div>
-		
-		<div id="content">
-			<form id="signin" th:action="@{/signin/authenticate}" method="post">
-				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
-				<div class="formInfo">
-			  		<div class="error" th:if="${param.error eq 'bad_credentials'}">
-			  			Your sign in information was incorrect.
-			  			Please try again or <a th:href="@{/signup}">sign up</a>.
-			  		</div>
-			  		<div class="error" th:if="${param.error eq 'multiple_users'}">
-			  			Multiple local accounts are connected to the provider account.
-			  			Try again with a different provider or with your username and password.
-			  		</div>
-				</div>
-				<fieldset>
-					<label for="login">Username</label>
-					<input id="login" name="username" type="text" size="25"></input>
-					<label for="password">Password</label>
-					<input id="password" name="password" type="password" size="25"></input>
-				</fieldset>
-				<button type="submit">Sign In</button>
-				
-				<p>Some test user/password pairs you may use are:</p>
-				<ul>
-					<li>habuma/tacos</li>
-					<li>rclarkson/atlanta</li>
-				</ul>
-				
-				<p>Or you can <a th:href="@{/signup}">signup</a> with a new account.</p>
-			</form>
+	<body class="hold-transition login-page">
 
-			<!-- FACEBOOK SIGNIN -->
-			<form name="fb_signin" id="fb_signin" th:action="@{/signin/facebook}" method="POST">
-				<input type="hidden" name="_csrf" th:value="${_csrf.token}"></input>
-				<input type="hidden" name="scope" value="user_posts,user_photos"></input>
-				<button type="submit"><img th:src="@{/social/facebook/sign-in-with-facebook.png}"></img></button>
-			</form>
-		</div>		
+		<div id="content" class="login-box">
+			<div class="login-logo">
+				<b>Athena</b>
+			</div><!-- /.login-logo -->
+			<div class="login-box-body">
+				<p class="login-box-msg">Sign in to start your session</p>
+				<form id="signin" th:action="@{/signin/authenticate}" method="post">
+					<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+					<div class="form-group">
+						<div class="error" th:if="${param.error eq 'bad_credentials'}">
+							Your sign in information was incorrect.
+							Please try again or <a th:href="@{/signup}">sign up</a>.
+						</div>
+						<div class="error" th:if="${param.error eq 'multiple_users'}">
+							Multiple local accounts are connected to the provider account.
+							Try again with a different provider or with your username and password.
+						</div>
+					</div>
+
+					<div class="form-group has-feedback">
+						<input id="login" class="form-control" name="username" type="text" size="25" placeholder="username" />
+						<i class="fa fa-user form-control-feedback"></i>
+					</div>
+
+					<div class="form-group has-feedback">
+						<input id="password" class="form-control" name="password" type="password" size="25" placeholder="password" />
+						<i class="fa fa-lock form-control-feedback"></i>
+					</div>
+
+					<button class="btn btn-primary btn-block btn-flat" type="submit">Sign In</button>
+
+				</form>
+
+				<div id="social-links" style="margin-top: 10px; margin-bottom: 10px;">
+					<!-- FACEBOOK SIGNIN -->
+					<form name="fb_signin" id="fb_signin" th:action="@{/signin/facebook}" method="POST">
+						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+						<input type="hidden" name="scope" value="user_posts,user_photos" />
+						<button type="submit" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using facebook</button>
+					</form>
+				</div>
+
+				<div>
+					<p>Some test user/password pairs you may use are:</p>
+					<ul>
+						<li>habuma/tacos</li>
+						<li>rclarkson/atlanta</li>
+					</ul>
+					<p>Or you can <a th:href="@{/signup}">signup</a> with a new account.</p>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
