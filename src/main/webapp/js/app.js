@@ -1,6 +1,6 @@
 // Athena angularjs app
 // loads config and routing
-angular.module('athena', ['ui.router','ngResource','ui.bootstrap','cgBusy','ui.select'])
+angular.module('athena', ['ui.router','ngResource','ui.bootstrap','cgBusy','ui.select', 'ngTagsInput'])
 .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('dashboard', {
