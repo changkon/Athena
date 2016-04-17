@@ -20,9 +20,17 @@ public class QuestionResource implements IQuestionResource {
 
     @Override
     public String storeQuestion(@RequestBody QuestionDTO input) {
-        System.out.println("rating question " + input.getRating());
+        System.out.println("storing and rating question " + input.getRating());
         InsertQuestionQuery insertQuestionQuery = new InsertQuestionQuery();
         insertQuestionQuery.insert(input);
+        RatingQuery ratingQuery = new RatingQuery();
+        ratingQuery.insertRating(input);
+        return "yay";
+    }
+
+    @Override
+    public String rateQuestion(@RequestBody QuestionDTO input) {
+        System.out.println("rating question " + input.getRating());
         RatingQuery ratingQuery = new RatingQuery();
         ratingQuery.insertRating(input);
         return "yay";

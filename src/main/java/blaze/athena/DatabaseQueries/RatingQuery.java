@@ -52,7 +52,11 @@ public class RatingQuery {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            if (e.getMessage().contains("The result set has no current row")) {
+                System.out.println("question doesn't exist - can't rate");
+            } else {
+                e.printStackTrace();
+            }
         }
         finally {
             // Close the connections after the data has been handled.

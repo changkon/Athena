@@ -20,6 +20,15 @@
             });
         });
 
+     app.factory('RateQuestionPost', function ($resource) {
+            return $resource('/services/question/rate',null,{
+                create: {
+                    method: "POST",
+                    headers: { 'Content-Type': "application/json" }
+                }
+            });
+        });
+
      app.factory('GetCategories', function ($resource) {
             return $resource('/services/question/categories',null,{
                 create: {

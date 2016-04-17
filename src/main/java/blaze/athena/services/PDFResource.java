@@ -105,7 +105,7 @@ public class PDFResource implements IPDFResource {
             // set category
             questions.parallelStream().forEach(q -> q.setCategoryTags(categories));
 
-            saveQuestionsToDB(questions);
+        //    saveQuestionsToDB(questions);
 
             return new ResponseEntity<>(questions, HttpStatus.OK);
         } catch (IOException e) {

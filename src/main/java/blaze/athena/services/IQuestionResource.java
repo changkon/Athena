@@ -22,6 +22,12 @@ public interface IQuestionResource {
     @Produces("text/plain")
     String storeQuestion(@RequestBody QuestionDTO input);
 
+    @POST
+    @Path("/rate")
+    @Consumes("application/json")
+    @Produces("text/plain")
+    String rateQuestion(@RequestBody QuestionDTO input);
+
     @GET
     @Path("/categories")
     @Produces("application/json")

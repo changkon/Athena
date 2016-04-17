@@ -1,7 +1,7 @@
 (function() {
     var app = angular.module('athena');
 
-    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', 'GetCategories', '$timeout', function($scope, FilePost, StoreQuestionPost, GetCategories, $timeout) {
+    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', 'RateQuestionPost', 'GetCategories', '$timeout', function($scope, FilePost, StoreQuestionPost, RateQuestionPost, GetCategories, $timeout) {
         $scope.showQuestions = false;
         $scope.hideRating = true;
         $scope.myFile = { result : null };
@@ -173,9 +173,16 @@
             console.log(currentQuestion);
             currentQuestion.rating = val;
             console.log("rating question score of " + val);
-            $scope.myPromise = StoreQuestionPost.create({}, currentQuestion).$promise.then(function(res){
-                console.log(res);
-            });
+
+            if ($scope.shared) {
+                $scope.myPromise = StoreQuestionPost.create({}, currentQuestion).$promise.then(function(res){
+                    console.log(res);
+                });
+            } else {
+                $scope.myPromise = RateQuestionPost.create({}, currentQuestion).$promise.then(function(res){
+                    console.log(res);
+                });
+            }
             $scope.hideRating = true;
         }
 
