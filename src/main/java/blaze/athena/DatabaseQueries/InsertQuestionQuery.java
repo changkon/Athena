@@ -152,7 +152,7 @@ public class InsertQuestionQuery {
             for (String categoryTag : categoryTags) {
                 //use stored procedure instead
                 categoryPrepsInsertProduct = connection.prepareCall("{call dbo.InsertCategoryProcedure(?,?)}");
-                categoryPrepsInsertProduct.setString(1, categoryTag);
+                categoryPrepsInsertProduct.setString(1, categoryTag.replace("'", "''"));
                 categoryPrepsInsertProduct.registerOutParameter(2, Types.INTEGER);
 
                 categoryPrepsInsertProduct.execute();

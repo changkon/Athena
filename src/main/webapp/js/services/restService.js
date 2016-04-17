@@ -20,6 +20,15 @@
             });
         });
 
+     app.factory('InsertGroupPost', function ($resource) {
+            return $resource('/services/group/create',null,{
+                create: {
+                    method: "POST",
+                    headers: { 'Content-Type': "application/json" }
+                }
+            });
+        });
+
      app.factory('RateQuestionPost', function ($resource) {
             return $resource('/services/question/rate',null,{
                 create: {
