@@ -24,13 +24,21 @@
                     <input type="text" style="width:50%" placeholder="Description (optional)" name="inputDescription" ng-model="description" ng-trim="true">
                 </div>
                 <div class="box-body">
-                    <textarea placeholder="Add member emails/accounts (one per line)" style="width:50%;height:100px" name="inputEmails" ng-model="emailEntries" ng-trim="true" > </textarea>
+                    <textarea placeholder="Add member emails/accounts (one per line)" style="width:50%;height:100px" required name="inputEmails" ng-model="emailEntries" ng-trim="true" > </textarea>
                 </div>
             </div>
 
             <div class="selectFile">
                 <button class="btn btn-success btn-lg" ng-click="uploadGroup()"><i class="fa fa-plus"></i> Submit</button>
             </div>
+
+            <div ng-repeat="group in groups" class="box box-default">
+                <div class="box-header with-border"><h3 class="box-title">{{group[1]}}</h3></div>
+                <div class="box-body">
+                    <p>{{group[2]}}</p>
+                </div>
+            </div>
+
         </form>
 
     </div>

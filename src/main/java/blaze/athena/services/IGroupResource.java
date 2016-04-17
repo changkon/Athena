@@ -23,5 +23,9 @@ public interface IGroupResource {
     @Produces("text/plain")
     String createGroup(@RequestBody GroupDTO input);
 
+    @GET
+    @Path("{id}")
+    @Produces("application/json")
+    ResponseEntity getGroups(@PathParam("id") int ownerId);
 
 }

@@ -1,17 +1,32 @@
 (function() {
     var app = angular.module('athena');
 
-    app.controller('DashboardGroupsCtrl', ['$scope', 'InsertGroupPost', '$timeout', function($scope, InsertGroupPost, $timeout) {
+    app.controller('DashboardGroupsCtrl', ['$scope', 'InsertGroupPost', 'GetGroups', '$timeout', function($scope, InsertGroupPost, GetGroups, $timeout) {
+        $scope.groups = [];
+
+        refreshGroups();
 
        $scope.uploadGroup = function(){
-           console.log("name is: " + $scope.groupName)
-           console.log("description is: " + $scope.description)
-           console.log("emails are: " + $scope.emailEntries.split(/\s*[\s,]\s*/))
+           if ($scope.groupName == "" || $scope.groupName == undefined || $scope.emailEntries == "" || $scope.emailEntries == undefined) {
+                console.log("Name or emails is missing")
+                return;
+           }
            var group = {name: $scope.groupName, description: $scope.description, memberEmails: $scope.emailEntries.split(/\s*[\s,]\s*/)}
 
            $scope.myPromise = InsertGroupPost.create({}, group).$promise.then(function(res){
-               console.log(res);
+               window.alert("Group " + $scope.groupName + " added!");
+               $scope.groupName = "";
+               $scope.description = "";
+               $scope.emailEntries = "";
+               refreshGroups();
            });
+       }
+
+       function refreshGroups() {
+            $scope.myPromise = GetGroups.create({id: 6}, null).$promise.then(function(res){
+                   console.log(res);
+                   $scope.groups = res.body;
+              });
        }
 
     }]);

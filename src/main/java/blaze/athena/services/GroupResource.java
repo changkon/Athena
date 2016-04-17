@@ -1,9 +1,6 @@
 package blaze.athena.services;
 
-import blaze.athena.DatabaseQueries.InsertGroupQuery;
-import blaze.athena.DatabaseQueries.InsertQuestionQuery;
-import blaze.athena.DatabaseQueries.RatingQuery;
-import blaze.athena.DatabaseQueries.SelectAllCategoriesQuery;
+import blaze.athena.DatabaseQueries.*;
 import blaze.athena.dto.GroupDTO;
 import blaze.athena.dto.QuestionDTO;
 import org.springframework.http.HttpStatus;
@@ -25,4 +22,11 @@ public class GroupResource implements IGroupResource {
         query.insert(input);
         return "group created";
     }
+
+    @Override
+    public ResponseEntity getGroups(int ownerId) {
+        SelectGroupsByOwnerQuery query = new SelectGroupsByOwnerQuery();
+        return new ResponseEntity<>(query.select(ownerId), HttpStatus.OK);
+    }
+
 }

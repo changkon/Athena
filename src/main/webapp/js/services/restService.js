@@ -47,4 +47,13 @@
             });
         });
 
+     app.factory('GetGroups', function ($resource) {
+            return $resource('/services/group/:id',null,{
+                create: {
+                    method: "GET",
+                    headers: { 'Content-Type': "application/json" }
+                }
+            });
+        });
+
 })();
