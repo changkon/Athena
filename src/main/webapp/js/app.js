@@ -11,6 +11,11 @@ angular.module('athena', ['ui.router','ngResource','ui.bootstrap','cgBusy','ui.s
             url: '/question',
             templateUrl: '/templates/dashboard-question.html',
             controller: 'DashboardQuestionCtrl'
+        })
+        .state('dashboard.groups', {
+            url: '/groups',
+            templateUrl: '/templates/dashboard-groups.html',
+            controller: 'DashboardGroupsCtrl'
         });
 
     // For any unmatched url, redirect to /question

@@ -1,5 +1,6 @@
 package blaze.athena.application;
 
+import blaze.athena.services.GroupResource;
 import blaze.athena.services.HelloResource;
 import blaze.athena.services.PDFResource;
 import blaze.athena.services.QuestionResource;
@@ -27,6 +28,7 @@ public class AthenaRestApplication extends Application {
         components.add(HelloResource.class);
         components.add(PDFResource.class);
         components.add(QuestionResource.class);
+        components.add(GroupResource.class);
     }
 
     @Override
