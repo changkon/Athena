@@ -1,5 +1,9 @@
 package blaze.athena.application;
 
+import org.springframework.context.annotation.ComponentScan;
+
+
+import blaze.athena.signin.SimpleSignInAdapter;
 import com.microsoft.applicationinsights.web.internal.WebRequestTrackingFilter;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
@@ -10,9 +14,12 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.social.connect.web.SignInAdapter;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletContextListener;
@@ -26,6 +33,7 @@ import javax.servlet.ServletContextListener;
  */
 @SpringBootApplication
 @ComponentScan({"blaze.athena"})
+@EnableConfigurationProperties
 @EnableAutoConfiguration
 public class AthenaSpringApplication extends SpringBootServletInitializer {
 
@@ -67,6 +75,11 @@ public class AthenaSpringApplication extends SpringBootServletInitializer {
             servletContext.setInitParameter("resteasy.scan", "true");
             servletContext.setInitParameter("resteasy.servlet.mapping.prefix", "/services");
         };
+    }
+
+    @Bean
+    public SignInAdapter signInAdapter() {
+        return new SimpleSignInAdapter(new HttpSessionRequestCache());
     }
 
     @Bean
