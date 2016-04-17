@@ -40,6 +40,8 @@
             return $scope.tags.length < 3;
         }
 
+        console.log(document.cookie);
+
         var categories = [
             { topic: 'Cells', subject: 'Biology' },
             { topic: 'Evolution', subject: 'Biology' },

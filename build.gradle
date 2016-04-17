@@ -101,11 +101,24 @@ dependencies {
     // resteasy client
     compile "org.jboss.resteasy:resteasy-client:+"
 
+
+	compile 'org.springframework.security:spring-security-web:4.0.4.RELEASE'
+    compile "org.springframework.social:spring-social-core:1.1.4.RELEASE"
+    compile "org.springframework.social:spring-social-web:1.1.4.RELEASE"
+    compile 'org.springframework.social:spring-social-facebook:2.0.3.RELEASE'
+
+    compile("org.springframework.boot:spring-boot-starter-security")
+
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+
+    compile("com.h2database:h2")
+
     // application insights (analytic)
     compile 'com.microsoft.azure:applicationinsights-web:+'
 
     // deployable war file
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
