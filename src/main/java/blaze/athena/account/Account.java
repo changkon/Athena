@@ -25,11 +25,15 @@ public class Account {
 
 	private final String lastName;
 
+	//1 for students
+	private final int permissions;
+
 	public Account(String username, String password, String firstName, String lastName) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.permissions = 1;
 	}
 
 	public String getUsername() {
@@ -47,4 +51,6 @@ public class Account {
 	public String getLastName() {
 		return lastName;
 	}
+
+	public int getPermission() {return permissions; }
 }
