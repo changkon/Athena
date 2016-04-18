@@ -1,6 +1,7 @@
 (function() {
     var app = angular.module('athena');
 
+
     app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', 'RateQuestionPost', 'GetCategories', '$timeout', function($scope, FilePost, StoreQuestionPost, RateQuestionPost, GetCategories, $timeout) {
         $scope.showQuestions = false;
         $scope.hideRating = true;
@@ -40,7 +41,9 @@
             return $scope.tags.length < 3;
         }
 
-        console.log(document.cookie);
+        $scope.$watch("accountName", function(){
+            console.log($scope.accountName);
+         });
 
         var categories = [
             { topic: 'Cells', subject: 'Biology' },

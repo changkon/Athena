@@ -61,4 +61,13 @@ public class JdbcAccountRepository implements AccountRepository {
 				}, username);
 	}
 
+	public String findIdbyUserName(String username) {
+		return jdbcTemplate.queryForObject("select id from accounts where Email = ?",
+				new RowMapper<String>() {
+					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return rs.getString("Id");
+					}
+				}, username);
+	}
+
 }
