@@ -80,4 +80,7 @@
 #question-container .question .answers .answer {
   cursor: pointer; }
 
+.view-option {
+  display: inline-block; }
+
 /*# sourceMappingURL=style.css.map */
