@@ -56,4 +56,13 @@
             });
         });
 
+        app.factory('GetAccountName', function ($resource) {
+            return $resource('/services/account/:id',null,{
+                create: {
+                    method: "GET",
+                    headers: { 'Content-Type': "application/json" }
+                }
+            });
+        });
+
 })();

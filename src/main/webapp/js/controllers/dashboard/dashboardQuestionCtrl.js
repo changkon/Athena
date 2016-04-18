@@ -2,7 +2,7 @@
     var app = angular.module('athena');
 
 
-    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', 'RateQuestionPost', 'GetCategories', '$timeout', function($scope, FilePost, StoreQuestionPost, RateQuestionPost, GetCategories, $timeout) {
+    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', 'RateQuestionPost', 'GetCategories', 'GetAccountName', '$timeout', function($scope, FilePost, StoreQuestionPost, RateQuestionPost, GetCategories, GetAccountName, $timeout) {
         $scope.showQuestions = false;
         $scope.hideRating = true;
         $scope.myFile = { result : null };
@@ -13,6 +13,8 @@
         $scope.question.question = "No question currently";
         $scope.answerOnce = false;
         $scope.categories = null;
+//        $scope.accountName = "Name";
+        $scope.accountNameString = "";
 
         $scope.tags = [];
 
@@ -43,6 +45,10 @@
 
         $scope.$watch("accountName", function(){
             console.log($scope.accountName);
+            var id = $scope.accountName;
+            $scope.myPromise = GetAccountName.create({id: id}, null).$promise.then(function(res){
+                   $scope.accountNameString = res.body[0];
+              });
          });
 
         var categories = [
