@@ -1,5 +1,6 @@
 package blaze.athena.services;
 
+import blaze.athena.dto.GroupDTO;
 import blaze.athena.dto.QuestionDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,24 +14,18 @@ import javax.ws.rs.*;
  * @author Wesley Yep
  * @since 23 Feb 2016
  */
-@Path("/question")
-public interface IQuestionResource {
+@Path("/group")
+public interface IGroupResource {
 
     @POST
-    @Path("/store")
+    @Path("/create")
     @Consumes("application/json")
     @Produces("text/plain")
-    String storeQuestion(@RequestBody QuestionDTO input);
-
-    @POST
-    @Path("/rate")
-    @Consumes("application/json")
-    @Produces("text/plain")
-    String rateQuestion(@RequestBody QuestionDTO input);
+    String createGroup(@RequestBody GroupDTO input);
 
     @GET
-    @Path("/categories")
+    @Path("{id}")
     @Produces("application/json")
-    ResponseEntity getCategories();
+    ResponseEntity getGroups(@PathParam("id") int ownerId);
 
 }
