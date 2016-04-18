@@ -1,7 +1,8 @@
 (function() {
     var app = angular.module('athena');
 
-    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', '$timeout','$location', function($scope, FilePost, StoreQuestionPost, $timeout,$location) {
+
+    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', 'RateQuestionPost', 'GetCategories', '$timeout', function($scope, FilePost, StoreQuestionPost, RateQuestionPost, GetCategories, $timeout) {
         $scope.showQuestions = false;
         $scope.hideRating = true;
         $scope.myFile = { result : null };
@@ -11,6 +12,34 @@
         $scope.question = {};
         $scope.question.question = "No question currently";
         $scope.answerOnce = false;
+        $scope.categories = null;
+
+        $scope.tags = [];
+
+        $scope.loadTags = function(query) {
+            if ($scope.categories != null) {
+                return $scope.categories.filter(function(category) {
+                  return category.text.toLowerCase().indexOf(query.toLowerCase()) != -1;
+                });
+            } else {
+                $scope.myPromise = GetCategories.create().$promise.then(function(res){
+                    var categories = [];
+                    for (i = 0; i < res.body.length; i++) {
+                        categories.push({ text: res.body[i]})
+                    }
+                    $scope.categories = categories;
+                  //  console.log(categories);
+                    return categories.filter(function(category) {
+                      return category.text.toLowerCase().indexOf(query.toLowerCase()) != -1;
+                    });
+                });
+                return $scope.myPromise;
+            }
+        };
+
+        $scope.checkTag = function(tag){
+            return $scope.tags.length < 3;
+        }
 
         $scope.$watch("accountName", function(){
             console.log($scope.accountName);
@@ -19,7 +48,8 @@
         var categories = [
             { topic: 'Cells', subject: 'Biology' },
             { topic: 'Evolution', subject: 'Biology' },
-            { topic: 'Anatomy', subject: 'Biology' }
+            { topic: 'Anatomy', subject: 'Biology' },
+            { topic: 'Reactions', subject: 'Chemistry' }
         ];
 
         // settings
@@ -92,19 +122,22 @@
 
         $scope.uploadFile = function(){
             var file = $scope.myFile.result;
-            var category = $scope.settings.category.selected.topic;
+            var categoryTags = "";
+            for (i = 0; i < $scope.tags.length; i++) {
+               categoryTags += $scope.tags[i].text + ",";
+            }
             console.log("file received");
             console.log(file);
             var fd = new FormData();
 
             if (file != null) {
                 fd.append('uploadedFile', file);
-                fd.append('uploadedCategory', category);
+                fd.append('uploadedCategory', categoryTags);
             } else {
                 text = $scope.textModel.text;
                 console.log("text is " + text);
                 fd.append('uploadedText', text.replace("’", "'"));
-                fd.append('uploadedCategory', category);
+                fd.append('uploadedCategory', categoryTags);
             }
             $scope.myPromise = FilePost.create({}, fd).$promise.then(function(res){
                 // update returned object to store gotCorrect
@@ -143,9 +176,16 @@
             console.log(currentQuestion);
             currentQuestion.rating = val;
             console.log("rating question score of " + val);
-            $scope.myPromise = StoreQuestionPost.create({}, currentQuestion).$promise.then(function(res){
-                console.log(res);
-            });
+
+            if ($scope.shared) {
+                $scope.myPromise = StoreQuestionPost.create({}, currentQuestion).$promise.then(function(res){
+                    console.log(res);
+                });
+            } else {
+                $scope.myPromise = RateQuestionPost.create({}, currentQuestion).$promise.then(function(res){
+                    console.log(res);
+                });
+            }
             $scope.hideRating = true;
         }
 

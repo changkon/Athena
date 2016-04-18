@@ -63,11 +63,11 @@ public class InsertQuestionQuery {
 
         try {
             // Submit category
-            int categoryId = submitCategory(question, connection);
+            List<Integer> categoryIds = submitCategory(question, connection);
 
             // Create and execute an INSERT SQL prepared statement.
-            String insertSql = "INSERT INTO dbo.Questions (Question, Category, Topic, PdfId) VALUES "
-                    + "('"+ question.getQuestion().replace("'", "''")  + "', '" + categoryId + "', '" + question.getTopic().replace("'", "''")  + "', '0');";
+            String insertSql = "INSERT INTO dbo.Questions (Question, Topic, PdfId) VALUES "
+                    + "('"+ question.getQuestion().replace("'", "''") + "', '" + question.getTopic().replace("'", "''")  + "', '0');";
 
             prepsInsertProduct = connection.prepareStatement(
                     insertSql,
@@ -84,6 +84,8 @@ public class InsertQuestionQuery {
                 System.out.println("Generated question: " +resultId);
             }
 
+            //create category tags for the question
+            insertTags(connection, categoryIds, Integer.parseInt(resultId));
             //now submit the answers
             submitAnswers(question, connection, Integer.parseInt(resultId));
             return resultId;
@@ -103,55 +105,69 @@ public class InsertQuestionQuery {
         return "-1";
     }
 
-    private int submitCategory(QuestionDTO question, Connection connection) {
-        int categoryId = 0;
-
-        ResultSet categoryResultSet = null;
-        PreparedStatement categoryPrepsInsertProduct = null;
-        String category = question.getCategory();
+    private void insertTags(Connection connection, List<Integer> categoryIds, int questionId) {
+        if (categoryIds.size() == 0) {return;}
+        ResultSet tagsResultSet = null;
+        PreparedStatement tagsPrepsInsertProduct = null;
         try {
             // Create and execute an INSERT SQL prepared statement.
-            String categoryInsertSql = "INSERT INTO dbo.Categories (GroupName) VALUES "
-                    + "('" + category.replace("'", "''")  + "');";
+            String answersInsertSql = "INSERT INTO dbo.QuestionCategory (QuestionId, CategoryId) VALUES ";
+            for (int i = 0; i < categoryIds.size(); i++) {
+                if (i < categoryIds.size() - 1) {
+                    answersInsertSql += "('" + questionId + "', '" + categoryIds.get(i) + "'), ";
+                } else {
+                    answersInsertSql += "('" + questionId + "', '" + categoryIds.get(i) + "');";
+                }
+            }
 
-            categoryPrepsInsertProduct = connection.prepareStatement(
-                    categoryInsertSql,
+            tagsPrepsInsertProduct = connection.prepareStatement(
+                    answersInsertSql,
                     Statement.RETURN_GENERATED_KEYS);
-            categoryPrepsInsertProduct.execute();
+            tagsPrepsInsertProduct.execute();
 
             // Retrieve the generated key from the insert.
-            categoryResultSet = categoryPrepsInsertProduct.getGeneratedKeys();
+            tagsResultSet = tagsPrepsInsertProduct.getGeneratedKeys();
 
-            // Retrieve the ID of the inserted row.
-            while (categoryResultSet.next()) {
-                categoryId = categoryResultSet.getInt(1);
+            // Print the ID of the inserted row.
+            while (tagsResultSet.next()) {
+                System.out.println("Generated tag: " + tagsResultSet.getString(1));
             }
         }
         catch (Exception e) {
-            // Problem inserting duplicate key
-            // retrieve matching
-            try {
-                String categoryQuerySql = "SELECT Id FROM dbo.Categories WHERE GroupName='" + category.replace("'", "''")  + "';";
+            e.printStackTrace();
+        }
+        finally {
+            if (tagsResultSet != null) try { tagsResultSet.close(); } catch(Exception e) {}
+            if (tagsPrepsInsertProduct != null) try { tagsPrepsInsertProduct.close(); } catch(Exception e) {}
+        }
+    }
 
-                PreparedStatement categoryPrepsQueryProduct = connection.prepareStatement(categoryQuerySql);
-                categoryPrepsQueryProduct.execute();
+    private List<Integer> submitCategory(QuestionDTO question, Connection connection) {
+        List<Integer> categoryTagIds = new ArrayList<>();
 
-                categoryResultSet = categoryPrepsQueryProduct.getResultSet();
+        ResultSet categoryResultSet = null;
+        CallableStatement categoryPrepsInsertProduct = null;
+        List<String> categoryTags = question.getCategoryTags();
+        try {
+            for (String categoryTag : categoryTags) {
+                //use stored procedure instead
+                categoryPrepsInsertProduct = connection.prepareCall("{call dbo.InsertCategoryProcedure(?,?)}");
+                categoryPrepsInsertProduct.setString(1, categoryTag.replace("'", "''"));
+                categoryPrepsInsertProduct.registerOutParameter(2, Types.INTEGER);
 
-                while (categoryResultSet.next()) {
-                    categoryId = categoryResultSet.getInt(1);
-                }
-
-            } catch (Exception e1) {
-                e.printStackTrace();
+                categoryPrepsInsertProduct.execute();
+                categoryTagIds.add(categoryPrepsInsertProduct.getInt(2));
             }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
         finally {
             if (categoryResultSet != null) try { categoryResultSet.close(); } catch(Exception e) {}
             if (categoryPrepsInsertProduct != null) try { categoryPrepsInsertProduct.close(); } catch(Exception e) {}
         }
 
-        return categoryId;
+        return categoryTagIds;
     }
 
     private void submitAnswers(QuestionDTO question, Connection connection, int questionId) {

@@ -1,9 +1,7 @@
 package blaze.athena.services;
 
 import blaze.athena.DatabaseQueries.InsertQuestionQuery;
-import blaze.athena.DatabaseQueries.SelectQuery;
 import blaze.athena.QuestionGeneration.SentenceSimplifier;
-import blaze.athena.config.DatabaseConnection;
 import blaze.athena.document.PDFManager;
 import blaze.athena.dto.QuestionDTO;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
@@ -17,14 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * @author Chang Kon Han
@@ -107,14 +98,14 @@ public class PDFResource implements IPDFResource {
             }
 
             // Get category
-            String category = categoryData.get(0).getBodyAsString();
+            List<String> categories = Arrays.asList(categoryData.get(0).getBodyAsString().split(","));
             SentenceSimplifier ss = new SentenceSimplifier();
             List<QuestionDTO> questions = ss.run(finalStr);
 
             // set category
-            questions.parallelStream().forEach(q -> q.setCategory(category));
+            questions.parallelStream().forEach(q -> q.setCategoryTags(categories));
 
-            saveQuestionsToDB(questions);
+        //    saveQuestionsToDB(questions);
 
             return new ResponseEntity<>(questions, HttpStatus.OK);
         } catch (IOException e) {
