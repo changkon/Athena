@@ -11,7 +11,7 @@
                 console.log("Name or emails is missing")
                 return;
            }
-           var group = {name: $scope.groupName, description: $scope.description, memberEmails: $scope.emailEntries.split(/\s*[\s,]\s*/)}
+           var group = {name: $scope.groupName, description: $scope.description, memberEmails: $scope.emailEntries.split(/\s*[\s,]\s*/), ownerId: $scope.accountName}
 
            $scope.myPromise = InsertGroupPost.create({}, group).$promise.then(function(res){
                window.alert("Group " + $scope.groupName + " added!");
@@ -23,7 +23,8 @@
        }
 
        function refreshGroups() {
-            $scope.myPromise = GetGroups.create({id: 6}, null).$promise.then(function(res){
+            console.log("account id is " + $scope.accountName);
+            $scope.myPromise = GetGroups.create({id: $scope.accountName}, null).$promise.then(function(res){
                    console.log(res);
                    $scope.groups = res.body;
               });

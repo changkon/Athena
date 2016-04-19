@@ -1,9 +1,6 @@
 package blaze.athena.application;
 
-import blaze.athena.services.GroupResource;
-import blaze.athena.services.HelloResource;
-import blaze.athena.services.PDFResource;
-import blaze.athena.services.QuestionResource;
+import blaze.athena.services.*;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -29,6 +26,7 @@ public class AthenaRestApplication extends Application {
         components.add(PDFResource.class);
         components.add(QuestionResource.class);
         components.add(GroupResource.class);
+        components.add(AccountResource.class);
     }
 
     @Override

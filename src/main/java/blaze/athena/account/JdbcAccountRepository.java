@@ -43,9 +43,9 @@ public class JdbcAccountRepository implements AccountRepository {
 	public void createAccount(Account user) throws UsernameAlreadyInUseException {
 		try {
 			jdbcTemplate.update(
-					"insert into Accounts (FirstName, LastName, Email, Password) values (?, ?, ?, ?)",
+					"insert into Accounts (FirstName, LastName, Email, Password, Permission) values (?, ?, ?, ?,?)",
 					user.getFirstName(), user.getLastName(), user.getUsername(),
-					passwordEncoder.encode(user.getPassword()));
+					passwordEncoder.encode(user.getPassword()), user.getPermission());
 		} catch (DuplicateKeyException e) {
 			throw new UsernameAlreadyInUseException(user.getUsername());
 		}
@@ -57,6 +57,15 @@ public class JdbcAccountRepository implements AccountRepository {
 					public Account mapRow(ResultSet rs, int rowNum) throws SQLException {
 						return new Account(rs.getString("Email"), null, rs.getString("FirstName"), rs
 								.getString("LastName"));
+					}
+				}, username);
+	}
+
+	public String findIdbyUserName(String username) {
+		return jdbcTemplate.queryForObject("select id from accounts where Email = ?",
+				new RowMapper<String>() {
+					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return rs.getString("Id");
 					}
 				}, username);
 	}

@@ -5,7 +5,8 @@ angular.module('athena', ['ui.router','ngResource','ui.bootstrap','cgBusy','ui.s
     $stateProvider
         .state('dashboard', {
             abstract: true,
-            templateUrl: '/templates/dashboard.html'
+            templateUrl: '/templates/dashboard.html',
+            controller: 'DashboardQuestionCtrl'
         })
         .state('dashboard.question', {
             url: '/question',

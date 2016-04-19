@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Athena: Dashboard</title>
+    <title>Athena</title>
 
     <!-- load css file -->
     <!-- bootstrap css -->
@@ -58,7 +58,7 @@
     <script th:src="@{/lib/js/angular-busy.min.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/lib/css/angular-busy.min.css}" />
 </head>
-<body ng-app="athena">
+<body ng-app="athena" th:attr="ng-init='accountName=\'' + ${username} + '\''">
     <ui-view id="main-content"></ui-view>
 </body>
 </html>
