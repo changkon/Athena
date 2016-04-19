@@ -62,6 +62,7 @@ public class RatingQuery {
             // Close the connections after the data has been handled.
             if (resultSet != null) try { resultSet.close(); } catch(Exception e) {}
             if (prepsInsertProduct != null) try { prepsInsertProduct.close(); } catch(Exception e) {}
+            if (connection != null) try {connection.close();} catch (Exception e) {};
         }
     }
 

@@ -201,6 +201,7 @@ public class InsertQuestionQuery {
         finally {
             if (answersResultSet != null) try { answersResultSet.close(); } catch(Exception e) {}
             if (answersPrepsInsertProduct != null) try { answersPrepsInsertProduct.close(); } catch(Exception e) {}
+            if (connection != null) try {connection.close();} catch (Exception e) {};
         }
     }
 
