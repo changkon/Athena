@@ -13,6 +13,7 @@ public class GroupDTO {
     private String name;
     private String description;
     private List<String> memberEmails;
+    private int ownerId;
 
     public GroupDTO() {
 
@@ -41,5 +42,13 @@ public class GroupDTO {
 
     public void setMemberEmails(List<String> memberEmails) {
         this.memberEmails = memberEmails;
+    }
+
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
     }
 }
