@@ -44,7 +44,6 @@
         }
 
         $scope.$watch("accountName", function(){
-            console.log($scope.accountName);
             var id = $scope.accountName;
             $scope.myPromise = GetAccountName.create({id: id}, null).$promise.then(function(res){
                    $scope.accountNameString = res.body[0];
