@@ -116,6 +116,7 @@
 
         $scope.returnMenu = function() {
       //      $scope.myFile = null;
+            $scope.categories = null;
             $scope.answerOnce = false;
             // remove classes
             for (i=0; i< $scope.question.answers.length; i++) {
