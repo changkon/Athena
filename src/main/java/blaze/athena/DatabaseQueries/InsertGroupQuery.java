@@ -22,7 +22,7 @@ public class InsertGroupQuery {
         try {
             // Create and execute an INSERT SQL prepared statement.
             String insertSql = "INSERT INTO dbo.Groups (Name, Description, OwnerId) VALUES "
-                    + "('"+ group.getName().replace("'", "''") + "', '" + group.getDescription().replace("'", "''")  + "', '6');";
+                    + "('"+ group.getName().replace("'", "''") + "', '" + group.getDescription().replace("'", "''")  + "', '" + group.getOwnerId() + "');";
 
             prepsInsertProduct = connection.prepareStatement(
                     insertSql,
