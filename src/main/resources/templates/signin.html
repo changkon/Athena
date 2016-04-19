@@ -41,14 +41,14 @@
 
 				</form>
 
-				<div id="social-links" style="margin-top: 10px; margin-bottom: 10px;">
-					<!-- FACEBOOK SIGNIN -->
-					<form name="fb_signin" id="fb_signin" th:action="@{/signin/facebook}" method="POST">
-						<input type="hidden" name="_csrf" th:value="${_csrf.token}" />
-						<input type="hidden" name="scope" value="user_posts,user_photos" />
-						<button type="submit" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using facebook</button>
-					</form>
-				</div>
+				<!--<div id="social-links" style="margin-top: 10px; margin-bottom: 10px;">-->
+					<!--&lt;!&ndash; FACEBOOK SIGNIN &ndash;&gt;-->
+					<!--<form name="fb_signin" id="fb_signin" th:action="@{/signin/facebook}" method="POST">-->
+						<!--<input type="hidden" name="_csrf" th:value="${_csrf.token}" />-->
+						<!--<input type="hidden" name="scope" value="user_posts,user_photos" />-->
+						<!--<button type="submit" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using facebook</button>-->
+					<!--</form>-->
+				<!--</div>-->
 
 				<div>
 					<p>You can <a th:href="@{/signup}">signup</a> with a new account.</p>

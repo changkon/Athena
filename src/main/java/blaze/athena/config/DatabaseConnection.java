@@ -13,14 +13,14 @@ public class DatabaseConnection {
     private static final String connectionString = "jdbc:sqlserver://athenablaze.database.windows.net:1433;database=athena_db;user=blaze@athenablaze;password=Rosathena123;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 
     public static DatabaseConnection getInstance() {
-
+        //change to connection per request to utilise azure connection pool
         DatabaseConnection db = new DatabaseConnection();
         try {
             db.connection = DriverManager.getConnection(connectionString);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    
+
         return db;
     }
 
