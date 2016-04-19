@@ -38,7 +38,7 @@
                     </div>
 
                     <uib-tabset active="active" class="nav-tabs-custom">
-                        <uib-tab index="0" heading="Upload PDF">
+                        <uib-tab ng-click="onTabSelect(0)" index="0" heading="Upload PDF">
                             <div class="outer-dropzone">
                                 <div ng-click="openFileModal()" class="dropzone" file-dropzone="[application/pdf,image/png, image/jpeg, image/gif]"
                                      file="myFile.result" file-name="fileName" data-max-file-size="50">
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                         </uib-tab>
-                        <uib-tab index="1" heading="Upload Text">
+                        <uib-tab ng-click="onTabSelect(1)" index="1" heading="Upload Text">
                             <div>
                                 ​<textarea id="inputTextElement" rows="20" ng-model="textModel.text" placeholder="Or paste your study notes below"></textarea>
                             </div>

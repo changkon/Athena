@@ -13,6 +13,7 @@
         $scope.question.question = "No question currently";
         $scope.answerOnce = false;
         $scope.categories = null;
+        $scope.selectedTab = 0;
 //        $scope.accountName = "Name";
         $scope.accountNameString = "";
 
@@ -126,7 +127,13 @@
             $scope.showQuestions = false;
         }
 
+        $scope.onTabSelect = function(tab) {
+            $scope.selectedTab = tab;
+            console.log("Changed tab to " + tab);
+          }
+
         $scope.uploadFile = function(){
+            console.log('active tab is ' + $scope.selectedTab);
             var file = $scope.myFile.result;
             var categoryTags = "";
             for (i = 0; i < $scope.tags.length; i++) {
@@ -136,7 +143,7 @@
             console.log(file);
             var fd = new FormData();
 
-            if (file != null) {
+            if ($scope.selectedTab == 0) {
                 fd.append('uploadedFile', file);
                 fd.append('uploadedCategory', categoryTags);
             } else {
