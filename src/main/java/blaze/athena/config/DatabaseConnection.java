@@ -10,7 +10,7 @@ public class DatabaseConnection {
     private static DatabaseConnection dbConnection;
     private Connection connection;
     //get this from environmental variable later
-    private static final String connectionString = "jdbc:sqlserver://teamblazepilot.database.windows.net:1433;database=athena_db;user=blaze@teamblazepilot;password={your_password_here};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+    private static final String connectionString = "jdbc:sqlserver://teamblazepilot.database.windows.net:1433;database=athena_db;user=blaze@teamblazepilot;password=RosAthena123;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 
     public static DatabaseConnection getInstance() {
         if (dbConnection == null) {
