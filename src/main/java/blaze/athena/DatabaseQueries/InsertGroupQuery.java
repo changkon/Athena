@@ -3,6 +3,7 @@ package blaze.athena.DatabaseQueries;
 import blaze.athena.config.DatabaseConnection;
 import blaze.athena.dto.GroupDTO;
 import blaze.athena.dto.QuestionDTO;
+import net.sf.extjwnl.data.Exc;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class InsertGroupQuery {
             // Close the connections after the data has been handled.
             if (resultSet != null) try { resultSet.close(); } catch(Exception e) {}
             if (prepsInsertProduct != null) try { prepsInsertProduct.close(); } catch(Exception e) {}
+            if (connection != null) try {connection.close();} catch (Exception e) {};
         }
         return "-1";
     }

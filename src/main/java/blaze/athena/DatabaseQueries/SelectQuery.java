@@ -43,6 +43,7 @@ public class SelectQuery {
             // Close the connections after the data has been handled.
             if (resultSet != null) try { resultSet.close(); } catch(Exception e) {}
             if (statement != null) try { statement.close(); } catch(Exception e) {}
+            if (connection != null) try {connection.close();} catch (Exception e) {};
         }
         return arrayList;
     }
