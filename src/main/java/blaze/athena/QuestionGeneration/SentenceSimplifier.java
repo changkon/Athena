@@ -1490,6 +1490,7 @@ public class SentenceSimplifier {
 
 				String topicString = questionList.get(i).split(":::")[0].replaceAll("[^\\x00-\\x7F]", "");
 				String questionString = questionList.get(i).split(":::", 2)[1].replaceAll("[^\\x00-\\x7F]", "");
+				questionString = questionString.replaceAll("\r\n","") ;
 				QuestionDTO q = new QuestionDTO(topicString, questionString);
 				List<String> answers = getAnswerSet(answerList, i);
 				String correctAnswer = getStringFromTree(answerList.get(i));
