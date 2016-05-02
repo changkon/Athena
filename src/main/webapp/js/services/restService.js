@@ -65,4 +65,14 @@
             });
         });
 
+        app.factory('GetQuestions', function ($resource) {
+            return $resource('/services/question/questions',null,{
+                create: {
+                    method: "POST",
+                    headers: { 'Content-Type': "application/json" }
+                }
+            });
+        });
+
+
 })();

@@ -39,17 +39,28 @@
                         <!--</div>-->
                     <!--</div>-->
                 <!--</div>-->
-
-                <div class="box box-primary">
-                    <div class="box-header with-border"><h3 class="box-title">Choose a Category</h3></div>
-                    <div class="box-body">
-
+                <form ng-submit="submit()">
+                    <div id="settings-container" class="box box-default">
+                        <div class="box-header with-border"><h3 class="box-title">Search Questions</t></h3></div>
+                        <div class="box-body">
+                            <tags-input ng-model="tags" max-tags="3" on-tag-adding="checkTag($tag)" style="width:90%" placeholder="Enter the tags you would like to search for">
+                                <auto-complete source="loadTags($query)"></auto-complete>
+                            </tags-input>
+                            <input type="submit">
+                        </div>
                     </div>
-                </div>
+                </form>
 
-                <div ng-repeat="category in categories" class="box box-default">
-                    <div class="box-header with-border"><h3 class="box-title">{{category.text}}</h3></div>
-                </div>
+                <!--<div class="box box-primary">-->
+                    <!--<div class="box-header with-border"><h3 class="box-title">Choose a Category</h3></div>-->
+                    <!--<div class="box-body">-->
+
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div ng-repeat="category in categories" class="box box-default">-->
+                    <!--<div class="box-header with-border"><h3 class="box-title">{{category.text}}</h3></div>-->
+                <!--</div>-->
 
             </div>
             <!--<div class="col-sm-2">-->

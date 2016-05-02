@@ -1,5 +1,6 @@
 package blaze.athena.services;
 
+import blaze.athena.dto.CategoryTagsDTO;
 import blaze.athena.dto.QuestionDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,5 +33,11 @@ public interface IQuestionResource {
     @Path("/categories")
     @Produces("application/json")
     ResponseEntity getCategories();
+
+    @POST
+    @Path("/questions")
+    @Consumes("application/json")
+    @Produces("application/json")
+    ResponseEntity getQuestions(@RequestBody CategoryTagsDTO tags);
 
 }

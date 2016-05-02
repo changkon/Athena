@@ -2,7 +2,9 @@ package blaze.athena.services;
 
 import blaze.athena.DatabaseQueries.InsertQuestionQuery;
 import blaze.athena.DatabaseQueries.RatingQuery;
+import blaze.athena.DatabaseQueries.SearchQuestionsQuery;
 import blaze.athena.DatabaseQueries.SelectAllCategoriesQuery;
+import blaze.athena.dto.CategoryTagsDTO;
 import blaze.athena.dto.QuestionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,12 @@ public class QuestionResource implements IQuestionResource {
     public ResponseEntity getCategories() {
         SelectAllCategoriesQuery query = new SelectAllCategoriesQuery();
         return new ResponseEntity<>(query.select(), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity getQuestions(CategoryTagsDTO tags) {
+        SearchQuestionsQuery searchQuestionsQuery = new SearchQuestionsQuery();
+        return new ResponseEntity<>(searchQuestionsQuery.search(tags.getCategoryTags()), HttpStatus.OK);
     }
 
 
