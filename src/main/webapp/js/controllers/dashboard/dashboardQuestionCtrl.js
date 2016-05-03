@@ -2,8 +2,10 @@
     var app = angular.module('athena');
 
 
-    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', 'RateQuestionPost', 'GetCategories', 'GetAccountName', '$timeout', function($scope, FilePost, StoreQuestionPost, RateQuestionPost, GetCategories, GetAccountName, $timeout) {
+    app.controller('DashboardQuestionCtrl', ['$scope','FilePost', 'StoreQuestionPost', 'RateQuestionPost', 'GetCategories', 'GetAccountName', '$timeout', '$location',
+                        function($scope, FilePost, StoreQuestionPost, RateQuestionPost, GetCategories, GetAccountName, $timeout, $location) {
         $scope.showQuestions = false;
+
         $scope.hideRating = true;
         $scope.myFile = { result : null };
         $scope.textModel = { text : null };
@@ -125,11 +127,37 @@
                 element.removeClass('incorrect');
             }
             $scope.showQuestions = false;
+            if (!($scope.questionSet == null || $scope.questionSet == undefined || $scope.questionSet.body.length == 0)) { //need to go back to search menu
+                $scope.questionSet.body = [];
+                $location.path("search");
+            }
         }
 
         $scope.onTabSelect = function(tab) {
             $scope.selectedTab = tab;
             console.log("Changed tab to " + tab);
+          }
+
+          if (!($scope.questionSet == null || $scope.questionSet == undefined || $scope.questionSet.body.length == 0)) {
+              var res = $scope.questionSet;
+              // update returned object to store gotCorrect
+              for (var i = 0; i < res.body.length; i++) {
+                  res.body[i].correctAnswer = null;
+                  res.body[i].questions = res.body[i].question.split(/\\n|:\\n/g);
+              }
+              $scope.questions = res;
+
+              $scope.question = $scope.questions.body[0];
+              currentQuestion = $scope.question;
+              setFontSize($scope.question.questions);
+
+              // set pagination
+              $scope.pag.numfound = res.body.length;
+              $scope.pag.currentPage = 1;
+
+              $scope.progressPag.numfound = res.body.length;
+              $scope.progressPag.currentPage = 1;
+              $scope.showQuestions = true;
           }
 
         $scope.uploadFile = function(){
@@ -177,6 +205,10 @@
                 console.log(err);
             });
         };
+
+        $scope.$on('setQuestions', function(event, res) {
+            $scope.questionSet = res;
+        });
 
         $scope.openFileModal = function() {
             var inputFileElement = document.getElementById('inputFileElement');
